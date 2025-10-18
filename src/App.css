@@ -1,38 +1,156 @@
-.App {
-  text-align: center;
+.astrovoyager-app {
+  min-height: 100vh;
+  position: relative;
+  font-family: var(--font-family-primary);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.app-content {
+  min-height: 100vh;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+/* Error Banner */
+.error-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-accent-1);
+  color: white;
+  padding: var(--space-md);
+  z-index: var(--z-toast);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: slideInDown 0.3s ease-out;
+}
+
+.error-content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.error-icon {
+  font-size: var(--font-size-lg);
+}
+
+.error-message {
+  font-weight: var(--font-weight-medium);
+}
+
+.error-close {
+  background: none;
+  color: white;
+  font-size: var(--font-size-xl);
+  padding: 0 var(--space-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.error-close:hover {
+  transform: scale(1.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .error-banner {
+    padding: var(--space-sm);
+    font-size: var(--font-size-sm);
   }
 }
 
-.App-header {
-  background-color: #282c34;
+/* Print Styles */
+@media print {
+  .audio-controls,
+  .error-banner {
+    display: none;
+  }
+}
+
+/* Mission Map Placeholder */
+.mission-map-placeholder {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  background: linear-gradient(135deg, var(--color-space-dark), var(--color-space-medium));
+  text-align: center;
+  padding: var(--space-2xl);
+}
+
+.mission-map-placeholder h1 {
+  font-size: var(--font-size-4xl);
+  background: linear-gradient(45deg, var(--color-primary), var(--color-secondary));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  margin-bottom: var(--space-lg);
+}
+
+
+.mission-map-placeholder p {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-md);
+  color: var(--color-text-secondary);
+}
+
+.back-button {
+  background: linear-gradient(45deg, var(--color-accent-1), var(--color-accent-2));
   color: white;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-xl);
+  margin-top: var(--space-lg);
+  transition: var(--transition-normal);
 }
 
-.App-link {
-  color: #61dafb;
+.back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Loading Overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-spinner {
+  background: rgba(255, 255, 255, 0.1);
+  padding: var(--space-2xl);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+/* Error Banner */
+.error-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-accent-1);
+  color: white;
+  padding: var(--space-md);
+  text-align: center;
+  z-index: 1001;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.error-banner button {
+  background: none;
+  color: white;
+  font-size: var(--font-size-xl);
+  padding: 0 var(--space-sm);
 }

@@ -1,0 +1,217 @@
+.mission-map {
+  min-height: 100vh;
+  padding: var(--space-2xl);
+  background: linear-gradient(135deg, var(--color-space-dark), var(--color-space-medium));
+  position: relative;
+  overflow: hidden;
+}
+
+.mission-map-header {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+}
+
+.mission-title {
+  font-size: var(--font-size-4xl);
+  background: linear-gradient(45deg, var(--color-primary), var(--color-secondary));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: var(--space-md);
+}
+
+.player-welcome {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-sm);
+}
+
+.player-name {
+  color: var(--color-accent-1);
+  font-weight: bold;
+}
+
+.mission-instruction {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-xl);
+  max-width: 1000px;
+  margin: 0 auto var(--space-2xl);
+}
+
+.game-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--accent-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.game-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left var(--transition-slow);
+}
+
+.game-card:hover::before {
+  left: 100%;
+}
+
+.game-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: transparent;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+}
+
+.game-icon {
+  font-size: 4rem;
+  margin-bottom: var(--space-lg);
+  filter: drop-shadow(0 0 10px var(--accent-color));
+}
+
+.game-title {
+  font-size: var(--font-size-2xl);
+  color: var(--accent-color);
+  margin-bottom: var(--space-md);
+}
+
+.game-description {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-lg);
+  line-height: 1.5;
+}
+
+.game-status {
+  color: var(--color-accent-3);
+  font-weight: bold;
+  font-size: var(--font-size-sm);
+}
+
+.mission-map-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+}
+
+.back-button {
+  background: transparent;
+  border: 2px solid var(--color-text-secondary);
+  color: var(--color-text-secondary);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.back-button:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateX(-5px);
+}
+
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.status-dot.online {
+  background: var(--color-accent-3);
+}
+
+.status-dot.offline {
+  background: var(--color-accent-2);
+  animation: pulse-offline 2s infinite;
+}
+
+.space-station {
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
+  animation: float-station 4s ease-in-out infinite;
+}
+
+.station-core {
+  width: 60px;
+  height: 60px;
+  background: #555;
+  border-radius: 50%;
+  position: relative;
+}
+
+.solar-panel {
+  position: absolute;
+  top: 50%;
+  width: 80px;
+  height: 20px;
+  background: #333;
+  transform: translateY(-50%);
+}
+
+.solar-panel.left {
+  right: 100%;
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+}
+
+.solar-panel.right {
+  left: 100%;
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+}
+
+@keyframes float-station {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+@keyframes pulse-offline {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@media (max-width: 768px) {
+  .mission-map {
+    padding: var(--space-lg);
+  }
+  
+  .games-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .mission-map-footer {
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+  
+  .space-station {
+    display: none;
+  }
+}
