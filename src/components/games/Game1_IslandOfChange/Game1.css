@@ -1,0 +1,97 @@
+.game1-root {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+}
+
+.game1-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-xl);
+  background: rgba(255, 107, 107, 0.1);
+  border-bottom: 2px solid var(--color-accent-1);
+  backdrop-filter: blur(10px);
+}
+
+.game1-header h1 {
+  font-size: var(--font-size-3xl);
+  background: linear-gradient(45deg, var(--color-accent-1), var(--color-accent-2));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+.back-button {
+  background: transparent;
+  border: 2px solid var(--color-text-secondary);
+  color: var(--color-text-secondary);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: var(--transition-normal);
+  font-size: var(--font-size-base);
+}
+
+.back-button:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateX(-3px);
+}
+
+.game1-content {
+  flex: 1;
+  padding: var(--space-xl);
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.game1-progress {
+  padding: var(--space-lg);
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--color-border);
+}
+
+.progress-bar {
+  width: 300px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin: 0 auto var(--space-sm);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(45deg, var(--color-accent-1), var(--color-accent-2));
+  border-radius: var(--radius-full);
+  transition: width var(--transition-slow);
+}
+
+.progress-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .game1-header {
+    padding: var(--space-lg);
+    flex-direction: column;
+    gap: var(--space-md);
+    text-align: center;
+  }
+
+  .game1-header h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .game1-content {
+    padding: var(--space-lg);
+  }
+}

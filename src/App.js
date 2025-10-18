@@ -5,7 +5,7 @@ import { PlayerProvider, usePlayer } from './contexts/PlayerContext';
 import RocketLoader from './components/common/RocketLoader/RocketLoader';
 import LaunchScreen from './components/screens/LaunchScreen/LaunchScreen';
 import MissionMap from './components/screens/MissionMap/MissionMap';
-import Game1Screen from './components/screens/Game1Screen/Game1Screen';
+import Game1_Root from './components/games/Game1_IslandOfChange/Game1_Root';
 import Game2Screen from './components/screens/Game2Screen/Game2Screen';
 import Game3Screen from './components/screens/Game3Screen/Game3Screen';
 import EndCredits from './components/screens/EndCredits/EndCredits';
@@ -134,7 +134,7 @@ function AppContent() {
         return <MissionMap />;
       
       case 'game1':
-        return <Game1Screen onComplete={(score) => handleGameComplete('game1', score)} />;
+        return <Game1_Root onComplete={(score) => handleGameComplete('game1', score)} />;
       
       case 'game2':
         return <Game2Screen onComplete={(score) => handleGameComplete('game2', score)} />;
