@@ -6,7 +6,7 @@ import RocketLoader from './components/common/RocketLoader/RocketLoader';
 import LaunchScreen from './components/screens/LaunchScreen/LaunchScreen';
 import MissionMap from './components/screens/MissionMap/MissionMap';
 import Game1_Root from './components/games/Game1_IslandOfChange/Game1_Root';
-import Game2Screen from './components/screens/Game2Screen/Game2Screen';
+import Game2_Root from './components/games/Game2_WeatherWatchers/Game2_Root';
 import Game3Screen from './components/screens/Game3Screen/Game3Screen';
 import EndCredits from './components/screens/EndCredits/EndCredits';
 import AudioControls from './components/common/AudioControls/AudioControls';
@@ -137,7 +137,7 @@ function AppContent() {
         return <Game1_Root onComplete={(score) => handleGameComplete('game1', score)} />;
       
       case 'game2':
-        return <Game2Screen onComplete={(score) => handleGameComplete('game2', score)} />;
+        return <Game2_Root onComplete={(score) => handleGameComplete('game2', score)} />;
       
       case 'game3':
         return <Game3Screen onComplete={(score) => handleGameComplete('game3', score)} />;
