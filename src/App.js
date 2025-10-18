@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GameStateProvider, useGameState } from './contexts/GameStateContext';
 import { AudioProvider, useAudio } from './contexts/AudioContext';
 import { PlayerProvider, usePlayer } from './contexts/PlayerContext';
@@ -7,7 +7,7 @@ import LaunchScreen from './components/screens/LaunchScreen/LaunchScreen';
 import MissionMap from './components/screens/MissionMap/MissionMap';
 import Game1_Root from './components/games/Game1_IslandOfChange/Game1_Root';
 import Game2_Root from './components/games/Game2_WeatherWatchers/Game2_Root';
-import Game3Screen from './components/screens/Game3Screen/Game3Screen';
+import Game3_Root from './components/games/Game3_MatchTheSun/Game3_Root';
 import EndCredits from './components/screens/EndCredits/EndCredits';
 import AudioControls from './components/common/AudioControls/AudioControls';
 import LoadingSpinner from './components/common/LoadingSpinner/LoadingSpinner';
@@ -17,35 +17,23 @@ import './styles/globals/variables.css';
 import './styles/globals/animations.css';
 import './App.css';
 
-// Import services to initialize them
-import { IndexedDBService } from './services/storage';
-
 function AppContent() {
   const { state: gameState, dispatch: gameDispatch } = useGameState();
   const { actions: audioActions } = useAudio();
   const { actions: playerActions } = usePlayer();
+  const [isAppReady, setIsAppReady] = useState(false);
 
-  // Initialize services on app start
+  // Wait for GameStateProvider to be fully initialized, but don't block transitions
   useEffect(() => {
-    const initializeApp = async () => {
-      try {
-        await IndexedDBService.init();
-        console.log('Astrovoyager initialized successfully');
-      } catch (error) {
-        console.error('Failed to initialize app:', error);
-        gameDispatch({ 
-          type: 'SET_ERROR', 
-          payload: 'Failed to initialize application. Some features may not work.' 
-        });
-      }
-    };
-
-    initializeApp();
-  }, [gameDispatch]);
+    if (gameState.currentView !== 'loading' && gameState.isInitialized) {
+      setIsAppReady(true);
+    }
+  }, [gameState.currentView, gameState.isInitialized]);
 
   // Play appropriate background music based on current view
   useEffect(() => {
-    if (gameState.audioEnabled) {
+    // Allow audio to play even if app isn't fully ready, but only when not in loading view
+    if (gameState.audioEnabled && gameState.currentView !== 'loading') {
       switch (gameState.currentView) {
         case 'launch':
         case 'mission-map':
@@ -66,6 +54,8 @@ function AppContent() {
   }, [gameState.currentView, gameState.audioEnabled, audioActions]);
 
   const handleLoadingComplete = () => {
+    // ✅ Allow transition even if app isn't fully initialized
+    // This prevents the RocketLoader from getting stuck
     gameDispatch({ type: 'SET_VIEW', payload: 'launch' });
   };
 
@@ -83,7 +73,7 @@ function AppContent() {
         lastPlayed: new Date().toISOString()
       };
 
-      // Save player using PlayerContext
+      // Save player using PlayerContext (DB is initialized in GameStateContext)
       await playerActions.createPlayer(playerData);
       
       gameDispatch({ type: 'SET_VIEW', payload: 'mission-map' });
@@ -123,10 +113,13 @@ function AppContent() {
   };
 
   const renderCurrentView = () => {
+    // ✅ Simplified: Only show RocketLoader during initial loading state
+    // Allow transitions to happen even if assets aren't fully loaded
+    if (gameState.currentView === 'loading') {
+      return <RocketLoader onComplete={handleLoadingComplete} duration={2000} />;
+    }
+    
     switch (gameState.currentView) {
-      case 'loading':
-        return <RocketLoader onComplete={handleLoadingComplete} />;
-      
       case 'launch':
         return <LaunchScreen onLaunch={handleLaunch} />;
       
@@ -140,20 +133,21 @@ function AppContent() {
         return <Game2_Root onComplete={(score) => handleGameComplete('game2', score)} />;
       
       case 'game3':
-        return <Game3Screen onComplete={(score) => handleGameComplete('game3', score)} />;
+        return <Game3_Root onComplete={(score) => handleGameComplete('game3', score)} />;
       
       case 'end-credits':
         return <EndCredits />;
       
       default:
-        return <RocketLoader onComplete={handleLoadingComplete} />;
+        // Fallback if currentView gets into an unknown state
+        return <LaunchScreen onLaunch={handleLaunch} />;
     }
   };
 
   return (
     <div className="astrovoyager-app">
-      {/* Audio Controls */}
-      <AudioControls />
+      {/* ✅ Show AudioControls as soon as we're past the loading screen */}
+      {gameState.currentView !== 'loading' && <AudioControls />}
       
       {/* Loading Overlay */}
       {gameState.isLoading && (

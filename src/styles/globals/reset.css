@@ -9,6 +9,8 @@ html {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Add this to ensure html takes full height */
+  height: 100%;
 }
 
 body {
@@ -16,11 +18,16 @@ body {
   color: var(--color-text);
   min-height: 100vh;
   overflow-x: hidden;
+  /* Change to full height */
+  height: 100%;
 }
 
 #root {
   min-height: 100vh;
+  /* Change to full height */
+  height: 100%;
 }
+
 
 button {
   font-family: inherit;

@@ -2,10 +2,34 @@
   min-height: 100vh;
   position: relative;
   font-family: var(--font-family-primary);
+  /* Add these lines: */
+  display: flex;
+  flex-direction: column;
 }
 
 .app-content {
   min-height: 100vh;
+  /* Add these lines: */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* To ensure all screen components fill the space */
+.app-content > * {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure specific components fill available space */
+.launch-screen,
+.mission-map,
+.end-credits,
+.game-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Error Banner */
@@ -77,6 +101,8 @@
   background: linear-gradient(135deg, var(--color-space-dark), var(--color-space-medium));
   text-align: center;
   padding: var(--space-2xl);
+  /* Ensure it fills parent */
+  flex: 1;
 }
 
 .mission-map-placeholder h1 {

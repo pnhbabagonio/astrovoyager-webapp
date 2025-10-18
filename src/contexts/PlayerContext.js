@@ -12,7 +12,8 @@ const initialState = {
     gamesCompleted: 0,
     totalPoints: 0,
     sessions: 0
-  }
+  },
+  isLoaded: false // Track if players are loaded
 };
 
 function playerReducer(state, action) {
@@ -46,7 +47,8 @@ function playerReducer(state, action) {
     case 'LOAD_PLAYERS':
       return {
         ...state,
-        players: action.payload
+        players: action.payload,
+        isLoaded: true
       };
     
     case 'UPDATE_STATISTICS':
@@ -61,7 +63,8 @@ function playerReducer(state, action) {
     case 'RESET_PLAYER':
       return {
         ...initialState,
-        players: state.players
+        players: state.players,
+        isLoaded: true
       };
     
     default:
@@ -72,7 +75,7 @@ function playerReducer(state, action) {
 export function PlayerProvider({ children }) {
   const [state, dispatch] = useReducer(playerReducer, initialState);
 
-  // Load players from IndexedDB on mount
+  // Load players from IndexedDB on mount - NON-BLOCKING
   useEffect(() => {
     const loadPlayers = async () => {
       try {
@@ -80,6 +83,8 @@ export function PlayerProvider({ children }) {
         dispatch({ type: 'LOAD_PLAYERS', payload: players });
       } catch (error) {
         console.log('Error loading players:', error);
+        // Mark as loaded even if there's an error
+        dispatch({ type: 'LOAD_PLAYERS', payload: [] });
       }
     };
 

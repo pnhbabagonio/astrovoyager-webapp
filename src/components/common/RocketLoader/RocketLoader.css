@@ -6,6 +6,24 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   color: white;
+  /* ADD THESE CRITICAL LINES: */
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.rocket-loader-container {
+  /* ADD THIS NEW CLASS: */
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
 }
 
 .rocket-container {
@@ -76,6 +94,14 @@
   color: #a0a0a0;
 }
 
+.loading-tip {
+  margin-top: var(--space-lg);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-style: italic;
+  animation: fadeIn 1s ease-in;
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
@@ -84,4 +110,32 @@
 @keyframes burn {
   0% { transform: scaleY(1); opacity: 0.8; }
   100% { transform: scaleY(1.2); opacity: 1; }
+}
+
+/* ADD THESE MEDIA QUERIES FOR RESPONSIVE FULL-SCREEN */
+@media (max-width: 768px) {
+  .rocket-loader {
+    min-height: 100vh;
+    width: 100vw;
+  }
+  
+  .progress-bar {
+    width: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .rocket-loader {
+    min-height: 100vh;
+    width: 100vw;
+    padding: 1rem;
+  }
+  
+  .rocket {
+    font-size: 3rem;
+  }
+  
+  .progress-bar {
+    width: 200px;
+  }
 }

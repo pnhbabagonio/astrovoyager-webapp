@@ -14,7 +14,8 @@ const initialState = {
   audioEnabled: true,
   isLoading: false,
   error: null,
-  isOnline: navigator.onLine
+  isOnline: navigator.onLine,
+  isDataLoaded: false // New flag to track data loading
 };
 
 function gameReducer(state, action) {
@@ -52,11 +53,15 @@ function gameReducer(state, action) {
     case 'SET_ONLINE_STATUS':
       return { ...state, isOnline: action.payload };
     
+    case 'SET_DATA_LOADED':
+      return { ...state, isDataLoaded: true };
+    
     case 'RESET_GAME':
       return {
         ...initialState,
         currentView: 'launch',
-        audioEnabled: state.audioEnabled
+        audioEnabled: state.audioEnabled,
+        isDataLoaded: true
       };
     
     default:
@@ -67,33 +72,45 @@ function gameReducer(state, action) {
 export function GameStateProvider({ children }) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
-  // Load saved data on app start
+  // Load saved data on app start - NON-BLOCKING
   useEffect(() => {
     const loadSavedData = async () => {
       try {
-        await IndexedDBService.init();
+        // Don't await init here - it's already handled in App.js
+        // Just try to load the data quickly
         
         // Try to load the last active player
         const players = await IndexedDBService.getAllPlayers();
-        const lastPlayer = players[players.length - 1]; // Simple approach - get last player
+        const lastPlayer = players[players.length - 1];
         
         if (lastPlayer) {
           dispatch({ type: 'SET_PLAYER_DATA', payload: lastPlayer });
           
-          // Load progress for this player
-          const progress = await IndexedDBService.getGameProgress(lastPlayer.id);
-          progress.forEach(item => {
-            dispatch({
-              type: 'UPDATE_PROGRESS',
-              payload: { game: item.gameName, progress: item }
+          // Load progress for this player - don't wait for this to complete
+          IndexedDBService.getGameProgress(lastPlayer.id)
+            .then(progress => {
+              progress.forEach(item => {
+                dispatch({
+                  type: 'UPDATE_PROGRESS',
+                  payload: { game: item.gameName, progress: item }
+                });
+              });
+            })
+            .catch(error => {
+              console.log('Error loading progress:', error);
+              // Continue anyway - progress will be empty
             });
-          });
         }
       } catch (error) {
         console.log('No saved data found or error loading data:', error);
+        // Continue anyway - this is not critical
+      } finally {
+        // Mark data as loaded regardless of success/failure
+        dispatch({ type: 'SET_DATA_LOADED' });
       }
     };
 
+    // Start loading data but don't block the app
     loadSavedData();
   }, []);
 

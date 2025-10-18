@@ -1,0 +1,49 @@
+.accuracy-points {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  background: rgba(255, 255, 255, 0.1);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-xl);
+  border: 2px solid rgba(255, 167, 38, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.points-icon {
+  font-size: 1.5rem;
+  animation: pulse 2s infinite;
+}
+
+.points-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.points-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.points-value {
+  font-size: var(--font-size-lg);
+  color: #ffa726;
+  font-weight: var(--font-weight-bold);
+}
+
+.bonus-label {
+  font-size: var(--font-size-xs);
+  color: #4CAF50;
+  font-weight: var(--font-weight-medium);
+}
+
+@media (max-width: 768px) {
+  .accuracy-points {
+    padding: var(--space-sm) var(--space-md);
+  }
+  
+  .points-value {
+    font-size: var(--font-size-md);
+  }
+}
