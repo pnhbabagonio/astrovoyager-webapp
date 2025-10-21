@@ -104,21 +104,29 @@ export function AudioProvider({ children }) {
 
     const soundKey = `bg_${trackName}`;
     
-    // Stop current background music
-    audioInstances.current.forEach((sound, key) => {
-      if (key.startsWith('bg_') && key !== soundKey) {
-        sound.stop();
-      }
-    });
+    // Only stop if it's a different track
+    const currentTrack = state.backgroundMusic.currentTrack;
+    if (currentTrack && currentTrack !== trackName) {
+      audioInstances.current.forEach((sound, key) => {
+        if (key.startsWith('bg_') && key !== soundKey) {
+          sound.stop();
+        }
+      });
+    }
+
+    // If same track is already playing, do nothing
+    if (currentTrack === trackName && state.backgroundMusic.playing) {
+      return;
+    }
 
     // Create or get sound instance
     let sound = audioInstances.current.get(soundKey);
     if (!sound) {
-      // For now, use placeholder URLs - replace with actual files later
+      // Use your local audio files
       const trackUrls = {
-        space: ['https://assets.mixkit.co/music/preview/mixkit-space-game-668.mp3'],
-        adventure: ['https://assets.mixkit.co/music/preview/mixkit-adventure-96.mp3'],
-        victory: ['https://assets.mixkit.co/music/preview/mixkit-victory-110.mp3']
+        space: ['/assets/audio/background-music.wav'],
+        adventure: ['/assets/audio/background-music.wav'],
+        victory: ['/assets/audio/background-music.wav']
       };
 
       sound = new Howl({
@@ -127,6 +135,9 @@ export function AudioProvider({ children }) {
         volume: state.backgroundMusic.volume,
         onloaderror: (id, error) => {
           console.warn(`Failed to load background music ${trackName}:`, error);
+        },
+        onplayerror: (id, error) => {
+          console.warn(`Failed to play background music ${trackName}:`, error);
         }
       });
       

@@ -30,27 +30,14 @@ function AppContent() {
     }
   }, [gameState.currentView, gameState.isInitialized]);
 
-  // Play appropriate background music based on current view
+  // Play background music - starts on LaunchScreen and continues throughout the app
   useEffect(() => {
-    // Allow audio to play even if app isn't fully ready, but only when not in loading view
-    if (gameState.audioEnabled && gameState.currentView !== 'loading') {
-      switch (gameState.currentView) {
-        case 'launch':
-        case 'mission-map':
-          audioActions.playBackgroundMusic('space');
-          break;
-        case 'game1':
-        case 'game2':
-        case 'game3':
-          audioActions.playBackgroundMusic('adventure');
-          break;
-        case 'end-credits':
-          audioActions.playBackgroundMusic('victory');
-          break;
-        default:
-          audioActions.playBackgroundMusic('space');
-      }
+    // Start background music only when entering LaunchScreen and audio is enabled
+    if (gameState.audioEnabled && gameState.currentView === 'launch') {
+      audioActions.playBackgroundMusic('space');
     }
+    // Music will continue playing through all subsequent screens
+    // until manually stopped or the user mutes it
   }, [gameState.currentView, gameState.audioEnabled, audioActions]);
 
   const handleLoadingComplete = () => {

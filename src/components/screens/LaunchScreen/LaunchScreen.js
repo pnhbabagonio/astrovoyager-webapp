@@ -13,6 +13,9 @@ const LaunchScreen = ({ onLaunch }) => {
   return (
     <div className="launch-screen">
       <div className="stars"></div>
+      <div className="planet"></div>
+      <div className="rocket-silhouette"></div>
+      
       <div className="content">
         <h1 className="main-title">ASTROVOYAGER</h1>
         <p className="subtitle">Embark on an Educational Space Journey</p>
