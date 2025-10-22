@@ -29,10 +29,12 @@ const RocketLoader = ({ onComplete, duration = 2000 }) => {
   }, [duration, onComplete]);
 
   return (
-    <div className="rocket-loader-container"> {/* Added this wrapper div */}
+    <div className="rocket-loader-container">
       <div className="rocket-loader">
         <div className="rocket-container">
-          <div className="rocket">🚀</div>
+          <div className="rocket">
+            <img src="/assets/images/ui/rocket.png" alt="Rocket" className="rocket-image" />
+          </div>
           <div className="flames">
             <div className="flame flame-1"></div>
             <div className="flame flame-2"></div>

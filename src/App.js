@@ -11,6 +11,7 @@ import Game3_Root from './components/games/Game3_MatchTheSun/Game3_Root';
 import EndCredits from './components/screens/EndCredits/EndCredits';
 import AudioControls from './components/common/AudioControls/AudioControls';
 import LoadingSpinner from './components/common/LoadingSpinner/LoadingSpinner';
+import LaunchVideo from './components/screens/LaunchVideo/LaunchVideo';
 
 import './styles/globals/reset.css';
 import './styles/globals/variables.css';
@@ -22,6 +23,8 @@ function AppContent() {
   const { actions: audioActions } = useAudio();
   const { actions: playerActions } = usePlayer();
   const [isAppReady, setIsAppReady] = useState(false);
+  const [showLaunchVideo, setShowLaunchVideo] = useState(false);
+  const [playerData, setPlayerData] = useState(null);
 
   // Wait for GameStateProvider to be fully initialized, but don't block transitions
   useEffect(() => {
@@ -30,19 +33,38 @@ function AppContent() {
     }
   }, [gameState.currentView, gameState.isInitialized]);
 
-  // Play background music - starts on LaunchScreen and continues throughout the app
+  // Simplified background music management
   useEffect(() => {
-    // Start background music only when entering LaunchScreen and audio is enabled
-    if (gameState.audioEnabled && gameState.currentView === 'launch') {
-      audioActions.playBackgroundMusic('space');
+    if (!gameState.audioEnabled) return;
+
+    // Stop music when video is showing
+    if (showLaunchVideo) {
+      audioActions.stopBackgroundMusic();
+      return;
     }
-    // Music will continue playing through all subsequent screens
-    // until manually stopped or the user mutes it
-  }, [gameState.currentView, gameState.audioEnabled, audioActions]);
+
+    // Play appropriate music based on current view
+    switch (gameState.currentView) {
+      case 'launch':
+        audioActions.playBackgroundMusic('space');
+        break;
+      case 'mission-map':
+        audioActions.playBackgroundMusic('space');
+        break;
+      case 'game1':
+      case 'game2':
+      case 'game3':
+        audioActions.playBackgroundMusic('adventure');
+        break;
+      case 'end-credits':
+        audioActions.playBackgroundMusic('victory');
+        break;
+      default:
+        audioActions.stopBackgroundMusic();
+    }
+  }, [gameState.currentView, showLaunchVideo, gameState.audioEnabled]);
 
   const handleLoadingComplete = () => {
-    // ✅ Allow transition even if app isn't fully initialized
-    // This prevents the RocketLoader from getting stuck
     gameDispatch({ type: 'SET_VIEW', payload: 'launch' });
   };
 
@@ -63,9 +85,10 @@ function AppContent() {
       // Save player using PlayerContext (DB is initialized in GameStateContext)
       await playerActions.createPlayer(playerData);
       
-      gameDispatch({ type: 'SET_VIEW', payload: 'mission-map' });
-      audioActions.playSoundEffect('gameStart');
-      audioActions.playVoiceover('welcome');
+      // Store player data and show video
+      setPlayerData(playerData);
+      setShowLaunchVideo(true);
+      
     } catch (error) {
       console.error('Error during launch:', error);
       gameDispatch({ 
@@ -75,6 +98,14 @@ function AppContent() {
     } finally {
       gameDispatch({ type: 'SET_LOADING', payload: false });
     }
+  };
+
+  const handleVideoComplete = () => {
+    // After video completes, go to mission map
+    setShowLaunchVideo(false);
+    gameDispatch({ type: 'SET_VIEW', payload: 'mission-map' });
+    audioActions.playSoundEffect('gameStart');
+    audioActions.playVoiceover('welcome');
   };
 
   const handleGameComplete = (gameName, scoreData) => {
@@ -100,8 +131,12 @@ function AppContent() {
   };
 
   const renderCurrentView = () => {
-    // ✅ Simplified: Only show RocketLoader during initial loading state
-    // Allow transitions to happen even if assets aren't fully loaded
+    // Show LaunchVideo component when triggered
+    if (showLaunchVideo) {
+      return <LaunchVideo onComplete={handleVideoComplete} />;
+    }
+
+    // Show RocketLoader during initial loading state
     if (gameState.currentView === 'loading') {
       return <RocketLoader onComplete={handleLoadingComplete} duration={2000} />;
     }
@@ -126,15 +161,14 @@ function AppContent() {
         return <EndCredits />;
       
       default:
-        // Fallback if currentView gets into an unknown state
         return <LaunchScreen onLaunch={handleLaunch} />;
     }
   };
 
   return (
     <div className="astrovoyager-app">
-      {/* ✅ Show AudioControls as soon as we're past the loading screen */}
-      {gameState.currentView !== 'loading' && <AudioControls />}
+      {/* Show AudioControls as soon as we're past the loading screen and not in video */}
+      {gameState.currentView !== 'loading' && !showLaunchVideo && <AudioControls />}
       
       {/* Loading Overlay */}
       {gameState.isLoading && (

@@ -11,11 +11,15 @@ const LaunchScreen = ({ onLaunch }) => {
   };
 
   return (
-    <div className="launch-screen">
-      <div className="stars"></div>
-      <div className="planet"></div>
-      <div className="rocket-silhouette"></div>
-      
+    <div 
+      className="launch-screen"
+      style={{ 
+        backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/launch-screen-bg.png)`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
       <div className="content">
         <h1 className="main-title">ASTROVOYAGER</h1>
         <p className="subtitle">Embark on an Educational Space Journey</p>
@@ -31,7 +35,7 @@ const LaunchScreen = ({ onLaunch }) => {
             onChange={(e) => setPlayerName(e.target.value)}
             placeholder="e.g., Astronaut Quincy"
             className="name-input"
-            onKeyPress={(e) => e.key === 'Enter' && handleLaunch()}
+            onKeyUp={(e) => e.key === 'Enter' && handleLaunch()}
           />
         </div>
 
