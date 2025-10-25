@@ -45,63 +45,47 @@
   line-height: 1.1;
 }
 
-.player-welcome {
-  font-size: 1rem;
-  color: #eaeaea;
-  font-weight: 500;
-  margin-bottom: 0;
-}
-
-.player-name {
-  color: #ff914d;
-  font-weight: 700;
-  text-shadow: 0 0 8px rgba(255, 145, 77, 0.4);
-}
-
-.mission-instruction {
-  font-size: 0.9rem;
-  color: #cfd9df;
-  font-style: italic;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-  margin: 0;
-}
-
-/* Back button in header */
-.back-button {
+/* Back button in header - SMALLER SIZE */
+.mission-map-header .back-button {
   position: absolute;
-  top: 1.2rem;
-  left: 1.2rem;
+  top: 0;
+  left: 20px;
   z-index: 5;
 
   background: linear-gradient(135deg, #ffb703, #fca311);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
   color: #fff;
-  padding: 0.7rem 1.5rem;
-  border-radius: 30px;
+  padding: 10px 12px !important;
+  border-radius: 10px;
 
   font-family: 'Orbitron', 'Poppins', sans-serif;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 12px !important;
   cursor: pointer;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 
-  box-shadow: 0 4px 15px rgba(255, 180, 0, 0.4);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 3px 12px rgba(255, 180, 0, 0.3);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
   transition: all 0.3s ease;
+  
+  min-width: auto;
+  width: auto;
+  height: auto;
+  line-height: 1.2;
 }
 
-.back-button:hover {
+.mission-map-header .back-button:hover {
   background: linear-gradient(135deg, #ffd166, #ffb703);
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 6px 20px rgba(255, 200, 0, 0.6);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 5px 15px rgba(255, 200, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
-.back-button:active {
-  transform: translateY(1px) scale(0.97);
-  box-shadow: 0 2px 8px rgba(255, 200, 0, 0.3);
+.mission-map-header .back-button:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 6px rgba(255, 200, 0, 0.3);
 }
-
-
 
 /* ISLANDS LAYER */
 .islands-layer {
@@ -109,7 +93,7 @@
   flex: 1;
   width: 100%;
   z-index: 3;
-  min-height: 0; /* Important for flex child */
+  min-height: 0;
 }
 
 /* Island Base Styling - No boxes! */
@@ -126,8 +110,8 @@
 
 /* Enlarged island images */
 .island-image {
-  width: 450px; /* Increased from 140px */
-  height: 300px; /* Increased from 140px */
+  width: 300px;
+  height: 350px;
   object-fit: contain;
   border: none;
   transition: all 0.3s ease;
@@ -140,8 +124,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 200px; /* Increased from 160px */
-  height: 200px; /* Increased from 160px */
+  width: 200px;
+  height: 200px;
   background: radial-gradient(circle, rgba(255, 221, 87, 0.3) 0%, transparent 70%);
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -169,17 +153,17 @@
   filter: brightness(1.1) saturate(1.2) drop-shadow(0 4px 15px rgba(0, 230, 118, 0.5));
 }
 
-/* Island Label */
+/* Island Label - EXTREMELY CLOSE VERSION */
 .island-label {
   position: absolute;
-  bottom: -30px;
+  bottom: 2px; /* Positive value puts it above the bottom edge */
   left: 50%;
-  transform: translateX(-50%) translateY(15px);
+  transform: translateX(-50%) translateY(3px);
   opacity: 0;
   pointer-events: none;
-  transition: all 0.4s ease;
+  transition: all 0.3s ease;
   z-index: 4;
-  min-width: 180px;
+  min-width: 140px;
   text-align: center;
 }
 
@@ -189,50 +173,129 @@
 }
 
 .label-name {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.1rem;
-  color: #ffdd57;
-  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  color: #ffffff;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.3rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-  background: rgba(15, 32, 58, 0.95);
-  padding: 0.5rem 0.8rem;
-  border-radius: 6px;
+  letter-spacing: 0.3px;
+  margin-bottom: 0.2rem;
+  background: rgba(15, 32, 58, 0.98);
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 221, 87, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   line-height: 1.2;
 }
 
 .label-desc {
-  font-size: 0.8rem;
+  font-size: 0.65rem;
   color: #e2e8f0;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.3rem;
   line-height: 1.2;
-  font-weight: 500;
-  background: rgba(8, 20, 38, 0.95);
-  padding: 0.4rem 0.6rem;
-  border-radius: 4px;
+  font-weight: 400;
+  background: rgba(8, 20, 38, 0.98);
+  padding: 0.25rem 0.4rem;
+  border-radius: 3px;
   backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .mission-status {
-  font-size: 0.75rem;
+  font-size: 0.6rem;
   font-weight: 600;
   color: #ffeaa7;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-  background: rgba(15, 32, 58, 0.95);
-  padding: 0.3rem 0.6rem;
-  border-radius: 4px;
+  background: rgba(15, 32, 58, 0.98);
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
   backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  letter-spacing: 0.3px;
 }
 
-/* Responsive Design for different screen sizes */
+/* Character Container at Center */
+.character-container {
+  position: absolute;
+  top: 65%;
+  left: 80%;
+  transform: translate(-50%, -0%);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+/* Character Image */
+.character-image {
+  width: 180px;
+  height: 250px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 25px rgba(0, 0, 0, 0.4));
+  margin-top: -40px;
+}
+
+/* Text Bubble */
+.text-bubble {
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1.2rem 1.5rem;
+  border-radius: 20px;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(74, 144, 226, 0.2);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  max-width: 300px;
+  margin-bottom: 5px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.text-bubble p {
+  margin: 0;
+  color: #2d3748;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.player-name {
+  color: #4a90e2;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Bubble Tail */
+.bubble-tail {
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 12px solid rgba(255, 255, 255, 0.95);
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Responsive Design */
 @media (max-width: 1024px) {
   .island-image {
-    width: 160px; /* Increased from 120px */
-    height: 160px; /* Increased from 120px */
+    width: 160px;
+    height: 160px;
   }
   
   .mission-title {
@@ -240,8 +303,31 @@
   }
   
   .island-glow {
-    width: 180px; /* Increased from 140px */
-    height: 180px; /* Increased from 140px */
+    width: 180px;
+    height: 180px;
+  }
+  
+  .island-label {
+    bottom: 1px;
+    min-width: 120px;
+  }
+  
+  .character-container {
+    transform: translate(-50%, -40%);
+  }
+  
+  .character-image {
+    width: 140px;
+    height: 200px;
+  }
+  
+  .text-bubble {
+    max-width: 240px;
+    padding: 1rem 1.2rem;
+  }
+  
+  .text-bubble p {
+    font-size: 0.9rem;
   }
 }
 
@@ -250,29 +336,60 @@
     font-size: 1.8rem;
   }
   
+  .back-button {
+    top: 15px;
+    left: 15px;
+    padding: 6px 12px;
+    font-size: 10px;
+  }
+  
   .island-image {
-    width: 140px; /* Increased from 100px */
-    height: 140px; /* Increased from 100px */
+    width: 140px;
+    height: 140px;
   }
   
   .island-glow {
-    width: 160px; /* Increased from 120px */
-    height: 160px; /* Increased from 120px */
+    width: 160px;
+    height: 160px;
   }
   
   .island-label {
-    bottom: -75px;
-    min-width: 150px;
+    bottom: 1px;
+    min-width: 110px;
   }
   
   .label-name {
-    font-size: 1rem;
-    padding: 0.4rem 0.6rem;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.35rem;
   }
   
   .label-desc {
-    font-size: 0.75rem;
-    padding: 0.3rem 0.5rem;
+    font-size: 0.55rem;
+    padding: 0.15rem 0.3rem;
+  }
+  
+  .mission-status {
+    font-size: 0.5rem;
+    padding: 0.1rem 0.3rem;
+  }
+  
+  .character-container {
+    transform: translate(-50%, -30%);
+  }
+  
+  .character-image {
+    width: 120px;
+    height: 170px;
+  }
+  
+  .text-bubble {
+    max-width: 200px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 10px;
+  }
+  
+  .text-bubble p {
+    font-size: 0.85rem;
   }
 }
 
@@ -282,26 +399,59 @@
     letter-spacing: 1px;
   }
   
-  .player-welcome {
-    font-size: 0.9rem;
-  }
-  
-  .mission-instruction {
-    font-size: 0.8rem;
+  .back-button {
+    top: 10px;
+    left: 10px;
+    padding: 5px 10px;
+    font-size: 9px;
+    border-radius: 12px;
   }
   
   .island-image {
-    width: 120px; /* Increased from 80px */
-    height: 120px; /* Increased from 80px */
+    width: 120px;
+    height: 120px;
   }
   
   .island-glow {
-    width: 140px; /* Increased from 100px */
-    height: 140px; /* Increased from 100px */
+    width: 140px;
+    height: 140px;
   }
   
-  .back-button {
-    padding: 0.5rem 1rem;
+  .island-label {
+    bottom: 0px;
+    min-width: 100px;
+  }
+  
+  .label-name {
+    font-size: 0.6rem;
+    padding: 0.15rem 0.3rem;
+  }
+  
+  .label-desc {
+    font-size: 0.5rem;
+    padding: 0.1rem 0.25rem;
+  }
+  
+  .mission-status {
+    font-size: 0.45rem;
+    padding: 0.08rem 0.25rem;
+  }
+  
+  .character-container {
+    transform: translate(-50%, -20%);
+  }
+  
+  .character-image {
+    width: 100px;
+    height: 140px;
+  }
+  
+  .text-bubble {
+    max-width: 180px;
+    padding: 0.7rem 0.9rem;
+  }
+  
+  .text-bubble p {
     font-size: 0.8rem;
   }
 }
