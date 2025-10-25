@@ -21,7 +21,7 @@ const MissionMap = () => {
       description: 'Disaster Response Training',
       img: island1Bg,
       route: 'game1',
-      pos: { left: '5%', top: '18%' },
+      pos: { left: '0%', top: '43%' },
     },
     {
       id: 2,
@@ -29,7 +29,7 @@ const MissionMap = () => {
       description: 'Atmospheric Phenomena',
       img: island2Bg,
       route: 'game2',
-      pos: { left: '35%', top: '5%' },
+      pos: { left: '35%', top: '20%' },
     },
     {
       id: 3,
@@ -37,7 +37,7 @@ const MissionMap = () => {
       description: 'Seasons & Sun Position',
       img: island3Bg,
       route: 'game3',
-      pos: { left: '65%', top: '0%' },
+      pos: { left: '70%', top: '-15%' },
     },
   ];
 

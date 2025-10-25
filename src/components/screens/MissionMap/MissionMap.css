@@ -110,8 +110,8 @@
 
 /* Enlarged island images */
 .island-image {
-  width: 300px;
-  height: 350px;
+  width: 350px;
+  height: 400px;
   object-fit: contain;
   border: none;
   transition: all 0.3s ease;
@@ -156,7 +156,7 @@
 /* Island Label - EXTREMELY CLOSE VERSION */
 .island-label {
   position: absolute;
-  bottom: 2px; /* Positive value puts it above the bottom edge */
+  top: 67%; 
   left: 50%;
   transform: translateX(-50%) translateY(3px);
   opacity: 0;
@@ -216,7 +216,7 @@
 /* Character Container at Center */
 .character-container {
   position: absolute;
-  top: 65%;
+  top: 50%;
   left: 80%;
   transform: translate(-50%, -0%);
   z-index: 4;
@@ -228,8 +228,8 @@
 
 /* Character Image */
 .character-image {
-  width: 180px;
-  height: 250px;
+  width: 480px;
+  height: 350px;
   object-fit: contain;
   filter: drop-shadow(0 8px 25px rgba(0, 0, 0, 0.4));
   margin-top: -40px;
@@ -255,7 +255,7 @@
   margin: 0;
   color: #2d3748;
   font-family: 'Inter', sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 1.4;
   text-align: center;
