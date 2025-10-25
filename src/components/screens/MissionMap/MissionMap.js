@@ -20,7 +20,7 @@ const MissionMap = () => {
       description: 'Disaster Response Training',
       img: island1Bg,
       route: 'game1',
-      pos: { left: '6%', top: '8%' },
+      pos: { left: '5%', top: '5%' },
     },
     {
       id: 2,
@@ -28,7 +28,7 @@ const MissionMap = () => {
       description: 'Atmospheric Phenomena',
       img: island2Bg,
       route: 'game2',
-      pos: { left: '42%', top: '28%' },
+      pos: { left: '35%', top: '20%' },
     },
     {
       id: 3,
@@ -36,7 +36,7 @@ const MissionMap = () => {
       description: 'Seasons & Sun Position',
       img: island3Bg,
       route: 'game3',
-      pos: { left: '72%', top: '62%' },
+      pos: { left: '65%', top: '5%' },
     },
   ];
 
@@ -62,65 +62,45 @@ const MissionMap = () => {
     >
       <div className="overlay" />
 
-      {/* Static white dashed line path */}
-      <svg className="map-path" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
-        <path
-          d="M8 12 C28 18, 40 28, 44 32 C55 40, 66 48, 72 56 C78 64, 86 70, 76 76"
-          fill="none"
-          stroke="rgba(255,255,255,0.95)"
-          strokeWidth="0.6"
-          strokeDasharray="0.6 0.9"
-          strokeLinecap="round"
-          vectorEffect="non-scaling-stroke"
-        />
-      </svg>
-
       <header className="mission-map-header">
-        <h1 className="mission-title">MISSION MAP</h1>
+        <h1 className="mission-title">EXPEDITION MAP</h1>
         <div className="player-welcome">
-          Welcome, <span className="player-name">{gameState.playerData?.encodedName || 'Astronaut'}</span>
-        </div>
-        <p className="mission-instruction">Hover an island to reveal the mission — click to launch.</p>
+          Welcome, <span className="player-name">{gameState.playerData?.encodedName || 'Explorer'}</span>
+        </div>        
+        {/* Back button moved to header */}
+        <button onClick={handleBackToLaunch} className="back-button">
+          ← Base Camp
+        </button>
       </header>
 
       <div className="islands-layer">
         {games.map((g) => (
           <button
             key={g.id}
-            className="island"
+            className={`island ${gameState.gameProgress[`game${g.id}`]?.completed ? 'completed' : ''}`}
             style={{
               left: g.pos.left,
               top: g.pos.top,
-              backgroundImage: `url(${g.img})`,
-              backgroundSize: 'contain',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
             }}
             onClick={() => handleGameSelect(g)}
-            aria-label={g.name}
-            onMouseDown={(e) => e.currentTarget.classList.add('pressed')}
-            onMouseUp={(e) => e.currentTarget.classList.remove('pressed')}
+            aria-label={`Launch ${g.name} mission`}
           >
+            <img 
+              src={g.img}
+              alt={g.name}
+              className="island-image"
+            />
+            <div className="island-glow"></div>
             <div className="island-label">
-              <div className="label-inner">
-                <div className="label-name">{g.name}</div>
-                <div className="label-desc">{g.description}</div>
+              <h3 className="label-name">{g.name}</h3>
+              <p className="label-desc">{g.description}</p>
+              <div className="mission-status">
+                {gameState.gameProgress[`game${g.id}`]?.completed ? '✅ Complete' : '🟡 Ready'}
               </div>
             </div>
           </button>
         ))}
       </div>
-
-      <footer className="mission-map-footer">
-        <button onClick={handleBackToLaunch} className="back-button">
-          ← Return to Launch
-        </button>
-
-        <div className="connection-status">
-          <div className={`status-dot ${gameState.isOnline ? 'online' : 'offline'}`} />
-          <span>Mission Control: {gameState.isOnline ? 'Online' : 'Offline'}</span>
-        </div>
-      </footer>
     </div>
   );
 };

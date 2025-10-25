@@ -3,6 +3,7 @@ import './LaunchVideo.css';
 
 const LaunchVideo = ({ onComplete }) => {
   const videoRef = useRef(null);
+  const skipButtonRef = useRef(null);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -48,24 +49,27 @@ const LaunchVideo = ({ onComplete }) => {
 
   return (
     <div className="launch-video-container">
+      <div className="video-overlay" onClick={handleSkipVideo}></div>
+      
       <div className="video-wrapper">
         <iframe
           ref={videoRef}
-          src="https://www.youtube.com/embed/XPMzSYzKImM?autoplay=1&mute=0&controls=1&modestbranding=1&rel=0"
+          src="https://www.youtube.com/embed/XPMzSYzKImM?autoplay=1&mute=0&controls=0&modestbranding=1&rel=0"
           title="Astrovoyager Launch Video"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
           className="launch-video"
         ></iframe>
-        
-        <button 
-          onClick={handleSkipVideo}
-          className="skip-button"
-        >
-          Skip Video
-        </button>
       </div>
+      
+      <button 
+        ref={skipButtonRef}
+        onClick={handleSkipVideo}
+        className="skip-button"
+      >
+        Skip Video
+      </button>
     </div>
   );
 };
