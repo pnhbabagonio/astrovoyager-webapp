@@ -5,8 +5,14 @@ const LoadingSpinner = ({ message = "Loading..." }) => {
   return (
     <div className="loading-spinner-overlay">
       <div className="loading-spinner">
-        <div className="spinner"></div>
+        <img 
+          src="/assets/images/ui/rocket.png" 
+          alt="Rocket Loading" 
+          className="rocket-spinner"
+        />
         <div className="spinner-text">{message}</div>
+        <div className="loading-progress"></div>
+        <div className="loading-subtext">Preparing for launch sequence...</div>
       </div>
     </div>
   );

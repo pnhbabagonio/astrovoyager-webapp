@@ -47,14 +47,14 @@ const LaunchScreen = ({ onLaunch }) => {
           🚀 BEGIN JOURNEY
         </button>
 
-        <div className="mission-brief">
+        {/* <div className="mission-brief">
           <h3>Mission Objectives:</h3>
           <ul>
             <li>🌋 Master Disaster Response</li>
             <li>🌦️ Understand Weather Patterns</li>
             <li>☀️ Learn Seasonal Changes</li>
           </ul>
-        </div>
+        </div> */}
       </div>
     </div>
   );

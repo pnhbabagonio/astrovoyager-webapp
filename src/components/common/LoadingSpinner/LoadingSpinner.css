@@ -1,0 +1,137 @@
+.loading-spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  flex-direction: column;
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.rocket-spinner {
+  width: 120px;
+  height: auto;
+  margin-bottom: 2rem;
+  animation: rocketSpin 2s linear infinite, rocketFloat 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(79, 172, 254, 0.6));
+}
+
+.spinner-text {
+  color: #4facfe;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 10px rgba(79, 172, 254, 0.5);
+}
+
+.loading-progress {
+  width: 200px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.loading-progress::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #4facfe, #00f2fe);
+  border-radius: 2px;
+  animation: loadingProgress 5s linear forwards;
+}
+
+.loading-subtext {
+  color: #a0a0a0;
+  font-size: 1rem;
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+@keyframes rocketSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rocketFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(5deg);
+  }
+}
+
+@keyframes loadingProgress {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .rocket-spinner {
+    width: 100px;
+  }
+  
+  .spinner-text {
+    font-size: 1.3rem;
+  }
+  
+  .loading-progress {
+    width: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .rocket-spinner {
+    width: 80px;
+  }
+  
+  .spinner-text {
+    font-size: 1.1rem;
+  }
+  
+  .loading-progress {
+    width: 160px;
+  }
+  
+  .loading-subtext {
+    font-size: 0.9rem;
+  }
+}

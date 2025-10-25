@@ -24,6 +24,7 @@ function AppContent() {
   const { actions: playerActions } = usePlayer();
   const [isAppReady, setIsAppReady] = useState(false);
   const [showLaunchVideo, setShowLaunchVideo] = useState(false);
+  const [showJourneyLoading, setShowJourneyLoading] = useState(false);
   const [playerData, setPlayerData] = useState(null);
 
   // Wait for GameStateProvider to be fully initialized, but don't block transitions
@@ -37,8 +38,8 @@ function AppContent() {
   useEffect(() => {
     if (!gameState.audioEnabled) return;
 
-    // Stop music when video is showing
-    if (showLaunchVideo) {
+    // Stop music when video is showing or during journey loading
+    if (showLaunchVideo || showJourneyLoading) {
       audioActions.stopBackgroundMusic();
       return;
     }
@@ -62,7 +63,7 @@ function AppContent() {
       default:
         audioActions.stopBackgroundMusic();
     }
-  }, [gameState.currentView, showLaunchVideo, gameState.audioEnabled]);
+  }, [gameState.currentView, showLaunchVideo, showJourneyLoading, gameState.audioEnabled]);
 
   const handleLoadingComplete = () => {
     gameDispatch({ type: 'SET_VIEW', payload: 'launch' });
@@ -85,9 +86,15 @@ function AppContent() {
       // Save player using PlayerContext (DB is initialized in GameStateContext)
       await playerActions.createPlayer(playerData);
       
-      // Store player data and show video
+      // Store player data and show journey loading
       setPlayerData(playerData);
-      setShowLaunchVideo(true);
+      setShowJourneyLoading(true);
+      
+      // After 5 seconds, show the video
+      setTimeout(() => {
+        setShowJourneyLoading(false);
+        setShowLaunchVideo(true);
+      }, 5000);
       
     } catch (error) {
       console.error('Error during launch:', error);
@@ -131,6 +138,11 @@ function AppContent() {
   };
 
   const renderCurrentView = () => {
+    // Show Journey Loading after clicking BEGIN JOURNEY
+    if (showJourneyLoading) {
+      return <LoadingSpinner message="Launching rocket..." />;
+    }
+
     // Show LaunchVideo component when triggered
     if (showLaunchVideo) {
       return <LaunchVideo onComplete={handleVideoComplete} />;
@@ -167,10 +179,10 @@ function AppContent() {
 
   return (
     <div className="astrovoyager-app">
-      {/* Show AudioControls as soon as we're past the loading screen and not in video */}
-      {gameState.currentView !== 'loading' && !showLaunchVideo && <AudioControls />}
+      {/* Show AudioControls as soon as we're past the loading screen and not in video/journey loading */}
+      {gameState.currentView !== 'loading' && !showLaunchVideo && !showJourneyLoading && <AudioControls />}
       
-      {/* Loading Overlay */}
+      {/* Loading Overlay for general app loading */}
       {gameState.isLoading && (
         <LoadingSpinner message="Preparing mission..." />
       )}

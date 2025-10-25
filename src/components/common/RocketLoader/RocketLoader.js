@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './RocketLoader.css';
 
-const RocketLoader = ({ onComplete, duration = 2000 }) => {
+const RocketLoader = ({ onComplete, duration = 7000 }) => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const RocketLoader = ({ onComplete, duration = 2000 }) => {
         }
         return prev + 2;
       });
-    }, duration / 50);
+    }, duration / 10);
 
     return () => {
       mounted = false;
@@ -35,11 +35,11 @@ const RocketLoader = ({ onComplete, duration = 2000 }) => {
           <div className="rocket">
             <img src="/assets/images/ui/rocket.png" alt="Rocket" className="rocket-image" />
           </div>
-          <div className="flames">
+          {/* <div className="flames">
             <div className="flame flame-1"></div>
             <div className="flame flame-2"></div>
             <div className="flame flame-3"></div>
-          </div>
+          </div> */}
         </div>
         <div className="loader-text">Launching Astrovoyager...</div>
         <div className="progress-bar">

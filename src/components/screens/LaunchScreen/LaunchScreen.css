@@ -4,17 +4,19 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  background-color: #000;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   overflow: hidden;
 }
 
 .launch-screen::before {
+  /* soft gradient to ensure text visibility */
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(12, 12, 46, 0.7);
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6));
   z-index: 1;
 }
 
@@ -22,183 +24,125 @@
   position: relative;
   z-index: 2;
   text-align: center;
-  max-width: 600px;
   padding: 2rem;
+  color: #fff;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
 }
 
+/* --- Main Title --- */
 .main-title {
   font-size: 4rem;
-  background: linear-gradient(45deg, #ff6b6b, #4facfe, #00f2fe, #ff6b6b);
-  background-size: 300% 300%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 1rem;
-  animation: glow 3s ease-in-out infinite, gradientShift 4s ease-in-out infinite;
-  transition: all 0.3s ease;
+  letter-spacing: 2px;
+  font-family: 'Orbitron', 'Poppins', sans-serif;
+  color: #ffe066;
+  text-transform: uppercase;
+  animation: pulseGlow 3s ease-in-out infinite;
+  margin-bottom: 0.8rem;
 }
 
+/* --- Subtitle --- */
 .subtitle {
-  font-size: 1.3rem;
-  color: #a0a0a0;
-  margin-bottom: 3rem;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #f0f0f0;
+  letter-spacing: 1px;
+  margin-bottom: 2.5rem;
 }
 
+/* --- Input Section --- */
 .input-section {
   margin: 2rem 0;
 }
 
 .input-label {
   display: block;
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
-  color: #4facfe;
+  font-size: 1rem;
+  color: #ffde59;
+  margin-bottom: 0.6rem;
+  font-weight: 500;
 }
 
 .name-input {
-  width: 300px;
-  padding: 12px 20px;
-  font-size: 1.1rem;
-  border: 2px solid #4facfe;
-  border-radius: 25px;
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
+  width: 280px;
+  padding: 12px 18px;
+  font-size: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 30px;
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
   text-align: center;
   outline: none;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  transition: 0.3s ease;
+  backdrop-filter: blur(4px);
 }
 
 .name-input:focus {
-  border-color: #00f2fe;
-  box-shadow: 0 0 25px rgba(79, 172, 254, 0.6);
-  background: rgba(255, 255, 255, 0.12);
-  transform: scale(1.05);
+  border-color: #ffe066;
+  box-shadow: 0 0 15px rgba(255, 224, 102, 0.4);
+  transform: scale(1.03);
 }
 
 .name-input::placeholder {
-  color: #666;
+  color: rgba(255, 255, 255, 0.5);
 }
 
+/* --- Button --- */
 .launch-button {
-  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  background: linear-gradient(45deg, #ff9f1a, #ff2c2c);
   border: none;
   color: white;
-  padding: 15px 40px;
+  padding: 15px 45px;
   font-size: 1.2rem;
-  border-radius: 30px;
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  border-radius: 40px;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin: 1rem 0;
-  box-shadow: 0 5px 20px rgba(255, 107, 107, 0.4);
-  position: relative;
-  overflow: hidden;
-}
-
-.launch-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
+  margin-top: 1rem;
+  box-shadow: 0 6px 25px rgba(255, 44, 44, 0.4);
+  letter-spacing: 1px;
 }
 
 .launch-button:hover:not(:disabled) {
   transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(255, 107, 107, 0.6);
-}
-
-.launch-button:hover:not(:disabled)::before {
-  left: 100%;
+  box-shadow: 0 10px 30px rgba(255, 159, 26, 0.6);
 }
 
 .launch-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  transform: none;
 }
 
-.mission-brief {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-}
-
-.mission-brief:hover {
-  background: rgba(255, 255, 255, 0.12);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-
-.mission-brief h3 {
-  color: #4facfe;
-  margin-bottom: 1rem;
-}
-
-.mission-brief ul {
-  list-style: none;
-  text-align: left;
-}
-
-.mission-brief li {
-  padding: 0.5rem 0;
-  font-size: 1.1rem;
-}
-
-@keyframes glow {
-  0% { 
-    text-shadow: 0 2px 20px rgba(79, 172, 254, 0.5);
-    transform: scale(1);
+/* --- Animation --- */
+@keyframes pulseGlow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(255, 224, 102, 0.8),
+                 0 0 20px rgba(255, 159, 26, 0.6),
+                 0 0 30px rgba(255, 44, 44, 0.3);
   }
-  50% { 
-    text-shadow: 0 2px 30px rgba(0, 242, 254, 0.8), 
-                 0 5px 40px rgba(79, 172, 254, 0.6),
-                 0 8px 60px rgba(255, 107, 107, 0.4);
-  }
-  100% { 
-    text-shadow: 0 2px 20px rgba(79, 172, 254, 0.5);
-    transform: scale(1.02);
+  50% {
+    text-shadow: 0 0 20px rgba(255, 224, 102, 1),
+                 0 0 30px rgba(255, 159, 26, 0.8),
+                 0 0 40px rgba(255, 44, 44, 0.5);
   }
 }
 
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-/* Responsive Design */
+/* --- Responsive --- */
 @media (max-width: 768px) {
   .main-title {
     font-size: 3rem;
   }
-  
   .name-input {
-    width: 250px;
-  }
-  
-  .content {
-    padding: 1rem;
+    width: 240px;
   }
 }
 
 @media (max-width: 480px) {
   .main-title {
-    font-size: 2.5rem;
+    font-size: 2.3rem;
   }
-  
-  .name-input {
-    width: 200px;
-  }
-  
   .launch-button {
     padding: 12px 30px;
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 }
