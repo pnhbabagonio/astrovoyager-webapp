@@ -1,217 +1,218 @@
 .mission-map {
   min-height: 100vh;
-  padding: var(--space-2xl);
-  background: linear-gradient(135deg, var(--color-space-dark), var(--color-space-medium));
+  width: 100%;
   position: relative;
   overflow: hidden;
+  font-family: 'Luckiest Guy', cursive;
+  color: #fff;
 }
 
+/* Subtle gradient overlay for readability */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 40, 0.2), rgba(0, 0, 0, 0.4));
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* SVG Dotted Path */
+.map-path {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+/* Header */
 .mission-map-header {
+  position: relative;
   text-align: center;
-  margin-bottom: var(--space-2xl);
+  margin-top: 1.2rem;
+  z-index: 3;
 }
 
 .mission-title {
-  font-size: var(--font-size-4xl);
-  background: linear-gradient(45deg, var(--color-primary), var(--color-secondary));
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: var(--space-md);
+  font-size: 3rem;
+  color: #fff;
+  text-shadow: 0 0 8px #ffd54f, 0 0 18px rgba(255, 213, 79, 0.7);
+  letter-spacing: 2px;
 }
 
 .player-welcome {
-  font-size: var(--font-size-xl);
-  margin-bottom: var(--space-sm);
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  color: #f1f1f1;
 }
 
 .player-name {
-  color: var(--color-accent-1);
-  font-weight: bold;
+  color: #ffe082;
+  font-weight: 600;
 }
 
 .mission-instruction {
-  font-size: var(--font-size-lg);
-  color: var(--color-text-secondary);
+  margin-top: 0.6rem;
+  font-family: 'Poppins', sans-serif;
+  font-style: italic;
+  color: #d0d8ff;
 }
 
-.games-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--space-xl);
-  max-width: 1000px;
-  margin: 0 auto var(--space-2xl);
-}
-
-.game-card {
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid var(--accent-color);
-  border-radius: var(--radius-lg);
-  padding: var(--space-xl);
-  text-align: center;
-  cursor: pointer;
-  transition: all var(--transition-normal);
-  backdrop-filter: blur(10px);
+/* ISLANDS */
+.islands-layer {
   position: relative;
-  overflow: hidden;
-}
-
-.game-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  transition: left var(--transition-slow);
+  z-index: 3;
 }
 
-.game-card:hover::before {
-  left: 100%;
+/* Base Island */
+.island {
+  position: absolute;
+  width: 18%;
+  aspect-ratio: 1 / 1;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: transform 0.4s ease, filter 0.4s ease;
 }
 
-.game-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-lg);
-  border-color: transparent;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+.island::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.95;
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
-.game-icon {
-  font-size: 4rem;
-  margin-bottom: var(--space-lg);
-  filter: drop-shadow(0 0 10px var(--accent-color));
+.island:hover {
+  transform: scale(1.1);
+  z-index: 5;
+  filter: drop-shadow(0 0 25px rgba(255, 240, 180, 0.8));
 }
 
-.game-title {
-  font-size: var(--font-size-2xl);
-  color: var(--accent-color);
-  margin-bottom: var(--space-md);
+/* Floating Label */
+.island-label {
+  position: absolute;
+  bottom: -2.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s ease;
 }
 
-.game-description {
-  color: var(--color-text-secondary);
-  margin-bottom: var(--space-lg);
-  line-height: 1.5;
+.island:hover .island-label {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
-.game-status {
-  color: var(--color-accent-3);
-  font-weight: bold;
-  font-size: var(--font-size-sm);
+.label-inner {
+  background: rgba(0, 0, 0, 0.55);
+  border: 2px solid #fff5c0;
+  border-radius: 12px;
+  padding: 0.6rem 1rem;
+  text-align: center;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
 }
 
+.label-name {
+  font-size: 1.2rem;
+  color: #ffe57f;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.label-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  color: #d1d1d1;
+  margin-top: 0.2rem;
+}
+
+/* Footer */
 .mission-map-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: var(--space-lg);
+  position: relative;
+  z-index: 4;
+  padding: 1rem 2rem;
+  margin-top: 2rem;
 }
 
 .back-button {
-  background: transparent;
-  border: 2px solid var(--color-text-secondary);
-  color: var(--color-text-secondary);
-  padding: var(--space-md) var(--space-lg);
-  border-radius: var(--radius-xl);
+  background: linear-gradient(45deg, #ff7043, #ffa726);
+  border: none;
+  color: #fff;
+  padding: 0.8rem 1.6rem;
+  border-radius: 25px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
   cursor: pointer;
-  transition: all var(--transition-normal);
+  transition: 0.3s ease;
 }
 
 .back-button:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
   transform: translateX(-5px);
+  box-shadow: 0 0 20px rgba(255, 167, 38, 0.6);
 }
 
+/* Connection Status */
 .connection-status {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-md);
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-sm);
+  gap: 0.5rem;
+  font-family: 'Poppins', sans-serif;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 20px;
+  padding: 0.4rem 0.8rem;
+  backdrop-filter: blur(4px);
+  color: #fff;
 }
 
 .status-dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  animation: pulse 2s infinite;
 }
 
 .status-dot.online {
-  background: var(--color-accent-3);
+  background: #00e676;
+  box-shadow: 0 0 10px #00e676;
 }
 
 .status-dot.offline {
-  background: var(--color-accent-2);
-  animation: pulse-offline 2s infinite;
+  background: #ff1744;
+  box-shadow: 0 0 10px #ff1744;
 }
 
-.space-station {
-  position: absolute;
-  bottom: 50px;
-  right: 50px;
-  animation: float-station 4s ease-in-out infinite;
-}
-
-.station-core {
-  width: 60px;
-  height: 60px;
-  background: #555;
-  border-radius: 50%;
-  position: relative;
-}
-
-.solar-panel {
-  position: absolute;
-  top: 50%;
-  width: 80px;
-  height: 20px;
-  background: #333;
-  transform: translateY(-50%);
-}
-
-.solar-panel.left {
-  right: 100%;
-  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
-}
-
-.solar-panel.right {
-  left: 100%;
-  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-}
-
-@keyframes float-station {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(2deg); }
-}
-
-@keyframes pulse-offline {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+/* Responsive Layout */
+@media (max-width: 1024px) {
+  .island {
+    width: 22%;
+  }
 }
 
 @media (max-width: 768px) {
-  .mission-map {
-    padding: var(--space-lg);
+  .mission-title {
+    font-size: 2.2rem;
   }
-  
-  .games-grid {
-    grid-template-columns: 1fr;
+  .island {
+    width: 26%;
   }
-  
-  .mission-map-footer {
-    flex-direction: column;
-    gap: var(--space-lg);
+}
+
+@media (max-width: 480px) {
+  .mission-title {
+    font-size: 1.8rem;
   }
-  
-  .space-station {
-    display: none;
+  .island {
+    width: 30%;
   }
 }
