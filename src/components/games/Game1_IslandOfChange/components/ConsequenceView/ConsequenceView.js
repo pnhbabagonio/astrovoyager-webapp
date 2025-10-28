@@ -8,9 +8,9 @@ const ConsequenceView = ({ result, role, scenario, onNext, onRetry, isLastScenar
   return (
     <div className={`consequence-view ${isSuccess ? 'success' : 'failure'}`}>
       <div className="consequence-header">
-        <div className="result-icon">
+        {/* <div className="result-icon">
           {isSuccess ? '✅' : '❌'}
-        </div>
+        </div> */}
         <h2>{isSuccess ? 'Great Decision!' : 'Needs Improvement'}</h2>
       </div>
 

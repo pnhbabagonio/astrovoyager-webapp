@@ -1,62 +1,78 @@
 .resilience-points {
   display: flex;
   align-items: center;
-  gap: var(--space-md);
-  background: rgba(255, 255, 255, 0.1);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-xl);
-  border: 2px solid rgba(76, 175, 80, 0.3);
-  backdrop-filter: blur(10px);
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  padding: 0.4rem 0.8rem;
+  border-radius: 12px;
+  border: 2px solid #fbbf24;
+  box-shadow: 0 3px 0 #f59e0b;
+  font-family: 'Poppins', sans-serif;
   flex-shrink: 0;
+  width: fit-content;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.resilience-points:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 #f59e0b;
 }
 
 .points-icon {
-  font-size: 1.25rem;
-  animation: pulse 2s infinite;
+  font-size: 1rem;
+  color: #b45309;
 }
 
 .points-info {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  line-height: 1;
 }
 
 .points-label {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
-  font-weight: var(--font-weight-medium);
+  font-size: 0.7rem;
+  color: #78350f;
+  font-weight: 600;
 }
 
 .points-value {
-  font-size: var(--font-size-md);
-  color: var(--color-accent-3);
-  font-weight: var(--font-weight-bold);
+  font-size: 0.8rem;
+  color: #92400e;
+  font-weight: 700;
 }
 
-@media (max-width: 768px) {
-  .resilience-points {
-    padding: var(--space-xs) var(--space-sm);
+/* Simple retro pixel pulse */
+@keyframes softPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
   }
-  
-  .points-value {
-    font-size: var(--font-size-sm);
-  }
-  
-  .points-icon {
-    font-size: 1rem;
+  50% {
+    opacity: 0.85;
+    transform: scale(1.05);
   }
 }
 
+.points-icon {
+  animation: softPulse 3s infinite ease-in-out;
+}
+
+/* Responsive tweak */
 @media (max-width: 480px) {
   .resilience-points {
-    gap: var(--space-sm);
+    padding: 0.3rem 0.6rem;
+    gap: 0.4rem;
   }
-  
+
   .points-label {
     font-size: 0.6rem;
   }
-  
+
   .points-value {
-    font-size: var(--font-size-xs);
+    font-size: 0.7rem;
+  }
+
+  .points-icon {
+    font-size: 0.9rem;
   }
 }

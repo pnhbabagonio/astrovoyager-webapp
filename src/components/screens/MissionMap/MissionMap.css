@@ -106,8 +106,8 @@
 
 /* Enlarged island images */
 .island-image {
-  width: 280px;
-  height: 320px;
+  width: 450px;
+  height: 350px;
   object-fit: contain;
   border: none;
   transition: all 0.3s ease;
@@ -225,7 +225,7 @@
 /* Character Image */
 .character-image {
   width: 300px;
-  height: 220px;
+  height: 350px;
   object-fit: contain;
   filter: drop-shadow(0 8px 25px rgba(0, 0, 0, 0.4));
   margin-top: -20px;
