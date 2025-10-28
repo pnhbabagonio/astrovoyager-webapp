@@ -3,14 +3,15 @@
   align-items: center;
   gap: var(--space-md);
   background: rgba(255, 255, 255, 0.1);
-  padding: var(--space-md) var(--space-lg);
+  padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-xl);
   border: 2px solid rgba(76, 175, 80, 0.3);
   backdrop-filter: blur(10px);
+  flex-shrink: 0;
 }
 
 .points-icon {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   animation: pulse 2s infinite;
 }
 
@@ -21,23 +22,41 @@
 }
 
 .points-label {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-medium);
 }
 
 .points-value {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-md);
   color: var(--color-accent-3);
   font-weight: var(--font-weight-bold);
 }
 
 @media (max-width: 768px) {
   .resilience-points {
-    padding: var(--space-sm) var(--space-md);
+    padding: var(--space-xs) var(--space-sm);
   }
   
   .points-value {
-    font-size: var(--font-size-md);
+    font-size: var(--font-size-sm);
+  }
+  
+  .points-icon {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .resilience-points {
+    gap: var(--space-sm);
+  }
+  
+  .points-label {
+    font-size: 0.6rem;
+  }
+  
+  .points-value {
+    font-size: var(--font-size-xs);
   }
 }

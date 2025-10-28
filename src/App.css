@@ -2,34 +2,40 @@
   min-height: 100vh;
   position: relative;
   font-family: var(--font-family-primary);
-  /* Add these lines: */
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .app-content {
-  min-height: 100vh;
-  /* Add these lines: */
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
 
-/* To ensure all screen components fill the space */
+/* Ensure all main components use the full available space */
 .app-content > * {
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
 
-/* Ensure specific components fill available space */
 .launch-screen,
 .mission-map,
 .end-credits,
-.game-container {
+.game-container,
+.game1-root,
+.game2-root,
+.game3-root {
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* Error Banner */
@@ -101,7 +107,6 @@
   background: linear-gradient(135deg, var(--color-space-dark), var(--color-space-medium));
   text-align: center;
   padding: var(--space-2xl);
-  /* Ensure it fills parent */
   flex: 1;
 }
 
@@ -114,7 +119,6 @@
   color: transparent;
   margin-bottom: var(--space-lg);
 }
-
 
 .mission-map-placeholder p {
   font-size: var(--font-size-xl);
