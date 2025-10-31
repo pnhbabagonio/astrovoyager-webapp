@@ -6,9 +6,9 @@ const PlacementFeedback = ({ result }) => {
   return (
     <div className="placement-feedback">
       <div className="feedback-header">
-        <div className="result-icon">
+        {/* <div className="result-icon">
           {result.isCorrect ? '✅' : '❌'}
-        </div>
+        </div> */}
         <h2>
           {result.isCorrect 
             ? 'Correct Placement!' 

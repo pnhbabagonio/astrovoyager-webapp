@@ -24,10 +24,10 @@ const MapInterface = ({ phenomena, placedPhenomena, onPhenomenonPlacement, regio
 
   return (
     <div className="map-interface">
-      <div className="map-header">
+      {/* <div className="map-header">
         <h2>Philippine Weather Map</h2>
         <p>Drag weather phenomena to their correct regions on the map</p>
-      </div>
+      </div> */}
 
       <div className="map-container">
         <div className="phenomena-palette">
