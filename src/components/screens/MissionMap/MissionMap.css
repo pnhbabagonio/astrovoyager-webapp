@@ -469,9 +469,9 @@
 }
 
 /* Prevent any scrollbars */
-body {
+/* body {
   overflow: hidden;
-}
+} */
 
 .mission-map * {
   box-sizing: border-box;
