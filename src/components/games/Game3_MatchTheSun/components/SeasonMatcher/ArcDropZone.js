@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './SeasonMatcher.css';
 
-const ArcDropZone = ({ arcType, onDrop, position }) => {
+const ArcDropZone = ({ arcType, onDrop }) => {
   const [isDragOver, setIsDragOver] = useState(false);
 
   const handleDragOver = (e) => {
@@ -31,7 +31,6 @@ const ArcDropZone = ({ arcType, onDrop, position }) => {
   return (
     <div 
       className={`arc-drop-zone ${arcType} ${isDragOver ? 'drag-over' : ''}`}
-      style={position}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}

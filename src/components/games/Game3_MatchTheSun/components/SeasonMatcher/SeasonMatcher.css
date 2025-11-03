@@ -1,7 +1,7 @@
 .season-matcher {
   position: relative;
   width: 100%;
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
   background: rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-xl);
@@ -129,9 +129,10 @@
 .matcher-content {
   padding: var(--space-2xl);
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 350px 1fr;
   gap: var(--space-2xl);
   align-items: start;
+  min-height: 500px;
 }
 
 .month-display {
@@ -140,17 +141,22 @@
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
   backdrop-filter: blur(10px);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .month-card {
   text-align: center;
+  width: 100%;
 }
 
 .month-name {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-lg);
 }
 
 .season-info {
@@ -166,19 +172,23 @@
 }
 
 .season-months {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   color: var(--color-text-secondary);
 }
 
 .weather-description {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   color: var(--color-text-secondary);
   line-height: var(--line-height-normal);
   font-style: italic;
+  padding: var(--space-md);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
 }
 
 .sun-interface {
   position: relative;
+  width: 100%;
   height: 400px;
   background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
   border-radius: var(--radius-lg);
@@ -194,8 +204,8 @@
 
 .sun-arc {
   position: absolute;
-  left: 10%;
-  right: 10%;
+  left: 15%;
+  right: 15%;
   border: 2px dashed rgba(255, 255, 255, 0.5);
   border-bottom: none;
   border-radius: 50% 50% 0 0;
@@ -203,26 +213,27 @@
 
 .high-arc {
   top: 15%;
-  height: 35%;
+  height: 30%;
   border-color: rgba(255, 165, 0, 0.5);
 }
 
 .medium-arc {
-  top: 40%;
-  height: 35%;
+  top: 45%;
+  height: 30%;
   border-color: rgba(255, 255, 255, 0.5);
 }
 
 .low-arc {
-  top: 65%;
-  height: 35%;
+  top: 75%;
+  height: 30%;
   border-color: rgba(135, 206, 250, 0.5);
 }
 
+/* Sun positioned in neutral top-left area */
 .sun-draggable {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 15%;
+  left: 15%;
   transform: translate(-50%, -50%);
   cursor: grab;
   z-index: 10;
@@ -253,8 +264,8 @@
 
 .arc-drop-zone {
   position: absolute;
-  width: 120px;
-  height: 60px;
+  width: 140px;
+  height: 70px;
   border: 2px dashed rgba(255, 255, 255, 0.3);
   border-radius: var(--radius-lg);
   display: flex;
@@ -279,19 +290,25 @@
 
 .arc-drop-zone.high {
   border-color: rgba(255, 165, 0, 0.5);
+  top: 30%;
+  left: 50%;
 }
 
 .arc-drop-zone.medium {
   border-color: rgba(255, 255, 255, 0.5);
+  top: 60%;
+  left: 50%;
 }
 
 .arc-drop-zone.low {
   border-color: rgba(135, 206, 250, 0.5);
+  top: 90%;
+  left: 50%;
 }
 
 .arc-label {
   color: white;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
@@ -301,25 +318,29 @@
   display: flex;
   justify-content: space-around;
   margin-top: var(--space-lg);
+  gap: var(--space-md);
 }
 
-.arc-label {
+.arc-label-item {
   background: rgba(255, 255, 255, 0.2);
-  padding: var(--space-sm) var(--space-md);
+  padding: var(--space-sm) var(--space-lg);
   border-radius: var(--radius-lg);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-medium);
+  text-align: center;
+  flex: 1;
+  max-width: 300px;
 }
 
-.arc-label.high {
+.arc-label-item.high {
   border-left: 4px solid rgba(255, 165, 0, 0.7);
 }
 
-.arc-label.medium {
+.arc-label-item.medium {
   border-left: 4px solid rgba(255, 255, 255, 0.7);
 }
 
-.arc-label.low {
+.arc-label-item.low {
   border-left: 4px solid rgba(135, 206, 250, 0.7);
 }
 
@@ -379,6 +400,46 @@
   }
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+}
+
+@media (max-width: 1024px) {
+  .season-matcher {
+    max-width: 95vw;
+  }
+  
+  .matcher-content {
+    grid-template-columns: 300px 1fr;
+    gap: var(--space-xl);
+    padding: var(--space-xl);
+  }
+  
+  .sun-interface {
+    height: 350px;
+  }
+}
+
 @media (max-width: 768px) {
   .matcher-content {
     grid-template-columns: 1fr;
@@ -402,5 +463,10 @@
 
   .matcher-header h2 {
     font-size: var(--font-size-2xl);
+  }
+  
+  .month-display {
+    height: auto;
+    min-height: 200px;
   }
 }

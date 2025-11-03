@@ -29,14 +29,13 @@ const SeasonMatcher = ({ seasons, onSunPlacement, completedSeasons }) => {
       }, 1000);
       return () => clearTimeout(timer);
     } else if (timeRemaining === 0 && currentSeason) {
-      // Time's up - automatic failure
       handleTimeUp();
     }
   }, [timeRemaining, currentSeason]);
 
   const handleSunDrop = (arcType) => {
     const isCorrect = arcType === currentSeason.sunArc;
-    const timeBonus = Math.floor(timeRemaining / 3); // Bonus points for speed
+    const timeBonus = Math.floor(timeRemaining / 3);
     
     onSunPlacement(currentSeason, isCorrect, timeBonus);
   };
@@ -89,24 +88,21 @@ const SeasonMatcher = ({ seasons, onSunPlacement, completedSeasons }) => {
             <div className="sun-arc medium-arc"></div>
             <div className="sun-arc low-arc"></div>
             
-            {/* Drop Zones */}
+            {/* Drop Zones - Now with fixed positions */}
             <ArcDropZone 
               arcType="high" 
               onDrop={handleSunDrop}
-              position={getSunArcPosition('high')}
             />
             <ArcDropZone 
               arcType="medium" 
               onDrop={handleSunDrop}
-              position={getSunArcPosition('medium')}
             />
             <ArcDropZone 
               arcType="low" 
               onDrop={handleSunDrop}
-              position={getSunArcPosition('low')}
             />
 
-            {/* Draggable Sun */}
+            {/* Draggable Sun - Starts at bottom for easy access */}
             <SunDraggable 
               onDragStart={() => setIsDragging(true)}
               onDragEnd={() => setIsDragging(false)}
@@ -115,14 +111,14 @@ const SeasonMatcher = ({ seasons, onSunPlacement, completedSeasons }) => {
         </div>
 
         <div className="arc-labels">
-          <div className="arc-label high">High Arc (Wet Season)</div>
-          <div className="arc-label medium">Medium Arc (Transition)</div>
-          <div className="arc-label low">Low Arc (Dry Season)</div>
+          <div className="arc-label-item high">High Arc (Wet Season)</div>
+          <div className="arc-label-item medium">Medium Arc (Transition)</div>
+          <div className="arc-label-item low">Low Arc (Dry Season)</div>
         </div>
       </div>
 
       <div className="matcher-instructions">
-        <p>💡 <strong>How to play:</strong> Drag the sun to the correct arc position for {currentSeason.name} ({currentSeason.months}).</p>
+        <p>💡 <strong>How to play:</strong> Drag the sun from the bottom to the correct arc position for {currentSeason.name}.</p>
         <p>Time Bonus: +{getTimeBonus()} points for speed!</p>
       </div>
     </div>
