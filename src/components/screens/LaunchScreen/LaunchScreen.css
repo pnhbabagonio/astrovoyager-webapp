@@ -1,3 +1,4 @@
+/* LaunchScreen.css */
 .launch-screen {
   min-height: 100vh;
   display: flex;
@@ -29,15 +30,17 @@
   text-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
 }
 
-/* --- Main Title --- */
-.main-title {
-  font-size: 4rem;
-  letter-spacing: 2px;
-  font-family: 'Orbitron', 'Poppins', sans-serif;
-  color: #ffe066;
-  text-transform: uppercase;
-  animation: pulseGlow 3s ease-in-out infinite;
+/* --- Main Title Image --- */
+.title-image-container {
   margin-bottom: 0.8rem;
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+.main-title-image {
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.7));
 }
 
 /* --- Subtitle --- */
@@ -86,63 +89,104 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
-/* --- Button --- */
-.launch-button {
-  background: linear-gradient(45deg, #ff9f1a, #ff2c2c);
-  border: none;
-  color: white;
-  padding: 15px 45px;
-  font-size: 1.2rem;
-  font-family: 'Orbitron', sans-serif;
-  text-transform: uppercase;
-  border-radius: 40px;
+/* --- Image Button --- */
+.image-button-container {
+  display: inline-block;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   margin-top: 1rem;
-  box-shadow: 0 6px 25px rgba(255, 44, 44, 0.4);
-  letter-spacing: 1px;
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
-.launch-button:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(255, 159, 26, 0.6);
+.image-button-container:hover:not(.disabled):not(.pressed) {
+  transform: translateY(-3px) scale(1.05);
+  filter: drop-shadow(0 10px 20px rgba(255, 159, 26, 0.6));
 }
 
-.launch-button:disabled {
-  opacity: 0.5;
+.image-button-container.pressed {
+  transform: translateY(2px) scale(0.95);
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3)) !important;
+  transition: all 0.1s ease;
+}
+
+.image-button-container.disabled {
+  opacity: 0.8;
   cursor: not-allowed;
+}
+
+.start-button-image {
+  width: 300px;
+  height: 120px;
+  transition: all 0.2s ease;
+  transform-style: preserve-3d;
+}
+
+/* Enable hover effects only when not disabled or pressed */
+.image-button-container:not(.disabled):not(.pressed):hover .start-button-image {
+  transform: scale(1.05);
+}
+
+/* Press animation for the image itself */
+.image-button-container.pressed .start-button-image {
+  transform: scale(0.95) translateY(2px);
+  filter: brightness(0.9);
+  transition: all 0.1s ease;
+}
+
+/* Click feedback animation */
+@keyframes buttonClick {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(0.95);
+  }
+}
+
+/* Active state for when button is being pressed */
+.image-button-container:active:not(.disabled) {
+  animation: buttonClick 0.15s ease-out;
 }
 
 /* --- Animation --- */
 @keyframes pulseGlow {
   0%, 100% {
-    text-shadow: 0 0 10px rgba(255, 224, 102, 0.8),
-                 0 0 20px rgba(255, 159, 26, 0.6),
-                 0 0 30px rgba(255, 44, 44, 0.3);
+    filter: drop-shadow(0 0 10px rgba(255, 224, 102, 0.8))
+           drop-shadow(0 0 20px rgba(255, 159, 26, 0.6))
+           drop-shadow(0 0 30px rgba(255, 44, 44, 0.3));
   }
   50% {
-    text-shadow: 0 0 20px rgba(255, 224, 102, 1),
-                 0 0 30px rgba(255, 159, 26, 0.8),
-                 0 0 40px rgba(255, 44, 44, 0.5);
+    filter: drop-shadow(0 0 20px rgba(255, 224, 102, 1))
+           drop-shadow(0 0 30px rgba(255, 159, 26, 0.8))
+           drop-shadow(0 0 40px rgba(255, 44, 44, 0.5));
   }
 }
 
 /* --- Responsive --- */
 @media (max-width: 768px) {
-  .main-title {
-    font-size: 3rem;
+  .main-title-image {
+    max-width: 500px;
   }
   .name-input {
     width: 240px;
   }
+  .start-button-image {
+    width: 180px;
+  }
 }
 
 @media (max-width: 480px) {
-  .main-title {
-    font-size: 2.3rem;
+  .main-title-image {
+    max-width: 350px;
   }
-  .launch-button {
-    padding: 12px 30px;
-    font-size: 1rem;
+  .start-button-image {
+    width: 160px;
+  }
+  .subtitle {
+    font-size: 1.1rem;
   }
 }

@@ -1,13 +1,40 @@
+// LaunchScreen.js
 import React, { useState } from 'react';
 import './LaunchScreen.css';
 
 const LaunchScreen = ({ onLaunch }) => {
   const [playerName, setPlayerName] = useState('');
+  const [isButtonPressed, setIsButtonPressed] = useState(false);
 
   const handleLaunch = () => {
     if (playerName.trim()) {
       onLaunch(playerName.trim());
     }
+  };
+
+  const handleButtonPress = () => {
+    if (!playerName.trim()) return;
+    
+    setIsButtonPressed(true);
+    // Reset the pressed state after a short delay for visual feedback
+    setTimeout(() => {
+      setIsButtonPressed(false);
+      handleLaunch();
+    }, 150);
+  };
+
+  const handleMouseDown = () => {
+    if (playerName.trim()) {
+      setIsButtonPressed(true);
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsButtonPressed(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsButtonPressed(false);
   };
 
   return (
@@ -21,8 +48,16 @@ const LaunchScreen = ({ onLaunch }) => {
       }}
     >
       <div className="content">
-        <h1 className="main-title">ASTROVOYAGER</h1>
-        <p className="subtitle">Embark on an Educational Space Journey</p>
+        {/* Main Title Image */}
+        <div className="title-image-container">
+          <img 
+            src={`${process.env.PUBLIC_URL}/assets/images/ui/astrovoyager-title.png`}
+            alt="ASTROVOYAGER"
+            className="main-title-image"
+          />
+        </div>
+        
+        {/* <p className="subtitle">Embark on an Educational Space Journey</p> */}
         
         <div className="input-section">
           <label htmlFor="playerName" className="input-label">
@@ -35,17 +70,30 @@ const LaunchScreen = ({ onLaunch }) => {
             onChange={(e) => setPlayerName(e.target.value)}
             placeholder="e.g., Astronaut Quincy"
             className="name-input"
-            onKeyUp={(e) => e.key === 'Enter' && handleLaunch()}
+            onKeyUp={(e) => e.key === 'Enter' && handleButtonPress()}
           />
         </div>
 
-        <button 
-          onClick={handleLaunch}
-          disabled={!playerName.trim()}
-          className="launch-button"
+        {/* Image Button with Press Animation */}
+        <div 
+          className={`image-button-container ${!playerName.trim() ? 'disabled' : ''} ${isButtonPressed ? 'pressed' : ''}`}
+          onClick={handleButtonPress}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
+          onTouchStart={handleMouseDown}
+          onTouchEnd={handleMouseUp}
         >
-          🚀 BEGIN JOURNEY
-        </button>
+          <img 
+            src={
+              isButtonPressed 
+                ? `${process.env.PUBLIC_URL}/assets/images/ui/ifPressed.png`
+                : `${process.env.PUBLIC_URL}/assets/images/ui/atRest.png`
+            }
+            alt="BEGIN JOURNEY"
+            className="start-button-image"
+          />
+        </div>
 
         {/* <div className="mission-brief">
           <h3>Mission Objectives:</h3>
