@@ -287,6 +287,90 @@
   }
 }
 
+/* Disabled Island Styling */
+.island.disabled {
+  cursor: not-allowed !important;
+  opacity: 0.7;
+}
+
+.island.disabled:hover {
+  transform: scale(1) !important;
+  z-index: 1 !important;
+}
+
+.island.disabled .island-image {
+  filter: grayscale(0.6) brightness(0.8) drop-shadow(0 4px 15px rgba(0, 0, 0, 0.4)) !important;
+}
+
+.island.disabled:hover .island-image {
+  filter: grayscale(0.6) brightness(0.8) drop-shadow(0 4px 15px rgba(0, 0, 0, 0.4)) !important;
+}
+
+.island.disabled .island-glow {
+  opacity: 0 !important;
+}
+
+/* Under Revision Sign */
+.revision-sign {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, #ff6b35, #ff8e53);
+  border: 3px solid #fff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  text-align: center;
+  z-index: 5;
+  box-shadow: 
+    0 8px 25px rgba(255, 107, 53, 0.4),
+    0 0 20px rgba(255, 255, 255, 0.3);
+  animation: pulseWarning 2s ease-in-out infinite;
+  backdrop-filter: blur(10px);
+  min-width: 140px;
+}
+
+.revision-icon {
+  font-size: 1.8rem;
+  margin-bottom: 5px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.revision-text {
+  font-family: 'Orbitron', 'Poppins', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Disabled Status in Label */
+.disabled-status {
+  color: #ff6b35 !important;
+  font-weight: 700;
+  background: rgba(255, 107, 53, 0.1) !important;
+  border: 1px solid rgba(255, 107, 53, 0.3) !important;
+}
+
+/* Warning Pulse Animation */
+@keyframes pulseWarning {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 
+      0 8px 25px rgba(255, 107, 53, 0.4),
+      0 0 20px rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.05);
+    box-shadow: 
+      0 12px 30px rgba(255, 107, 53, 0.6),
+      0 0 25px rgba(255, 255, 255, 0.4);
+  }
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .island-image {
@@ -329,6 +413,19 @@
   
   .islands-layer {
     transform: scale(0.8);
+  }
+  
+  .revision-sign {
+    padding: 10px 14px;
+    min-width: 120px;
+  }
+  
+  .revision-icon {
+    font-size: 1.5rem;
+  }
+  
+  .revision-text {
+    font-size: 0.7rem;
   }
 }
 
@@ -398,6 +495,21 @@
   .islands-layer {
     transform: scale(0.7);
   }
+  
+  .revision-sign {
+    padding: 8px 12px;
+    min-width: 110px;
+    border-width: 2px;
+  }
+  
+  .revision-icon {
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+  }
+  
+  .revision-text {
+    font-size: 0.65rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -466,13 +578,23 @@
   .islands-layer {
     transform: scale(0.6);
   }
+  
+  .revision-sign {
+    padding: 6px 10px;
+    min-width: 100px;
+  }
+  
+  .revision-icon {
+    font-size: 1.1rem;
+    margin-bottom: 3px;
+  }
+  
+  .revision-text {
+    font-size: 0.6rem;
+  }
 }
 
 /* Prevent any scrollbars */
-/* body {
-  overflow: hidden;
-} */
-
 .mission-map * {
   box-sizing: border-box;
 }
