@@ -15,35 +15,34 @@ const MissionMap = () => {
   const { actions: audioActions } = useAudio();
 
   const games = [
-    {
-      id: 1,
-      name: 'Island of Change',
-      description: 'Disaster Response Training',
-      img: island1Bg,
-      route: 'game1',
-      pos: { left: '0%', top: '43%' },
-      disabled: true, // Temporary disable Game 1
-      disabledMessage: 'Under Revision'
-    },
-    {
-      id: 2,
-      name: 'Weather Watchers',
-      description: 'Atmospheric Phenomena',
-      img: island2Bg,
-      route: 'game2',
-      pos: { left: '35%', top: '20%' },
-      disabled: false
-    },
-    {
-      id: 3,
-      name: 'Match the Sun',
-      description: 'Seasons & Sun Position',
-      img: island3Bg,
-      route: 'game3',
-      pos: { left: '70%', top: '-15%' },
-      disabled: false
-    },
-  ];
+  {
+    id: 1,
+    name: 'ASTROVOYAGER – Energy Detectives',
+    description: 'Investigate Sun-related scenarios, predict outcomes, and explain your scientific reasoning.',
+    img: island1Bg,
+    route: 'game1',
+    pos: { left: '0%', top: '43%' },
+    disabled: false
+  },
+  {
+    id: 2,
+    name: 'ASTROVOYAGER – TiltQuest',
+    description: 'Discover how Earth’s axial tilt changes day length—not distance from the Sun.',
+    img: island2Bg,
+    route: 'game2',
+    pos: { left: '35%', top: '20%' },
+    disabled: false
+  },
+  {
+    id: 3,
+    name: 'ASTROVOYAGER – Season Navigator',
+    description: 'Explore how Earth’s tilt and orbit create seasons through changing sunlight.',
+    img: island3Bg,
+    route: 'game3',
+    pos: { left: '70%', top: '-15%' },
+    disabled: false
+  },
+];
 
   const handleGameSelect = (game) => {
     if (game.disabled) {
@@ -112,21 +111,13 @@ const MissionMap = () => {
             />
             <div className="island-glow"></div>
             
-            {/* Under Revision Sign */}
-            {g.disabled && (
-              <div className="revision-sign">
-                <div className="revision-icon">🚧</div>
-                <div className="revision-text">Under Revision</div>
-              </div>
-            )}
+            {/* REMOVED: Under Revision Sign */}
             
             <div className="island-label">
               <h3 className="label-name">{g.name}</h3>
               <p className="label-desc">{g.description}</p>
               <div className="mission-status">
-                {g.disabled ? (
-                  <span className="disabled-status">🚧 Under Revision</span>
-                ) : gameState.gameProgress[`game${g.id}`]?.completed ? (
+                {gameState.gameProgress[`game${g.id}`]?.completed ? (
                   '✅ Complete'
                 ) : (
                   '🟡 Ready'
