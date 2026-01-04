@@ -27,6 +27,35 @@
   border-radius: var(--radius-full);
 }
 
+/* Character Avatar Styles */
+.character-avatar-mini {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: var(--space-xs);
+  vertical-align: middle;
+  border: 2px solid rgba(255, 152, 0, 0.5);
+}
+
+.character-avatar-small {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: var(--space-sm);
+  border: 2px solid rgba(255, 152, 0, 0.5);
+}
+
+.character-quote {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 152, 0, 0.1);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
 .scenario-title h1 {
   font-size: var(--font-size-3xl);
   color: #FFC107;

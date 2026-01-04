@@ -124,8 +124,8 @@
   margin-bottom: var(--space-lg);
 }
 
+/* Character Avatar Styles */
 .character-avatar-large {
-  font-size: 64px;
   width: 100px;
   height: 100px;
   display: flex;
@@ -133,6 +133,14 @@
   justify-content: center;
   background: rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.character-avatar-large img.avatar-image-large {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 3px solid rgba(255, 152, 0, 0.5);
 }
 
 .character-performance-info h3 {

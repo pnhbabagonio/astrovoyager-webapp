@@ -1,4 +1,3 @@
-import React from 'react';
 import './Scoreboard.css';
 
 const Scoreboard = ({ score, totalQuestions, character, onContinue }) => {
@@ -32,7 +31,17 @@ const Scoreboard = ({ score, totalQuestions, character, onContinue }) => {
       
       <div className="character-performance">
         <div className="character-summary">
-          <div className="character-avatar-large">{character.avatar}</div>
+          <div className="character-avatar-large">
+            <img 
+              src={character.avatar} 
+              alt={character.name}
+              className="avatar-image-large"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = `${process.env.PUBLIC_URL}/assets/images/characters/default.png`;
+              }}
+            />
+          </div>
           <div className="character-performance-info">
             <h3>{character.name}, Energy Detective</h3>
             <p>Great job investigating the Sun's energy mysteries!</p>

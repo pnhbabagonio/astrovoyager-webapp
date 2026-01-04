@@ -6,25 +6,25 @@ export const game1Data = {
     { 
       id: 1, 
       name: "June", 
-      avatar: "👩‍🚀", 
+      avatar: `${process.env.PUBLIC_URL}/assets/images/characters/june.png`, 
       description: "Space Explorer who loves investigating cosmic energy" 
     },
     { 
       id: 2, 
       name: "Quincy", 
-      avatar: "👨‍🔬", 
+      avatar: `${process.env.PUBLIC_URL}/assets/images/characters/quincy.png`, 
       description: "Science Detective with keen observation skills" 
     },
     { 
       id: 3, 
       name: "Annie", 
-      avatar: "👩‍🏫", 
+      avatar: `${process.env.PUBLIC_URL}/assets/images/characters/annie.png`, 
       description: "Energy Expert who understands how nature works" 
     },
     { 
       id: 4, 
       name: "Leo", 
-      avatar: "👨‍💻", 
+      avatar: `${process.env.PUBLIC_URL}/assets/images/characters/leo.png`, 
       description: "Tech Analyst who analyzes energy patterns" 
     }
   ],

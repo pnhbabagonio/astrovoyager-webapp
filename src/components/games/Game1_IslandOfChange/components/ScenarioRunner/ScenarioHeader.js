@@ -6,7 +6,16 @@ const ScenarioHeader = ({ scenarioNumber, totalScenarios, character }) => {
       <div className="scenario-meta">
         <span className="scenario-counter">Scenario {scenarioNumber} of {totalScenarios}</span>
         <span className="character-tag">
-          {character.avatar} {character.name} • Energy Detective
+          <img 
+            src={character.avatar} 
+            alt={character.name}
+            className="character-avatar-mini"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = `${process.env.PUBLIC_URL}/assets/images/characters/default.png`;
+            }}
+          />
+          {character.name} • Energy Detective
         </span>
       </div>
       <div className="scenario-title">

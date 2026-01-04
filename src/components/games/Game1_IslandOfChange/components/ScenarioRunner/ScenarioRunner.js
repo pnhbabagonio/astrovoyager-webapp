@@ -22,7 +22,15 @@ const ScenarioRunner = ({ scenario, character, onChoiceSelect, scenarioNumber, t
         <div className="scenario-text">
           <h2>{scenario.title}</h2>
           <div className="character-quote">
-            <span className="character-avatar-small">{character.avatar}</span>
+            <img 
+              src={character.avatar} 
+              alt={character.name}
+              className="character-avatar-small"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = `${process.env.PUBLIC_URL}/assets/images/characters/default.png`;
+              }}
+            />
             <span className="character-name-small">{character.name}:</span>
             <span className="quote-text">What do you think happens next?</span>
           </div>

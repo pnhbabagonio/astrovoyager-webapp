@@ -77,6 +77,14 @@
   border-radius: var(--radius-md);
 }
 
+.character-avatar img.avatar-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255, 152, 0, 0.5);
+}
+
 .character-info {
   flex: 1;
 }
