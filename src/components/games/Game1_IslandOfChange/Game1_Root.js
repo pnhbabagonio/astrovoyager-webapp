@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useGameState } from '../../../contexts/GameStateContext';
 import { useAudio } from '../../../contexts/AudioContext';
 import { usePlayer } from '../../../contexts/PlayerContext';
-import RoleSelection from './components/RoleSelection/RoleSelection';
+import CharacterSelection from './components/CharacterSelection/CharacterSelection';
 import ScenarioRunner from './components/ScenarioRunner/ScenarioRunner';
-import ConsequenceView from './components/ConsequenceView/ConsequenceView';
-import ResiliencePoints from './components/ResiliencePoints/ResiliencePoints';
+import FeedbackView from './components/FeedbackView/FeedbackView';
+import Scoreboard from './components/Scoreboard/Scoreboard';
+import ReflectionView from './components/ReflectionView/ReflectionView';
 import { game1Data } from '../../../data/game1Data';
 import './Game1.css';
 
@@ -14,89 +15,95 @@ const Game1_Root = ({ onComplete }) => {
   const { actions: audioActions } = useAudio();
   const { actions: playerActions } = usePlayer();
 
-  const [currentStage, setCurrentStage] = useState('role-selection');
-  const [selectedRole, setSelectedRole] = useState(null);
+  const [currentStage, setCurrentStage] = useState('character-selection');
+  const [selectedCharacter, setSelectedCharacter] = useState(null);
   const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0);
-  const [gameProgress, setGameProgress] = useState({
-    completedScenarios: [],
-    totalResiliencePoints: 0,
-    currentScenarioPoints: 0
-  });
-  const [lastChoiceResult, setLastChoiceResult] = useState(null);
+  const [score, setScore] = useState(0);
+  const [choicesHistory, setChoicesHistory] = useState([]);
+  const [lastChoiceFeedback, setLastChoiceFeedback] = useState(null);
+  const [currentReflectionIndex, setCurrentReflectionIndex] = useState(0);
 
   // Initialize game
   useEffect(() => {
-    audioActions.playVoiceover('welcome');
-    audioActions.playBackgroundMusic('adventure');
+    audioActions.playBackgroundMusic('space');
+    audioActions.playVoiceover('welcome_astro');
   }, [audioActions]);
 
-  const handleRoleSelect = (role) => {
+  const handleCharacterSelect = (character) => {
     audioActions.playSoundEffect('buttonClick');
-    setSelectedRole(role);
+    setSelectedCharacter(character);
     setCurrentStage('scenario');
-    audioActions.playVoiceover('roleSelection');
+    audioActions.playVoiceover('character_selected');
   };
 
-  const handleChoiceSelect = (choice) => {
+  const handleChoiceSelect = (choice, scenarioId) => {
     audioActions.playSoundEffect(choice.isCorrect ? 'success' : 'error');
     
-    const result = {
+    // Update score if correct
+    if (choice.isCorrect) {
+      setScore(prevScore => prevScore + 1);
+    }
+    
+    // Store choice in history
+    const choiceRecord = {
+      scenarioId,
       choice,
       isCorrect: choice.isCorrect,
-      points: choice.resiliencePoints,
-      consequence: choice.consequenceText,
-      feedback: choice.feedback,
-      geographyExplanation: game1Data.scenarios[currentScenarioIndex].geographyExplanation
+      timestamp: new Date().toISOString()
     };
-
-    setLastChoiceResult(result);
-
-    // Update game progress
-    const newPoints = gameProgress.totalResiliencePoints + choice.resiliencePoints;
-    const updatedProgress = {
-      ...gameProgress,
-      totalResiliencePoints: newPoints,
-      currentScenarioPoints: choice.resiliencePoints
-    };
-
-    if (choice.isCorrect) {
-      updatedProgress.completedScenarios = [
-        ...gameProgress.completedScenarios,
-        game1Data.scenarios[currentScenarioIndex].id
-      ];
-    }
-
-    setGameProgress(updatedProgress);
-    setCurrentStage('consequence');
+    
+    setChoicesHistory(prev => [...prev, choiceRecord]);
+    
+    // Show feedback for this choice
+    setLastChoiceFeedback({
+      choice,
+      isCorrect: choice.isCorrect,
+      explanation: choice.explanation
+    });
+    
+    setCurrentStage('feedback');
   };
 
-  const handleNextScenario = () => {
-    const nextIndex = currentScenarioIndex + 1;
+  const handleNextAfterFeedback = () => {
+    const nextScenarioIndex = currentScenarioIndex + 1;
     
-    if (nextIndex < game1Data.scenarios.length) {
-      setCurrentScenarioIndex(nextIndex);
+    if (nextScenarioIndex < game1Data.scenarios.length) {
+      setCurrentScenarioIndex(nextScenarioIndex);
       setCurrentStage('scenario');
-      setLastChoiceResult(null);
+      setLastChoiceFeedback(null);
       audioActions.playSoundEffect('buttonClick');
     } else {
-      // Game completed
+      // All scenarios completed - show scoreboard
+      setCurrentStage('scoreboard');
+      audioActions.playSoundEffect('level_complete');
+    }
+  };
+
+  const handleNextReflection = () => {
+    const nextReflectionIndex = currentReflectionIndex + 1;
+    
+    if (nextReflectionIndex < game1Data.reflectionQuestions.length) {
+      setCurrentReflectionIndex(nextReflectionIndex);
+      audioActions.playSoundEffect('buttonClick');
+    } else {
+      // All reflections shown - complete game
       completeGame();
     }
   };
 
-  const handleRetryScenario = () => {
-    setCurrentStage('scenario');
-    setLastChoiceResult(null);
+  const handleStartReflection = () => {
+    setCurrentStage('reflection');
     audioActions.playSoundEffect('buttonClick');
   };
 
   const completeGame = () => {
     const finalScore = {
       completed: true,
-      score: gameProgress.totalResiliencePoints,
-      resiliencePoints: gameProgress.totalResiliencePoints,
-      scenariosCompleted: gameProgress.completedScenarios.length,
-      totalScenarios: game1Data.scenarios.length
+      score: score,
+      maxScore: game1Data.scenarios.length,
+      character: selectedCharacter.name,
+      choicesHistory: choicesHistory,
+      completionDate: new Date().toISOString()
     };
 
     // Update global progress
@@ -113,8 +120,8 @@ const Game1_Root = ({ onComplete }) => {
       onComplete(finalScore);
     }
 
-    audioActions.playSoundEffect('success');
-    audioActions.playBackgroundMusic('space');
+    audioActions.playSoundEffect('game_complete');
+    audioActions.playBackgroundMusic('victory');
   };
 
   const handleBackToMap = () => {
@@ -123,43 +130,65 @@ const Game1_Root = ({ onComplete }) => {
   };
 
   const currentScenario = game1Data.scenarios[currentScenarioIndex];
+  const currentReflectionQuestion = game1Data.reflectionQuestions[currentReflectionIndex];
 
   return (
-    <div className="game1-root">
+    <div className="game1-root astro-theme">
       <div className="game1-header">
         <button onClick={handleBackToMap} className="back-button">
           ← Back to Map
         </button>
-        <h1>🌋 Island of Change</h1>
-        <ResiliencePoints points={gameProgress.totalResiliencePoints} />
+        <h1>🌞 AstroVoyager - Energy Detectives</h1>
+        {selectedCharacter && (
+          <div className="character-badge">
+            {selectedCharacter.avatar} {selectedCharacter.name}
+          </div>
+        )}
       </div>
 
       <div className="game1-content">
-        {currentStage === 'role-selection' && (
-          <RoleSelection 
-            roles={game1Data.roles}
-            onRoleSelect={handleRoleSelect}
+        {currentStage === 'character-selection' && (
+          <CharacterSelection 
+            characters={game1Data.characters}
+            onCharacterSelect={handleCharacterSelect}
           />
         )}
 
-        {currentStage === 'scenario' && selectedRole && currentScenario && (
+        {currentStage === 'scenario' && selectedCharacter && currentScenario && (
           <ScenarioRunner
             scenario={currentScenario}
-            role={selectedRole}
-            onChoiceSelect={handleChoiceSelect}
+            character={selectedCharacter}
+            onChoiceSelect={(choice) => handleChoiceSelect(choice, currentScenario.id)}
             scenarioNumber={currentScenarioIndex + 1}
             totalScenarios={game1Data.scenarios.length}
           />
         )}
 
-        {currentStage === 'consequence' && lastChoiceResult && (
-          <ConsequenceView
-            result={lastChoiceResult}
-            role={selectedRole}
+        {currentStage === 'feedback' && lastChoiceFeedback && currentScenario && (
+          <FeedbackView
+            feedback={lastChoiceFeedback}
             scenario={currentScenario}
-            onNext={handleNextScenario}
-            onRetry={handleRetryScenario}
+            onNext={handleNextAfterFeedback}
             isLastScenario={currentScenarioIndex === game1Data.scenarios.length - 1}
+          />
+        )}
+
+        {currentStage === 'scoreboard' && (
+          <Scoreboard
+            score={score}
+            totalQuestions={game1Data.scenarios.length}
+            character={selectedCharacter}
+            onContinue={handleStartReflection}
+          />
+        )}
+
+        {currentStage === 'reflection' && (
+          <ReflectionView
+            question={currentReflectionQuestion}
+            questionNumber={currentReflectionIndex + 1}
+            totalQuestions={game1Data.reflectionQuestions.length}
+            onNext={handleNextReflection}
+            isLastQuestion={currentReflectionIndex === game1Data.reflectionQuestions.length - 1}
           />
         )}
       </div>
@@ -169,12 +198,15 @@ const Game1_Root = ({ onComplete }) => {
           <div 
             className="progress-fill"
             style={{ 
-              width: `${((currentScenarioIndex + (currentStage === 'consequence' ? 1 : 0)) / game1Data.scenarios.length) * 100}%` 
+              width: `${((currentScenarioIndex + (currentStage === 'feedback' ? 1 : 0)) / game1Data.scenarios.length) * 100}%` 
             }}
           ></div>
         </div>
         <div className="progress-text">
-          Scenario {Math.min(currentScenarioIndex + 1, game1Data.scenarios.length)} of {game1Data.scenarios.length}
+          {currentStage === 'reflection' 
+            ? `Reflection ${currentReflectionIndex + 1} of ${game1Data.reflectionQuestions.length}`
+            : `Scenario ${Math.min(currentScenarioIndex + 1, game1Data.scenarios.length)} of ${game1Data.scenarios.length}`
+          }
         </div>
       </div>
     </div>

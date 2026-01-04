@@ -1,219 +1,164 @@
-/* ===== SCENARIO WRAPPER ===== */
 .scenario-runner {
-  background: rgba(139, 185, 23, 0.05);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
-  backdrop-filter: blur(10px);
-  flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  min-height: 0;
+  height: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-/* ===== HEADER ===== */
 .scenario-header {
-  background: linear-gradient(135deg, rgba(255, 107, 107, 0.15), rgba(255, 167, 38, 0.15));
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--color-border);
-  flex-shrink: 0;
+  margin-bottom: var(--space-xl);
+  text-align: center;
 }
 
 .scenario-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-sm);
+  color: #FFC107;
+  font-size: var(--font-size-sm);
 }
 
-.scenario-number {
-  background: rgba(255, 255, 255, 0.15);
-  padding: 0.25rem 0.6rem;
-  border-radius: var(--radius-md);
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.role-badge {
-  color: #fff;
-  padding: 0.25rem 0.6rem;
-  border-radius: var(--radius-md);
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.scenario-title {
-  font-size: 1.1rem;
-  color: var(--color-accent-1);
-  margin-bottom: 0.5rem;
-  text-align: center;
-  text-shadow: 0 1px 6px rgba(255, 107, 107, 0.25);
-}
-
-.disaster-type {
-  text-align: center;
-  font-size: 0.85rem;
-  color: var(--color-text-secondary);
-}
-
-.type-label {
-  background: var(--color-accent-1);
-  color: white;
-  padding: 0.2rem 0.6rem;
+.character-tag {
+  background: rgba(255, 152, 0, 0.2);
+  padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-full);
-  font-weight: 600;
-  margin-left: 0.3rem;
-  font-size: 0.75rem;
 }
 
-/* ===== SCENARIO CONTENT ===== */
+.scenario-title h1 {
+  font-size: var(--font-size-3xl);
+  color: #FFC107;
+  text-shadow: 0 0 15px rgba(255, 193, 7, 0.3);
+}
+
 .scenario-content {
-  padding: 1rem;
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 0;
-  overflow-y: auto;
+  gap: var(--space-xl);
 }
 
-.scenario-description {
-  background: rgba(255, 255, 255, 0.08);
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius-md);
-  margin-bottom: 1rem;
-  border-left: 3px solid var(--color-primary);
+.scenario-image-container {
+  width: 100%;
+  height: 200px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 193, 7, 0.05));
+  border: 2px solid rgba(255, 152, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.scenario-description p {
-  font-size: 0.85rem;
-  line-height: 1.4;
-  margin: 0;
-  color: var(--color-text);
-}
-
-/* ===== CHOICES ===== */
-.choices-grid {
+.scenario-image-placeholder {
   text-align: center;
-  flex: 1;
+}
+
+.sun-icon {
+  font-size: 64px;
+  margin-bottom: var(--space-sm);
+}
+
+.image-label {
+  color: #FFC107;
+  font-size: var(--font-size-sm);
+  opacity: 0.8;
+}
+
+.scenario-text {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  border-left: 4px solid #FF9800;
+}
+
+.scenario-text h2 {
+  color: white;
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-lg);
+  line-height: 1.3;
+}
+
+.character-quote {
   display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-.choices-title {
-  font-size: 1rem;
-  color: var(--color-primary);
-  margin-bottom: 0.3rem;
-}
-
-.choices-instruction {
-  color: var(--color-text-secondary);
-  margin-bottom: 0.8rem;
-  font-size: 0.85rem;
-}
-
-.choices-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 0.6rem;
-  align-content: flex-start;
-}
-
-/* ===== BUTTON ===== */
-.choice-button {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1.5px solid var(--color-border);
+  align-items: center;
+  background: rgba(255, 152, 0, 0.1);
+  padding: var(--space-md);
   border-radius: var(--radius-md);
-  padding: 0.7rem;
+  border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.character-avatar-small {
+  font-size: 24px;
+  margin-right: var(--space-sm);
+}
+
+.character-name-small {
+  color: #FFC107;
+  font-weight: bold;
+  margin-right: var(--space-sm);
+}
+
+.quote-text {
+  color: #E0E0E0;
+  font-style: italic;
+}
+
+.choice-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  margin-top: auto;
+}
+
+.choice-button {
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: var(--transition-normal);
   text-align: left;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 70px;
-  backdrop-filter: blur(8px);
 }
 
 .choice-button:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: var(--color-primary);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
+  transform: translateY(-3px);
+  border-color: rgba(255, 152, 0, 0.5);
+  box-shadow: 0 5px 15px rgba(255, 152, 0, 0.2);
+}
+
+.choice-button.correct-choice:hover {
+  border-color: #4CAF50;
+  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.2);
+}
+
+.choice-button.incorrect-choice:hover {
+  border-color: #F44336;
+  box-shadow: 0 5px 15px rgba(244, 67, 54, 0.2);
+}
+
+.choice-content {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: var(--space-sm);
+}
+
+.choice-label {
+  font-size: 24px;
+  margin-right: var(--space-md);
+  flex-shrink: 0;
 }
 
 .choice-text {
-  font-size: 0.85rem;
-  line-height: 1.3;
-  margin-bottom: 0.5rem;
-  color: var(--color-text);
+  color: white;
+  font-size: var(--font-size-base);
+  line-height: 1.4;
 }
 
-.choice-points {
-  background: linear-gradient(45deg, var(--color-accent-3), #66bb6a);
-  color: #fff;
-  padding: 0.25rem 0.6rem;
-  border-radius: var(--radius-full);
-  font-size: 0.7rem;
-  font-weight: 700;
-  align-self: flex-start;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .scenario-header {
-    padding: 0.6rem 0.8rem;
-  }
-
-  .scenario-title {
-    font-size: 1rem;
-  }
-
-  .scenario-description {
-    padding: 0.6rem 0.8rem;
-  }
-
-  .choices-container {
-    grid-template-columns: 1fr;
-  }
-
-  .choice-button {
-    padding: 0.6rem;
-    min-height: 65px;
-  }
-
-  .choice-text {
-    font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .scenario-title {
-    font-size: 0.9rem;
-  }
-
-  .disaster-type {
-    font-size: 0.75rem;
-  }
-
-  .scenario-description {
-    padding: 0.5rem;
-  }
-
-  .choices-title {
-    font-size: 0.9rem;
-  }
-
-  .choice-button {
-    padding: 0.5rem;
-    min-height: 60px;
-  }
-
-  .choice-text {
-    font-size: 0.75rem;
-  }
-
-  .choice-points {
-    font-size: 0.65rem;
-  }
+.choice-hint {
+  color: #BDBDBD;
+  font-size: var(--font-size-xs);
+  text-align: right;
 }

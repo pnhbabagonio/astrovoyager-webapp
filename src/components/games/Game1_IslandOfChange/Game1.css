@@ -1,12 +1,28 @@
-.game1-root {
-  min-height: 200vh;
-  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
-  color: var(--color-text);
+.game1-root.astro-theme {
+  min-height: 100vh;
+  background: linear-gradient(135deg, 
+    #0f0c29, #302b63, #24243e);
+  color: #fff;
   display: flex;
   flex-direction: column;
   flex: 1;
   height: 100%;
   overflow: hidden;
+  position: relative;
+}
+
+.astro-theme::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(255, 204, 0, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 102, 0, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(255, 153, 0, 0.06) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 .game1-header {
@@ -14,26 +30,38 @@
   justify-content: space-between;
   align-items: center;
   padding: var(--space-lg) var(--space-xl);
-  /* background: rgba(255, 107, 107, 0.1); */
-  /* border-bottom: 2px solid var(--color-accent-1); */
+  background: rgba(0, 0, 0, 0.4);
+  border-bottom: 2px solid #FF9800;
   backdrop-filter: blur(10px);
   flex-shrink: 0;
   min-height: 40px;
+  position: relative;
+  z-index: 2;
 }
 
 .game1-header h1 {
   font-size: var(--font-size-5xl);
-  background: linear-gradient(45deg, var(--color-accent-1), var(--color-accent-2));
+  background: linear-gradient(45deg, #FF9800, #FFC107, #FF5722);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0;
+  text-shadow: 0 0 20px rgba(255, 152, 0, 0.3);
+}
+
+.character-badge {
+  background: rgba(255, 152, 0, 0.2);
+  border: 1px solid #FF9800;
+  border-radius: var(--radius-lg);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-base);
+  color: #FFC107;
 }
 
 .back-button {
   background: transparent;
-  border: 2px solid var(--color-text-secondary);
-  color: var(--color-text-secondary);
+  border: 2px solid #FFC107;
+  color: #FFC107;
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-lg);
   cursor: pointer;
@@ -43,9 +71,9 @@
 }
 
 .back-button:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  background: rgba(255, 193, 7, 0.1);
   transform: translateX(-3px);
+  box-shadow: 0 0 15px rgba(255, 193, 7, 0.3);
 }
 
 .game1-content {
@@ -59,21 +87,25 @@
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
+  position: relative;
+  z-index: 2;
 }
 
 .game1-progress {
   padding: var(--space-md);
   text-align: center;
-  background: rgba(255, 255, 255, 0.05);
-  border-top: 1px solid var(--color-border);
+  background: rgba(0, 0, 0, 0.4);
+  border-top: 1px solid rgba(255, 152, 0, 0.3);
   flex-shrink: 0;
   min-height: 60px;
+  position: relative;
+  z-index: 2;
 }
 
 .progress-bar {
   width: 250px;
   height: 6px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-full);
   overflow: hidden;
   margin: 0 auto var(--space-sm);
@@ -81,14 +113,36 @@
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(45deg, var(--color-accent-1), var(--color-accent-2));
+  background: linear-gradient(45deg, #FF9800, #FFC107);
   border-radius: var(--radius-full);
   transition: width var(--transition-slow);
+  box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
 }
 
 .progress-text {
   font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
+  color: #FFC107;
+  font-weight: 500;
+}
+
+/* Stellar animations */
+@keyframes pulse {
+  0% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+  100% { opacity: 0.3; }
+}
+
+@keyframes twinkle {
+  0% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.3; }
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 3s infinite;
 }
 
 /* Responsive Design */
@@ -114,6 +168,11 @@
     order: 1;
     align-self: flex-start;
     margin-bottom: var(--space-sm);
+  }
+
+  .character-badge {
+    order: 3;
+    margin-top: var(--space-sm);
   }
 
   .progress-bar {

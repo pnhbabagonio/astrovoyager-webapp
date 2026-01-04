@@ -5,9 +5,9 @@ import './MissionMap.css';
 
 // ✅ Use PUBLIC_URL paths
 const mapBg = `${process.env.PUBLIC_URL}/assets/images/ui/map-bg.png`;
-const island1Bg = `${process.env.PUBLIC_URL}/assets/images/game1/island-of-change.png`;
-const island2Bg = `${process.env.PUBLIC_URL}/assets/images/game2/weather-watcher.png`;
-const island3Bg = `${process.env.PUBLIC_URL}/assets/images/game3/match-the-sun.png`;
+const island1Bg = `${process.env.PUBLIC_URL}/assets/images/game1/weather-watcher.png`;
+const island2Bg = `${process.env.PUBLIC_URL}/assets/images/game2/match-the-sun.png`;
+const island3Bg = `${process.env.PUBLIC_URL}/assets/images/game3/island-of-change.png`;
 const annieCharacter = `${process.env.PUBLIC_URL}/assets/images/characters/annie.png`;
 
 const MissionMap = () => {

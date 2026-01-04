@@ -1,28 +1,35 @@
-import React from 'react';
-import { getChoicesForScenarioAndRole } from '../../../../../data/game1Data';
 import ScenarioHeader from './ScenarioHeader';
-import ChoicesGrid from './ChoicesGrid';
+import ChoiceGrid from './ChoiceGrid';
 import './ScenarioRunner.css';
 
-const ScenarioRunner = ({ scenario, role, onChoiceSelect, scenarioNumber, totalScenarios }) => {
-  const choices = getChoicesForScenarioAndRole(scenario.id, role.id);
-
+const ScenarioRunner = ({ scenario, character, onChoiceSelect, scenarioNumber, totalScenarios }) => {
   return (
     <div className="scenario-runner">
-      <ScenarioHeader 
-        scenario={scenario}
-        role={role}
+      <ScenarioHeader
         scenarioNumber={scenarioNumber}
         totalScenarios={totalScenarios}
+        character={character}
       />
       
       <div className="scenario-content">
-        <div className="scenario-description">
-          <p>{scenario.description}</p>
+        <div className="scenario-image-container">
+          <div className="scenario-image-placeholder">
+            <div className="sun-icon">☀️</div>
+            <div className="image-label">Scenario {scenarioNumber}</div>
+          </div>
         </div>
-
-        <ChoicesGrid 
-          choices={choices}
+        
+        <div className="scenario-text">
+          <h2>{scenario.title}</h2>
+          <div className="character-quote">
+            <span className="character-avatar-small">{character.avatar}</span>
+            <span className="character-name-small">{character.name}:</span>
+            <span className="quote-text">What do you think happens next?</span>
+          </div>
+        </div>
+        
+        <ChoiceGrid
+          choices={scenario.choices}
           onChoiceSelect={onChoiceSelect}
         />
       </div>
