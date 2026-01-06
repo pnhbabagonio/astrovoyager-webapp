@@ -1,0 +1,372 @@
+.score-display {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.score-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.score-header h2 {
+  font-size: 2rem;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(45deg, #4a7dff, #8a4fff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.mission-summary {
+  color: #a0b9ff;
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.score-card {
+  background: rgba(20, 25, 60, 0.8);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 2px solid rgba(74, 125, 255, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.score-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(74, 125, 255, 0.1) 0%, transparent 70%);
+  z-index: 0;
+}
+
+.score-visual {
+  flex: 0 0 200px;
+  position: relative;
+  z-index: 1;
+}
+
+.score-circle {
+  width: 200px;
+  height: 200px;
+  position: relative;
+}
+
+.score-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.ring-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 2;
+}
+
+.ring-progress {
+  fill: none;
+  stroke: url(#gradient);
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition: stroke-dasharray 1s ease;
+}
+
+.score-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.score-number {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.score-total {
+  font-size: 1.5rem;
+  color: #a0b9ff;
+}
+
+.score-details {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.score-details h3 {
+  font-size: 1.8rem;
+  margin: 0 0 1rem 0;
+}
+
+.score-message {
+  color: #ffffff;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.score-breakdown {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.breakdown-item:last-child {
+  border-bottom: none;
+}
+
+.breakdown-label {
+  color: #a0b9ff;
+  font-size: 0.95rem;
+}
+
+.breakdown-value {
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+/* Celebration Animation */
+.celebration {
+  position: relative;
+  height: 100px;
+  margin: 2rem 0;
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 20px;
+  background: linear-gradient(45deg, #ff6666, #ff9966, #ffcc00, #66ff66, #6699ff, #9966ff);
+  opacity: 0;
+  animation: confetti-fall 2s ease-in-out infinite;
+}
+
+.confetti:nth-child(1) {
+  left: 10%;
+  animation-delay: 0s;
+}
+.confetti:nth-child(2) {
+  left: 30%;
+  animation-delay: 0.4s;
+}
+.confetti:nth-child(3) {
+  left: 50%;
+  animation-delay: 0.8s;
+}
+.confetti:nth-child(4) {
+  left: 70%;
+  animation-delay: 1.2s;
+}
+.confetti:nth-child(5) {
+  left: 90%;
+  animation-delay: 1.6s;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Knowledge Summary */
+.knowledge-summary {
+  background: rgba(20, 25, 60, 0.7);
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(74, 125, 255, 0.3);
+}
+
+.knowledge-summary h4 {
+  color: #ffffff;
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.knowledge-points {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.point {
+  background: rgba(74, 125, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  border: 1px solid rgba(74, 125, 255, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.point:hover {
+  transform: translateY(-5px);
+  border-color: #4a7dff;
+}
+
+.point-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.point-content h5 {
+  color: #ffffff;
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.point-content p {
+  color: #a0b9ff;
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+
+.retry-button,
+.review-button {
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  min-width: 200px;
+}
+
+.retry-button {
+  background: linear-gradient(45deg, #4a7dff, #8a4fff);
+  color: white;
+}
+
+.review-button {
+  background: rgba(255, 209, 102, 0.2);
+  color: #ffd166;
+  border: 2px solid #ffd166;
+}
+
+.retry-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(74, 125, 255, 0.4);
+}
+
+.review-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 209, 102, 0.3);
+  background: rgba(255, 209, 102, 0.3);
+}
+
+.mission-encouragement {
+  background: rgba(40, 200, 150, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 1px solid #28c896;
+  text-align: center;
+}
+
+.mission-encouragement p {
+  color: #ffffff;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.mission-encouragement strong {
+  color: #28c896;
+}
+
+/* Gradient definition for ring */
+.score-circle svg {
+  position: absolute;
+}
+
+.score-circle defs {
+  position: absolute;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .score-display {
+    padding: 1rem;
+  }
+  
+  .score-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+  
+  .score-visual {
+    flex: none;
+  }
+  
+  .knowledge-points {
+    grid-template-columns: 1fr;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .retry-button,
+  .review-button {
+    width: 100%;
+    min-width: unset;
+  }
+}
+
+@media (max-width: 480px) {
+  .score-circle {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .score-number {
+    font-size: 2.5rem;
+  }
+  
+  .score-total {
+    font-size: 1.2rem;
+  }
+}
