@@ -81,15 +81,18 @@
   box-shadow: 0 0 15px rgba(74, 125, 255, 0.4);
 }
 
+/* Add these to the existing Game2.css file */
+
+/* Location Progress Summary in Header */
 .astro-score {
   background: rgba(0, 0, 0, 0.3);
   border: 2px solid #ffd166;
   border-radius: 12px;
-  padding: 0.5rem 1rem;
+  padding: 0.8rem 1.2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 120px;
+  min-width: 180px;
 }
 
 .score-label {
@@ -99,10 +102,533 @@
 }
 
 .score-value {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
   color: #ffffff;
   text-shadow: 0 0 10px #ffd166;
+}
+
+.score-total {
+  font-size: 0.8rem;
+  color: #a0b9ff;
+  margin-top: 0.2rem;
+}
+
+/* Location Progress Summary at Bottom */
+.location-progress-summary {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(74, 125, 255, 0.3);
+}
+
+.location-tags {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.location-tag {
+  background: rgba(74, 125, 255, 0.1);
+  border: 2px solid rgba(74, 125, 255, 0.3);
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.location-tag.completed {
+  background: rgba(40, 200, 150, 0.1);
+  border-color: #28c896;
+}
+
+.location-tag.current {
+  border-color: #ffd166;
+  background: rgba(255, 209, 102, 0.1);
+  transform: scale(1.05);
+}
+
+.tag-icon {
+  font-size: 1.2rem;
+}
+
+.tag-name {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.tag-score {
+  color: #28c896;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+/* Updated ScoreDisplay Styles */
+.final-summary {
+  background: rgba(20, 25, 60, 0.8);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 2px solid rgba(74, 125, 255, 0.3);
+}
+
+.final-score-card {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  margin-bottom: 2rem;
+}
+
+.final-score-visual {
+  flex: 0 0 200px;
+}
+
+.final-score-circle {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle at 30% 30%, #1a1f4b, #0a0e2a);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 6px solid #4a7dff;
+  box-shadow: 0 0 30px rgba(74, 125, 255, 0.5);
+  position: relative;
+}
+
+.final-score-number {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #ffd166;
+  line-height: 1;
+}
+
+.final-score-label {
+  color: #a0b9ff;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+.final-score-percentage {
+  position: absolute;
+  bottom: -25px;
+  background: #4a7dff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.final-score-details {
+  flex: 1;
+}
+
+.final-message {
+  color: #ffffff;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.location-scores-summary {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.location-scores-summary h4 {
+  color: #ffffff;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.location-score-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.location-score-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.location-name {
+  color: #ffffff;
+  font-weight: 500;
+  min-width: 150px;
+}
+
+.score-bar-container {
+  flex: 1;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.score-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4a7dff, #8a4fff);
+  border-radius: 10px;
+  transition: width 1s ease;
+}
+
+.score-bar-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.final-achievements {
+  background: rgba(20, 25, 60, 0.7);
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(74, 125, 255, 0.3);
+}
+
+.final-achievements h4 {
+  color: #ffffff;
+  text-align: center;
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.achievement {
+  background: rgba(74, 125, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px solid rgba(74, 125, 255, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.achievement:hover {
+  transform: translateY(-5px);
+  border-color: #4a7dff;
+}
+
+.achievement-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.achievement h5 {
+  color: #ffffff;
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+
+.achievement p {
+  color: #a0b9ff;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.complete-mission-button {
+  background: linear-gradient(45deg, #ffd166, #ff9966);
+  color: #1a1f4b;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+  box-shadow: 0 5px 20px rgba(255, 209, 102, 0.4);
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.complete-mission-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 209, 102, 0.6);
+}
+
+.mission-complete-message {
+  background: rgba(40, 200, 150, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 1px solid #28c896;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.mission-complete-message p {
+  color: #ffffff;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.mission-complete-message strong {
+  color: #28c896;
+}
+
+/* Continue Options */
+.continue-options {
+  background: rgba(20, 25, 60, 0.7);
+  border-radius: 15px;
+  padding: 2rem;
+  margin-top: 2rem;
+  border: 1px solid rgba(74, 125, 255, 0.3);
+}
+
+.mission-progress-summary {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.progress-summary-item {
+  margin-bottom: 1rem;
+}
+
+.progress-summary-item:last-child {
+  margin-bottom: 0;
+}
+
+.progress-label {
+  color: #a0b9ff;
+  font-size: 0.95rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar-container {
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4a7dff, #8a4fff);
+  border-radius: 10px;
+  transition: width 1s ease;
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.progress-value {
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.next-location-section,
+.complete-mission-section {
+  text-align: center;
+}
+
+.next-location-section h4,
+.complete-mission-section h4 {
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.next-location-section p,
+.complete-mission-section p {
+  color: #a0b9ff;
+  margin-bottom: 1.5rem;
+}
+
+.try-another-button,
+.complete-all-button {
+  background: linear-gradient(45deg, #4a7dff, #8a4fff);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+  box-shadow: 0 5px 20px rgba(74, 125, 255, 0.4);
+  min-width: 250px;
+}
+
+.try-another-button:hover,
+.complete-all-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(74, 125, 255, 0.6);
+}
+
+.review-button {
+  background: rgba(255, 209, 102, 0.2);
+  color: #ffd166;
+  border: 2px solid #ffd166;
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 1rem;
+}
+
+.review-button:hover {
+  background: rgba(255, 209, 102, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 209, 102, 0.3);
+}
+
+/* Updated LocationSelector.css additions */
+.location-card.completed {
+  opacity: 0.8;
+  border-color: #28c896;
+}
+
+.location-card.completed:hover {
+  transform: none;
+  cursor: not-allowed;
+  border-color: #28c896;
+}
+
+.location-status {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.location-score {
+  background: rgba(40, 200, 150, 0.1);
+  padding: 0.8rem;
+  border-radius: 10px;
+  margin-top: 1rem;
+  border: 1px solid #28c896;
+}
+
+.score-label {
+  display: block;
+  color: #a0b9ff;
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
+}
+
+.score-value {
+  display: block;
+  color: #28c896;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.completed-indicator {
+  color: #28c896;
+  font-weight: bold;
+}
+
+.selector-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.mission-summary {
+  display: flex;
+  justify-content: space-around;
+  background: rgba(74, 125, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid rgba(74, 125, 255, 0.3);
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.summary-label {
+  color: #a0b9ff;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+
+.summary-value {
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .final-score-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 2rem;
+  }
+  
+  .final-score-visual {
+    flex: none;
+  }
+  
+  .location-tags {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .location-tag {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .try-another-button,
+  .review-button {
+    margin: 0.5rem 0;
+    width: 100%;
+  }
+  
+  .review-button {
+    margin-left: 0;
+  }
 }
 
 .astro-content {

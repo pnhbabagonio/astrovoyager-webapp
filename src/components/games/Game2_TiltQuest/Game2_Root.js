@@ -19,16 +19,20 @@ const Game2_Root = ({ onComplete }) => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [earthState, setEarthState] = useState({
     tilt: false,
-    position: 0, // 0-100 slider position
-    season: 'equinox' // equinox, summer-solstice, winter-solstice
+    position: 50, // Start at equinox (50%)
+    season: 'equinox'
   });
-  const [answers, setAnswers] = useState({
-    observation: null,
-    concept1: null,
-    concept2: null
+  
+  // Track progress for all locations
+  const [locationProgress, setLocationProgress] = useState({
+    ph: { completed: false, score: 0, observation: null, concept1: null, concept2: null },
+    ca: { completed: false, score: 0, observation: null, concept1: null, concept2: null },
+    au: { completed: false, score: 0, observation: null, concept1: null, concept2: null }
   });
-  const [score, setScore] = useState(0);
-  const [gameComplete, setGameComplete] = useState(false);
+  
+  const [currentLocationScore, setCurrentLocationScore] = useState(0);
+  const [allLocationsCompleted, setAllLocationsCompleted] = useState(false);
+  const [showFinalScore, setShowFinalScore] = useState(false);
 
   // Initialize game
   useEffect(() => {
@@ -36,7 +40,29 @@ const Game2_Root = ({ onComplete }) => {
     audioActions.playBackgroundMusic('space-theme');
   }, [audioActions]);
 
+  // Check if all locations are completed
+  useEffect(() => {
+    const completed = Object.values(locationProgress).every(loc => loc.completed);
+    setAllLocationsCompleted(completed);
+    
+    // Calculate total score
+    const totalScore = Object.values(locationProgress).reduce((sum, loc) => sum + loc.score, 0);
+    
+    // If all completed and we're in final stage, show final score
+    if (completed && currentStage === 'score-display' && !showFinalScore) {
+      setTimeout(() => {
+        setShowFinalScore(true);
+      }, 2000);
+    }
+  }, [locationProgress, currentStage, showFinalScore]);
+
   const handleLocationSelect = (location) => {
+    // Don't allow selecting already completed locations
+    if (locationProgress[location.id].completed) {
+      audioActions.playSoundEffect('error');
+      return;
+    }
+    
     setSelectedLocation(location);
     audioActions.playSoundEffect('select');
     setTimeout(() => {
@@ -49,7 +75,15 @@ const Game2_Root = ({ onComplete }) => {
   };
 
   const handleObservationComplete = (observationAnswer) => {
-    setAnswers(prev => ({ ...prev, observation: observationAnswer }));
+    // Update progress for current location
+    setLocationProgress(prev => ({
+      ...prev,
+      [selectedLocation.id]: {
+        ...prev[selectedLocation.id],
+        observation: observationAnswer
+      }
+    }));
+    
     audioActions.playSoundEffect('buttonClick');
     setTimeout(() => {
       setCurrentStage('concept-check');
@@ -57,34 +91,54 @@ const Game2_Root = ({ onComplete }) => {
   };
 
   const handleConceptComplete = (conceptAnswers) => {
-    setAnswers(prev => ({ ...prev, ...conceptAnswers }));
-    
-    // Calculate score (1 point each for correct answers)
+    // Calculate score for this location
     let calculatedScore = 0;
     
-    // Observation check scoring (simplified - in real app, would check against correct answer)
-    if (answers.observation) calculatedScore += 1;
+    // Check observation (simplified logic - would be based on actual observation)
+    const observationCorrect = true; // In real app, check if observation matches Earth state
+    if (observationCorrect) calculatedScore += 1;
     
-    // Concept check scoring
+    // Check concept answers
     if (conceptAnswers.concept1 === 'days-change') calculatedScore += 1;
     if (conceptAnswers.concept2 === 'earth-tilted') calculatedScore += 1;
     
-    setScore(calculatedScore);
-    setGameComplete(true);
-    audioActions.playSoundEffect(calculatedScore > 0 ? 'success' : 'error');
+    // Update location progress
+    setLocationProgress(prev => ({
+      ...prev,
+      [selectedLocation.id]: {
+        ...prev[selectedLocation.id],
+        completed: true,
+        score: calculatedScore,
+        concept1: conceptAnswers.concept1,
+        concept2: conceptAnswers.concept2
+      }
+    }));
     
-    // Update global progress after delay
-    setTimeout(() => {
-      completeGame(calculatedScore);
-    }, 2000);
+    setCurrentLocationScore(calculatedScore);
+    setCurrentStage('score-display');
+    
+    audioActions.playSoundEffect(calculatedScore > 0 ? 'success' : 'error');
   };
 
-  const completeGame = (finalScore) => {
+  const handleTryAnotherLocation = () => {
+    setSelectedLocation(null);
+    setEarthState({ tilt: false, position: 50, season: 'equinox' });
+    setCurrentLocationScore(0);
+    setShowFinalScore(false);
+    setCurrentStage('location-selector');
+    audioActions.playSoundEffect('reset');
+  };
+
+  const handleCompleteAllLocations = () => {
+    const totalScore = Object.values(locationProgress).reduce((sum, loc) => sum + loc.score, 0);
+    const maxScore = 9; // 3 locations * 3 points each
+    
     const gameResult = {
       completed: true,
-      score: finalScore,
-      maxScore: 3, // 3 possible points
-      location: selectedLocation?.name,
+      score: totalScore,
+      maxScore: maxScore,
+      locationsCompleted: Object.values(locationProgress).filter(loc => loc.completed).length,
+      details: locationProgress,
       date: new Date().toISOString()
     };
 
@@ -101,6 +155,8 @@ const Game2_Root = ({ onComplete }) => {
     if (onComplete) {
       onComplete(gameResult);
     }
+    
+    audioActions.playSoundEffect('success');
   };
 
   const handleBackToMap = () => {
@@ -108,14 +164,16 @@ const Game2_Root = ({ onComplete }) => {
     gameDispatch({ type: 'SET_VIEW', payload: 'mission-map' });
   };
 
-  const resetGame = () => {
-    setSelectedLocation(null);
-    setEarthState({ tilt: false, position: 0, season: 'equinox' });
-    setAnswers({ observation: null, concept1: null, concept2: null });
-    setScore(0);
-    setGameComplete(false);
-    setCurrentStage('location-selector');
-    audioActions.playSoundEffect('reset');
+  const getCompletedCount = () => {
+    return Object.values(locationProgress).filter(loc => loc.completed).length;
+  };
+
+  const getTotalScore = () => {
+    return Object.values(locationProgress).reduce((sum, loc) => sum + loc.score, 0);
+  };
+
+  const getProgressForLocation = (locationId) => {
+    return locationProgress[locationId];
   };
 
   return (
@@ -129,8 +187,9 @@ const Game2_Root = ({ onComplete }) => {
           <p className="subtitle">Discover how Earth's tilt affects daylight!</p>
         </div>
         <div className="astro-score">
-          <span className="score-label">Mission Points:</span>
-          <span className="score-value">{score}/3</span>
+          <span className="score-label">Total Progress:</span>
+          <span className="score-value">{getCompletedCount()}/3 Locations</span>
+          <span className="score-total">Score: {getTotalScore()}/9</span>
         </div>
       </div>
 
@@ -139,6 +198,7 @@ const Game2_Root = ({ onComplete }) => {
           <LocationSelector
             locations={locationsData}
             onSelectLocation={handleLocationSelect}
+            locationProgress={locationProgress}
           />
         )}
 
@@ -166,33 +226,60 @@ const Game2_Root = ({ onComplete }) => {
           />
         )}
 
-        {gameComplete && (
+        {currentStage === 'score-display' && selectedLocation && (
           <ScoreDisplay
-            score={score}
+            score={currentLocationScore}
             maxScore={3}
-            location={selectedLocation?.name}
-            onRetry={resetGame}
+            location={selectedLocation}
+            locationProgress={locationProgress}
+            allLocationsCompleted={allLocationsCompleted}
+            showFinalScore={showFinalScore}
+            onTryAnotherLocation={handleTryAnotherLocation}
+            onCompleteAllLocations={handleCompleteAllLocations}
           />
         )}
       </div>
 
       <div className="astro-progress">
         <div className="progress-steps">
-          <div className={`step ${currentStage === 'location-selector' ? 'active' : ''} ${currentStage === 'location-selector' ? 'current' : ''}`}>
+          <div className={`step ${['location-selector', 'earth-visualization', 'observation-check', 'concept-check', 'score-display'].includes(currentStage) ? 'active' : ''} ${currentStage === 'location-selector' ? 'current' : ''}`}>
             <span className="step-number">1</span>
             <span className="step-name">Select Location</span>
           </div>
-          <div className={`step ${currentStage === 'earth-visualization' ? 'active' : ''} ${currentStage === 'earth-visualization' ? 'current' : ''}`}>
+          <div className={`step ${['earth-visualization', 'observation-check', 'concept-check', 'score-display'].includes(currentStage) ? 'active' : ''} ${currentStage === 'earth-visualization' ? 'current' : ''}`}>
             <span className="step-number">2</span>
             <span className="step-name">Explore Earth</span>
           </div>
-          <div className={`step ${currentStage === 'observation-check' ? 'active' : ''} ${currentStage === 'observation-check' ? 'current' : ''}`}>
+          <div className={`step ${['observation-check', 'concept-check', 'score-display'].includes(currentStage) ? 'active' : ''} ${currentStage === 'observation-check' ? 'current' : ''}`}>
             <span className="step-number">3</span>
             <span className="step-name">Observation</span>
           </div>
-          <div className={`step ${currentStage === 'concept-check' || gameComplete ? 'active' : ''} ${currentStage === 'concept-check' ? 'current' : ''}`}>
+          <div className={`step ${['concept-check', 'score-display'].includes(currentStage) ? 'active' : ''} ${currentStage === 'concept-check' ? 'current' : ''}`}>
             <span className="step-number">4</span>
             <span className="step-name">Concept Check</span>
+          </div>
+        </div>
+        
+        <div className="location-progress-summary">
+          <div className="location-tags">
+            {locationsData.map(loc => {
+              const progress = getProgressForLocation(loc.id);
+              return (
+                <div 
+                  key={loc.id}
+                  className={`location-tag ${progress.completed ? 'completed' : ''} ${selectedLocation?.id === loc.id ? 'current' : ''}`}
+                  title={`${loc.name}: ${progress.completed ? `Score: ${progress.score}/3` : 'Not completed'}`}
+                >
+                  <span className="tag-icon">
+                    {loc.id === 'ph' ? '🏝️' : loc.id === 'ca' ? '🍁' : '🦘'}
+                  </span>
+                  <span className="tag-name">{loc.name}</span>
+                  {progress.completed && (
+                    <span className="tag-score">✓ {progress.score}/3</span>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
