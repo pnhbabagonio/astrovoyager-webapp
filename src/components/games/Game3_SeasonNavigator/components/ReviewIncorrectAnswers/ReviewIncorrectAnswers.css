@@ -1,0 +1,155 @@
+.review-incorrect {
+  max-width: 800px;
+  margin: 0 auto;
+  animation: fadeIn 0.8s ease;
+}
+
+.review-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.review-header h2 {
+  font-size: 2.2rem;
+  color: #00d4ff;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #b0e0e6;
+  font-size: 1.1rem;
+}
+
+.review-content {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 2rem;
+  border: 2px solid rgba(0, 212, 255, 0.2);
+  margin-bottom: 2rem;
+}
+
+.no-incorrect {
+  text-align: center;
+  color: #00ff00;
+  font-size: 1.2rem;
+  padding: 2rem;
+}
+
+.review-item {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.review-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.review-item h3 {
+  color: #ffd700;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.question {
+  color: #fff;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.answer-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .answer-comparison {
+    grid-template-columns: 1fr;
+  }
+}
+
+.answer {
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.answer .label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.answer .text {
+  font-size: 1rem;
+}
+
+.wrong-answer {
+  background: rgba(255, 107, 107, 0.2);
+  border: 2px solid #ff6b6b;
+}
+
+.wrong-answer .label {
+  color: #ff6b6b;
+}
+
+.correct-answer {
+  background: rgba(0, 255, 0, 0.2);
+  border: 2px solid #00ff00;
+}
+
+.correct-answer .label {
+  color: #00ff00;
+}
+
+.explanation {
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.explanation h4 {
+  color: #00d4ff;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.explanation p {
+  color: #e0f7ff;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.review-controls {
+  text-align: center;
+}
+
+.return-button {
+  background: linear-gradient(45deg, #00d4ff, #0099ff);
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.return-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

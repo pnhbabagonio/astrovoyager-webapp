@@ -7,7 +7,7 @@ import LaunchScreen from './components/screens/LaunchScreen/LaunchScreen';
 import MissionMap from './components/screens/MissionMap/MissionMap';
 import Game1_Root from './components/games/Game1_EnergyDetectives/Game1_Root';
 import Game2_Root from './components/games/Game2_TiltQuest/Game2_Root';
-import Game3_Root from './components/games/Game3_MatchTheSun/Game3_Root';
+import Game3_Root from './components/games/Game3_SeasonNavigator/Game3_Root';
 import EndCredits from './components/screens/EndCredits/EndCredits';
 import AudioControls from './components/common/AudioControls/AudioControls';
 import LoadingSpinner from './components/common/LoadingSpinner/LoadingSpinner';
