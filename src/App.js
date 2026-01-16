@@ -140,7 +140,7 @@ function AppContent() {
   const renderCurrentView = () => {
     // Show Journey Loading after clicking BEGIN JOURNEY
     if (showJourneyLoading) {
-      return <LoadingSpinner message="Launching rocket..." />;
+      return <LoadingSpinner message="Launching rocket" />;
     }
 
     // Show LaunchVideo component when triggered
