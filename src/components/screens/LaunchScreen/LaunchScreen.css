@@ -137,21 +137,23 @@
 
 /* ===== ORBITAL RINGS ===== */
 .orbital-rings {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 1;
   pointer-events: none;
+  overflow: hidden;
 }
 
 .orbital-ring {
   position: absolute;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .ring-1 {
@@ -173,8 +175,8 @@
 }
 
 @keyframes orbitRotate {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to { transform: translate(-50%, -50%) rotate(360deg); }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* ===== FLOATING PLANET ===== */
