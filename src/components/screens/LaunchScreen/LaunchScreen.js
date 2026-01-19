@@ -59,20 +59,27 @@ const LaunchScreen = ({ onLaunch }) => {
         
         {/* <p className="subtitle">Embark on an Educational Space Journey</p> */}
         
-        <div className="input-section">
-          <label htmlFor="playerName" className="input-label">
-            Enter Your Astronaut Name:
-          </label>
-          <input
-            id="playerName"
-            type="text"
-            value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-            placeholder="e.g., Astronaut Quincy"
-            className="name-input"
-            onKeyUp={(e) => e.key === 'Enter' && handleButtonPress()}
-          />
-        </div>
+<div className="input-section">
+  <div className={`name-plate ${playerName.trim() ? 'ready' : ''}`}>
+    <span className="plate-icon">🚀</span>
+
+    <input
+      type="text"
+      value={playerName}
+      onChange={(e) => setPlayerName(e.target.value)}
+      placeholder="Astronaut Quincy"
+      className="plate-input"
+      maxLength={16}
+      onKeyUp={(e) => e.key === 'Enter' && handleButtonPress()}
+    />
+  </div>
+
+  <div className="plate-caption">
+    Enter your name to begin your mission
+  </div>
+</div>
+
+
 
         {/* Image Button with Press Animation */}
         <div 

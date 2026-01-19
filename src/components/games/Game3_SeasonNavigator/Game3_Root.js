@@ -284,7 +284,7 @@ const Game3_Root = ({ onComplete }) => {
         {/* Progress Indicator */}
         <GameProgress 
           currentStep={gameState.currentStep}
-          totalSteps={5}
+          totalSteps={4}
           selectedRegion={gameState.selectedRegion}
           score={gameState.totalScore}
           completedRegions={gameState.completedRegions}

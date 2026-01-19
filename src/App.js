@@ -145,7 +145,7 @@ function AppContent() {
 
     // Show LaunchVideo component when triggered
     if (showLaunchVideo) {
-      return <LaunchVideo onComplete={handleVideoComplete} />;
+      return <LaunchVideo onSkip={handleVideoComplete} />;
     }
 
     // Show RocketLoader during initial loading state

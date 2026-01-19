@@ -616,6 +616,56 @@
   animation: teleportGlow 2s linear infinite;
 }
 
+/* ===== TEXT OVERFLOW PREVENTION ===== */
+.game3-content {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Safe text containers */
+.text-safe {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Prevent flex items from shrinking */
+.flex-item-safe {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Grid item safety */
+.grid-item-safe {
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Header text safety */
+.game3-header h1 {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .game3-content {
+    padding: 0.5rem;
+  }
+  
+  /* Ensure text doesn't overflow on small screens */
+  * {
+    max-width: 100vw;
+  }
+  
+  /* Prevent horizontal scrolling */
+  body {
+    overflow-x: hidden;
+  }
+}
+
 @keyframes teleportGlow {
   0% { transform: rotate(0deg) translate(-50%, -50%); }
   100% { transform: rotate(360deg) translate(-50%, -50%); }

@@ -139,11 +139,11 @@ const Game1_Root = ({ onComplete }) => {
           ← Back to Map
         </button>
         <h1>🌞 AstroVoyager - Energy Detectives</h1>
-        {selectedCharacter && (
+        {/* {selectedCharacter && (
           <div className="character-badge">
             {selectedCharacter.avatar} {selectedCharacter.name}
           </div>
-        )}
+        )} */}
       </div>
 
       <div className="game1-content">
