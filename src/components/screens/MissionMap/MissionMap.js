@@ -15,34 +15,34 @@ const MissionMap = () => {
   const { actions: audioActions } = useAudio();
 
   const games = [
-  {
-    id: 1,
-    name: 'ASTROVOYAGER – Energy Detectives',
-    description: 'Investigate Sun-related scenarios, predict outcomes, and explain your scientific reasoning.',
-    img: island1Bg,
-    route: 'game1',
-    pos: { left: '0%', top: '43%' },
-    disabled: false
-  },
-  {
-    id: 2,
-    name: 'ASTROVOYAGER – TiltQuest',
-    description: 'Discover how Earth’s axial tilt changes day length—not distance from the Sun.',
-    img: island2Bg,
-    route: 'game2',
-    pos: { left: '35%', top: '20%' },
-    disabled: false
-  },
-  {
-    id: 3,
-    name: 'ASTROVOYAGER – Season Navigator',
-    description: 'Explore how Earth’s tilt and orbit create seasons through changing sunlight.',
-    img: island3Bg,
-    route: 'game3',
-    pos: { left: '70%', top: '-15%' },
-    disabled: false
-  },
-];
+    {
+      id: 1,
+      name: 'Energy Detectives',
+      description: 'Investigate Sun-related scenarios and explain your reasoning.',
+      img: island1Bg,
+      route: 'game1',
+      pos: { left: '5%', top: '45%' },
+      disabled: false
+    },
+    {
+      id: 2,
+      name: 'TiltQuest',
+      description: 'Discover how Earth axial tilt changes day length.',
+      img: island2Bg,
+      route: 'game2',
+      pos: { left: '35%', top: '20%' },
+      disabled: false
+    },
+    {
+      id: 3,
+      name: 'Season Navigator',
+      description: 'Explore how tilt and orbit create seasons.',
+      img: island3Bg,
+      route: 'game3',
+      pos: { left: '65%', top: '1%' },
+      disabled: false
+    },
+  ];
 
   const handleGameSelect = (game) => {
     if (game.disabled) {
@@ -71,10 +71,14 @@ const MissionMap = () => {
       <div className="overlay" />
 
       <header className="mission-map-header">
-        <h1 className="mission-title">EXPEDITION MAP</h1>
         {/* Back button moved to header */}
         <button onClick={handleBackToLaunch} className="back-button">
-          ← Base Camp
+          <svg className="back-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3L4 9V21H9V14H15V21H20V9L12 3Z" fill="currentColor"/>
+            <path d="M12 3L4 9V21H9V14H15V21H20V9L12 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <span className="back-text">Base Camp</span>
+          <div className="back-btn-shine"></div>
         </button>
       </header>
 

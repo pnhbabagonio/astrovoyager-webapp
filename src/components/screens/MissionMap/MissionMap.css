@@ -43,42 +43,92 @@
   line-height: 1.1;
 }
 
-/* Back button in header - SMALLER SIZE */
+/* Back button in header - MODERN GLASSMORPHISM DESIGN */
 .mission-map-header .back-button {
   position: absolute;
-  top: 0;
+  top: 12px;
   left: 20px;
   z-index: 5;
-  background: linear-gradient(135deg, #ffb703, #fca311);
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.35) 0%, rgba(99, 179, 237, 0.2) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(147, 197, 253, 0.4);
   color: #fff;
-  padding: 10px 12px !important;
-  border-radius: 10px;
-  font-family: 'Orbitron', 'Poppins', sans-serif;
-  font-weight: 700;
-  font-size: 12px !important;
+  padding: 14px 24px;
+  border-radius: 50px;
+  font-family: 'Inter', 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
   cursor: pointer;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  box-shadow: 0 3px 12px rgba(255, 180, 0, 0.3);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-  transition: all 0.3s ease;
+  letter-spacing: 0.4px;
+  box-shadow: 
+    0 4px 24px rgba(74, 144, 226, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
   min-width: auto;
   width: auto;
   height: auto;
-  line-height: 1.2;
+  line-height: 1;
+}
+
+.back-icon {
+  width: 22px;
+  height: 22px;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.back-text {
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.back-btn-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  transition: left 0.5s ease;
+  pointer-events: none;
 }
 
 .mission-map-header .back-button:hover {
-  background: linear-gradient(135deg, #ffd166, #ffb703);
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 5px 15px rgba(255, 200, 0, 0.5);
-  border-color: rgba(255, 255, 255, 0.4);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.5) 0%, rgba(96, 165, 250, 0.35) 100%);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 
+    0 8px 32px rgba(59, 130, 246, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  border-color: rgba(147, 197, 253, 0.6);
+}
+
+.mission-map-header .back-button:hover .back-icon {
+  transform: translateX(-3px) scale(1.1);
+}
+
+.mission-map-header .back-button:hover .back-btn-shine {
+  left: 100%;
 }
 
 .mission-map-header .back-button:active {
-  transform: translateY(0) scale(0.98);
-  box-shadow: 0 2px 6px rgba(255, 200, 0, 0.3);
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 
+    0 4px 16px rgba(59, 130, 246, 0.3),
+    0 2px 6px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 /* ISLANDS LAYER */
@@ -106,8 +156,8 @@
 
 /* Enlarged island images */
 .island-image {
-  width: 450px;
-  height: 350px;
+  width: 550px;
+  height: 450px;
   object-fit: contain;
   border: none;
   transition: all 0.3s ease;
@@ -212,7 +262,7 @@
 /* Character Container at Center */
 .character-container {
   position: absolute;
-  top: 50%;
+  top: 55%;
   left: 75%;
   transform: translate(-50%, -0%);
   z-index: 4;
