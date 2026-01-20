@@ -207,33 +207,64 @@ export function AudioProvider({ children }) {
     sound.play();
   };
 
-  const playVoiceover = (voiceName, options = {}) => {
-    if (!state.voiceovers.enabled || state.muted) return;
+ // AudioContext.js - Updated playVoiceover function
+const playVoiceover = (voiceName, options = {}) => {
+  if (!state.voiceovers.enabled || state.muted) return;
 
-    const soundKey = `voice_${voiceName}`;
-    let sound = audioInstances.current.get(soundKey);
+  const soundKey = `voice_${voiceName}`;
+  let sound = audioInstances.current.get(soundKey);
 
-    if (!sound) {
-      // Placeholder voiceovers - replace with actual files later
-      const voiceUrls = {
-        welcome: ['https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3'],
-        roleSelection: ['https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3'],
-        gameInstruction: ['https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3']
-      };
+  if (!sound) {
+    // Updated with local audio files including annie-welcome
+    const voiceUrls = {
+      welcome: [`${process.env.PUBLIC_URL}/assets/audio/voiceovers/annie-welcome.mp3`],
+      annieWelcome: [`${process.env.PUBLIC_URL}/assets/audio/voiceovers/annie-welcome.mp3`], // Added specific key for Annie
+      roleSelection: [`${process.env.PUBLIC_URL}/assets/audio/voiceovers/role-selection.mp3`], // If you have this
+      gameInstruction: [`${process.env.PUBLIC_URL}/assets/audio/voiceovers/game-instruction.mp3`], // If you have this
+      missionStart: [`${process.env.PUBLIC_URL}/assets/audio/voiceovers/mission-start.mp3`] // If you have this
+    };
 
-      sound = new Howl({
-        src: voiceUrls[voiceName] || voiceUrls.welcome,
-        volume: state.voiceovers.volume,
-        onloaderror: (id, error) => {
-          console.warn(`Failed to load voiceover ${voiceName}:`, error);
+    // Fallback to online URLs if local files don't exist
+    const fallbackUrls = {
+      welcome: ['https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3'],
+      roleSelection: ['https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3'],
+      gameInstruction: ['https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3']
+    };
+
+    const src = voiceUrls[voiceName] || fallbackUrls[voiceName] || fallbackUrls.welcome;
+    
+    sound = new Howl({
+      src: src,
+      volume: state.voiceovers.volume * (options.volume || 1.0),
+      onloaderror: (id, error) => {
+        console.warn(`Failed to load voiceover ${voiceName}:`, error);
+        // Try fallback if local file fails
+        if (voiceUrls[voiceName] && voiceUrls[voiceName][0].includes(process.env.PUBLIC_URL)) {
+          console.log(`Trying fallback for ${voiceName}`);
+          const fallbackSound = new Howl({
+            src: fallbackUrls[voiceName] || fallbackUrls.welcome,
+            volume: state.voiceovers.volume * (options.volume || 1.0),
+          });
+          audioInstances.current.set(soundKey, fallbackSound);
+          fallbackSound.play();
         }
-      });
-      
-      audioInstances.current.set(soundKey, sound);
-    }
+      },
+      onplayerror: (id, error) => {
+        console.warn(`Failed to play voiceover ${voiceName}:`, error);
+      },
+      onend: options.onEnd
+    });
+    
+    audioInstances.current.set(soundKey, sound);
+  }
 
-    sound.play();
-  };
+  sound.play();
+  
+  // Return sound ID for potential control
+  return sound;
+};
+
+
 
   const toggleMute = () => {
     dispatch({ type: 'TOGGLE_MUTE' });

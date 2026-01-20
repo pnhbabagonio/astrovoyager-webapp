@@ -586,3 +586,83 @@
 .mission-map * {
   box-sizing: border-box;
 }
+
+
+/* Add to MissionMap.css */
+
+/* Animation for character when talking */
+@keyframes talking {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.character-image.talking {
+  animation: talking 0.5s ease-in-out infinite;
+}
+
+/* Audio status indicator */
+.audio-status-indicator {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(74, 144, 226, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(147, 197, 253, 0.3);
+  color: #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  z-index: 5;
+  opacity: 0;
+  animation: fadeInOut 5s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+}
+
+/* Fade in for mission map */
+.mission-map {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.mission-map.visible {
+  opacity: 1;
+}
+
+/* Pulse animation for character hint */
+@keyframes pulseHint {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.7); }
+  50% { box-shadow: 0 0 0 10px rgba(74, 144, 226, 0); }
+}
+
+.character-image {
+  transition: all 0.3s ease;
+}
+
+.character-image:hover {
+  filter: drop-shadow(0 0 15px rgba(74, 144, 226, 0.5));
+}
+
+/* Responsive adjustments for audio indicator */
+@media (max-width: 768px) {
+  .audio-status-indicator {
+    top: 60px;
+    font-size: 0.7rem;
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .audio-status-indicator {
+    top: 50px;
+    font-size: 0.65rem;
+    padding: 5px 10px;
+  }
+}

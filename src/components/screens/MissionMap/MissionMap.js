@@ -1,4 +1,5 @@
-import React from 'react';
+// MissionMap.js - Updated with audio greeting
+import React, { useEffect, useState, useRef } from 'react'; // Added hooks
 import { useGameState } from '../../../contexts/GameStateContext';
 import { useAudio } from '../../../contexts/AudioContext';
 import './MissionMap.css';
@@ -13,6 +14,9 @@ const annieCharacter = `${process.env.PUBLIC_URL}/assets/images/characters/annie
 const MissionMap = () => {
   const { state: gameState, dispatch } = useGameState();
   const { actions: audioActions } = useAudio();
+  const [greetingPlayed, setGreetingPlayed] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const greetingRef = useRef(null);
 
   const games = [
     {
@@ -44,6 +48,80 @@ const MissionMap = () => {
     },
   ];
 
+  // Play Annie's greeting when component mounts
+  useEffect(() => {
+    let delayTimer;
+    let visibilityTimer;
+
+    // First, set component as visible (for fade-in animations if any)
+    visibilityTimer = setTimeout(() => {
+      setIsVisible(true);
+    }, 300);
+
+    // Then play greeting after a delay
+    delayTimer = setTimeout(() => {
+      if (!greetingPlayed && audioActions.playVoiceover) {
+        console.log('Playing Annie welcome audio');
+        try {
+          // Try 'annieWelcome' key first, fallback to 'welcome'
+          const sound = audioActions.playVoiceover('annieWelcome') || 
+                       audioActions.playVoiceover('welcome');
+          
+          if (sound) {
+            greetingRef.current = sound;
+            setGreetingPlayed(true);
+            
+            // Optional: Add a visual cue when audio plays
+            const characterElement = document.querySelector('.character-image');
+            if (characterElement) {
+              characterElement.classList.add('talking');
+              setTimeout(() => {
+                characterElement.classList.remove('talking');
+              }, 3000); // Remove after audio duration
+            }
+          }
+        } catch (error) {
+          console.error('Error playing Annie greeting:', error);
+        }
+      }
+    }, 1500); // 1.5 second delay before playing
+
+    return () => {
+      clearTimeout(delayTimer);
+      clearTimeout(visibilityTimer);
+      
+      // Clean up any playing audio if component unmounts
+      if (greetingRef.current && greetingRef.current.stop) {
+        greetingRef.current.stop();
+      }
+    };
+  }, [audioActions, greetingPlayed]);
+
+  // Replay greeting when user interacts with Annie
+  const handleCharacterClick = () => {
+    if (audioActions.playVoiceover) {
+      console.log('Replaying Annie greeting');
+      audioActions.playSoundEffect?.('buttonClick');
+      
+      // Play the greeting again
+      const sound = audioActions.playVoiceover('annieWelcome') || 
+                   audioActions.playVoiceover('welcome');
+      
+      if (sound) {
+        greetingRef.current = sound;
+        
+        // Add talking animation
+        const characterElement = document.querySelector('.character-image');
+        if (characterElement) {
+          characterElement.classList.add('talking');
+          setTimeout(() => {
+            characterElement.classList.remove('talking');
+          }, 3000);
+        }
+      }
+    }
+  };
+
   const handleGameSelect = (game) => {
     if (game.disabled) {
       audioActions.playSoundEffect?.('error');
@@ -60,7 +138,7 @@ const MissionMap = () => {
 
   return (
     <div
-      className="mission-map"
+      className={`mission-map ${isVisible ? 'visible' : ''}`}
       style={{
         backgroundImage: `url(${mapBg})`,
         backgroundSize: 'cover',
@@ -82,7 +160,7 @@ const MissionMap = () => {
         </button>
       </header>
 
-      {/* Character and Text Bubble at Center */}
+      {/* Character and Text Bubble at Center - Now clickable */}
       <div className="character-container">
         <div className="text-bubble">
           <p>Welcome, <span className="player-name">{gameState.playerData?.encodedName || 'Explorer'}</span>! Choose your mission.</p>
@@ -92,8 +170,18 @@ const MissionMap = () => {
           src={annieCharacter} 
           alt="Annie the Guide" 
           className="character-image"
+          onClick={handleCharacterClick}
+          style={{ cursor: 'pointer' }}
+          title="Click to hear greeting again"
         />
       </div>
+
+      {/* Optional: Audio status indicator */}
+      {greetingPlayed && (
+        <div className="audio-status-indicator">
+          🔊 Annie is here to guide you!
+        </div>
+      )}
 
       <div className="islands-layer">
         {games.map((g) => (
@@ -114,8 +202,6 @@ const MissionMap = () => {
               className="island-image"
             />
             <div className="island-glow"></div>
-            
-            {/* REMOVED: Under Revision Sign */}
             
             <div className="island-label">
               <h3 className="label-name">{g.name}</h3>
