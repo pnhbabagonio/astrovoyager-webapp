@@ -1,7 +1,7 @@
 // LaunchScreen.js
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import './LaunchScreen.css';
-
+import { useAudio } from '../../../contexts/AudioContext';
 // Generate stars once and memoize
 const generateStars = (count) => {
   return Array.from({ length: count }, (_, i) => ({
@@ -30,6 +30,7 @@ const LaunchScreen = ({ onLaunch }) => {
   const [isButtonPressed, setIsButtonPressed] = useState(false);
   const [isLaunching, setIsLaunching] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const { actions: audioActions } = useAudio(); // for sound effects
 
   // Memoize stars to prevent regeneration on every render
   const stars = useMemo(() => generateStars(100), []);
@@ -49,14 +50,17 @@ const LaunchScreen = ({ onLaunch }) => {
   }, [playerName, onLaunch]);
 
   const handleButtonPress = useCallback(() => {
-    if (!playerName.trim() || isLaunching) return;
-    
-    setIsButtonPressed(true);
-    setTimeout(() => {
-      setIsButtonPressed(false);
-      handleLaunch();
-    }, 150);
-  }, [playerName, isLaunching, handleLaunch]);
+      if (!playerName.trim() || isLaunching) return;
+      
+      // Play button click sound effect
+      audioActions.playSoundEffect('buttonClick');
+      
+      setIsButtonPressed(true);
+      setTimeout(() => {
+        setIsButtonPressed(false);
+        handleLaunch();
+      }, 150);
+    }, [playerName, isLaunching, handleLaunch, audioActions]);
 
   const handleMouseDown = useCallback(() => {
     if (playerName.trim() && !isLaunching) {

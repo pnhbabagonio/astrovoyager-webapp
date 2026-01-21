@@ -177,11 +177,11 @@ const MissionMap = () => {
       </div>
 
       {/* Optional: Audio status indicator */}
-      {greetingPlayed && (
+      {/* {greetingPlayed && (
         <div className="audio-status-indicator">
           🔊 Annie is here to guide you!
         </div>
-      )}
+      )} */}
 
       <div className="islands-layer">
         {games.map((g) => (

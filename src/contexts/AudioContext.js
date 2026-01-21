@@ -186,11 +186,11 @@ export function AudioProvider({ children }) {
     if (!sound) {
       // Placeholder sound effects - replace with actual files later
       const effectUrls = {
-        buttonClick: ['https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3'],
-        success: ['https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3'],
-        error: ['https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3'],
-        rocketLaunch: ['https://assets.mixkit.co/sfx/preview/mixkit-rocket-whoosh-1114.mp3'],
-        gameStart: ['https://assets.mixkit.co/sfx/preview/mixkit-game-show-intro-331.mp3']
+        buttonClick: [`${process.env.PUBLIC_URL}/assets/audio/sound-effects/button-click.mp3`],
+        success: [`${process.env.PUBLIC_URL}/assets/audio/sound-effects/success.mp3`],
+        error: [`${process.env.PUBLIC_URL}/assets/audio/sound-effects/error.mp3`],
+        rocketLaunch: [`${process.env.PUBLIC_URL}/assets/audio/sound-effects/rocket-launch.mp3`],
+        gameStart: [`${process.env.PUBLIC_URL}/assets/audio/sound-effects/game-start.mp3`]
       };
 
       sound = new Howl({
