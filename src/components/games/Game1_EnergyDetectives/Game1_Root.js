@@ -133,17 +133,34 @@ const Game1_Root = ({ onComplete }) => {
   const currentReflectionQuestion = game1Data.reflectionQuestions[currentReflectionIndex];
 
   return (
-    <div className="game1-root astro-theme">
-      <div className="game1-header">
-        <button onClick={handleBackToMap} className="back-button">
-          ← Back to Map
+    <div className="game1-root solar-voyager-theme">
+      <div className="game1-header space-panel">
+        <button onClick={handleBackToMap} className="back-button space-button">
+          <span className="button-icon">←</span>
+          <span className="button-text">Mission Control</span>
         </button>
-        <h1>🌞 AstroVoyager - Energy Detectives</h1>
-        {/* {selectedCharacter && (
-          <div className="character-badge">
-            {selectedCharacter.avatar} {selectedCharacter.name}
+        <div className="header-center">
+          <div className="mission-title">
+            <div className="sun-icon-large">☀️</div>
+            <h1>Solar Voyager Adventures</h1>
+            <div className="mission-subtitle">Investigating Sun Energy Mysteries</div>
           </div>
-        )} */}
+        </div>
+        {selectedCharacter && (
+          <div className="character-badge solar-badge">
+            <img 
+              src={selectedCharacter.avatar} 
+              alt={selectedCharacter.name}
+              className="badge-avatar"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = `${process.env.PUBLIC_URL}/assets/images/characters/default.png`;
+              }}
+            />
+            <span className="badge-text">{selectedCharacter.name}</span>
+            <span className="badge-role">Solar Explorer</span>
+          </div>
+        )}
       </div>
 
       <div className="game1-content">
@@ -193,24 +210,39 @@ const Game1_Root = ({ onComplete }) => {
         )}
       </div>
 
-      <div className="game1-progress">
-        <div className="progress-bar">
-          <div 
-            className="progress-fill"
-            style={{ 
-              width: `${((currentScenarioIndex + (currentStage === 'feedback' ? 1 : 0)) / game1Data.scenarios.length) * 100}%` 
-            }}
-          ></div>
-        </div>
-        <div className="progress-text">
-          {currentStage === 'reflection' 
-            ? `Reflection ${currentReflectionIndex + 1} of ${game1Data.reflectionQuestions.length}`
-            : `Scenario ${Math.min(currentScenarioIndex + 1, game1Data.scenarios.length)} of ${game1Data.scenarios.length}`
-          }
+      {/* UPDATED PROGRESS BAR */}
+      <div className="game1-progress space-panel">
+        <div className="solar-progress">
+          <div className="progress-label">
+            {currentStage === 'reflection' 
+              ? `Reflection Log ${currentReflectionIndex + 1}/${game1Data.reflectionQuestions.length}`
+              : `Mission ${Math.min(currentScenarioIndex + 1, game1Data.scenarios.length)}/${game1Data.scenarios.length}`
+            }
+          </div>
+          <div className="progress-track">
+            <div 
+              className="progress-beam sun-glow"
+              style={{ 
+                width: `${((currentScenarioIndex + (currentStage === 'feedback' ? 1 : 0)) / game1Data.scenarios.length) * 100}%` 
+              }}
+            >
+              <div className="beam-core"></div>
+              <div className="beam-glow"></div>
+            </div>
+            <div className="progress-markers">
+              {Array.from({ length: game1Data.scenarios.length }).map((_, i) => (
+                <div 
+                  key={i} 
+                  className={`progress-marker ${i <= currentScenarioIndex ? 'active' : ''}`}
+                >
+                  {i + 1}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 };
-
 export default Game1_Root;

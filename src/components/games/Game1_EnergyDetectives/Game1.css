@@ -1,7 +1,13 @@
 .game1-root.astro-theme {
   min-height: 100vh;
   background: linear-gradient(135deg, 
-    #0f0c29, #302b63, #24243e);
+    #0a1a2f 0%,     /* Deep space blue */
+    #1a3a5f 30%,    /* Mid space blue */
+    #2a5a8f 60%,    /* Sky blue */
+    #4a8acf 100%    /* Bright sky */
+  );
+  background-size: 400% 400%;
+  animation: spaceShift 20s ease infinite;
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -11,7 +17,7 @@
   position: relative;
 }
 
-.astro-theme::before {
+.solar-voyager-theme::before {
   content: '';
   position: absolute;
   top: 0;
@@ -19,39 +25,314 @@
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(circle at 20% 50%, rgba(255, 204, 0, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 102, 0, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(255, 153, 0, 0.06) 0%, transparent 50%);
+    radial-gradient(circle at 20% 10%, rgba(255, 204, 0, 0.3) 0%, transparent 40%),
+    radial-gradient(circle at 80% 90%, rgba(255, 153, 0, 0.2) 0%, transparent 40%),
+    radial-gradient(circle at 40% 50%, rgba(255, 102, 0, 0.15) 0%, transparent 50%),
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" opacity="0.05"><circle cx="50" cy="50" r="1" fill="white"/><circle cx="150" cy="80" r="1" fill="white"/><circle cx="250" cy="30" r="2" fill="white"/><circle cx="350" cy="150" r="1" fill="white"/><circle cx="100" cy="250" r="1" fill="white"/><circle cx="300" cy="300" r="2" fill="white"/></svg>');
   pointer-events: none;
 }
 
-.game1-header {
-  display: flex;
-  justify-content: center; /* Changed from space-between */
-  align-items: center;
-  padding: var(--space-lg) var(--space-xl);
-  background: rgba(0, 0, 0, 0.4);
-  border-bottom: 2px solid #FF9800;
-  backdrop-filter: blur(10px);
-  flex-shrink: 0;
-  min-height: 40px;
-  position: relative;
-  z-index: 2;
-  position: relative; /* Add this for positioning the back button */
+@keyframes spaceShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse {
+  0% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+  100% { opacity: 0.3; }
+}
+
+@keyframes twinkle {
+  0% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.3; }
+}
+
+@keyframes sunGlow {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.7)); }
+  50% { filter: drop-shadow(0 0 40px rgba(255, 102, 0, 0.9)); }
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 3s infinite;
+}
+
+.sun-glow {
+  animation: sunGlow 2s ease-in-out infinite;
+}
+
+/* Space-themed UI Elements */
+.space-panel {
+  background: rgba(10, 26, 47, 0.85);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(74, 138, 207, 0.3);
+  border-radius: 20px;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.summer-highlight {
+  background: linear-gradient(135deg, 
+    rgba(255, 204, 0, 0.1), 
+    rgba(255, 153, 0, 0.05));
+  border: 2px solid rgba(255, 153, 0, 0.3);
+}
+
+.solar-energy-card {
+  background: linear-gradient(135deg, 
+    rgba(255, 204, 0, 0.15), 
+    rgba(255, 102, 0, 0.1));
+  border: 2px solid rgba(255, 153, 0, 0.4);
+}
+
+/* Game1.css - ADDITIONAL HEADER STYLES */
 .game1-header {
   display: flex;
-  justify-content: center; /* Changed from space-between */
+  justify-content: space-between;
   align-items: center;
   padding: var(--space-lg) var(--space-xl);
-  background: rgba(0, 0, 0, 0.4);
-  border-bottom: 2px solid #FF9800;
+  background: linear-gradient(135deg, 
+    rgba(10, 26, 47, 0.9), 
+    rgba(26, 58, 95, 0.7)
+  );
+  border-bottom: 2px solid rgba(255, 204, 0, 0.3);
   backdrop-filter: blur(10px);
   flex-shrink: 0;
-  min-height: 40px;
+  min-height: 80px;
   position: relative;
   z-index: 2;
-  position: relative; /* Add this for positioning the back button */
+  gap: var(--space-lg);
+}
+
+.header-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.mission-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.sun-icon-large {
+  font-size: 48px;
+  animation: sunGlow 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.8));
+}
+
+.mission-title h1 {
+  font-size: var(--font-size-3xl);
+  background: linear-gradient(45deg, 
+    #FFC107, 
+    #FF9800,
+    #4a8acf
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+  text-shadow: 0 0 20px rgba(255, 193, 7, 0.3);
+  line-height: 1.2;
+}
+
+.mission-subtitle {
+  color: #B0D0FF;
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 500;
+}
+
+/* Back Button */
+.back-button.space-button {
+  background: linear-gradient(135deg, 
+    rgba(74, 138, 207, 0.2), 
+    rgba(26, 58, 95, 0.2)
+  );
+  border: 2px solid rgba(74, 138, 207, 0.4);
+  color: #B0D0FF;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: var(--font-size-base);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-width: 160px;
+  backdrop-filter: blur(5px);
+}
+
+.back-button.space-button:hover {
+  background: linear-gradient(135deg, 
+    rgba(255, 204, 0, 0.2), 
+    rgba(255, 153, 0, 0.1)
+  );
+  border-color: rgba(255, 204, 0, 0.5);
+  color: #FFC107;
+  transform: translateX(-3px);
+  box-shadow: 
+    0 5px 15px rgba(255, 193, 7, 0.2),
+    0 0 10px rgba(255, 193, 7, 0.1);
+}
+
+.button-icon {
+  font-size: var(--font-size-lg);
+}
+
+/* Character Badge */
+.character-badge.solar-badge {
+  background: linear-gradient(135deg, 
+    rgba(255, 204, 0, 0.1), 
+    rgba(255, 153, 0, 0.05)
+  );
+  border: 2px solid rgba(255, 204, 0, 0.3);
+  border-radius: var(--radius-xl);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-base);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-width: 200px;
+  backdrop-filter: blur(5px);
+}
+
+.badge-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 204, 0, 0.5);
+}
+
+.badge-text {
+  color: #FFC107;
+  font-weight: bold;
+  flex: 1;
+}
+
+.badge-role {
+  color: #4a8acf;
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Solar Progress Bar */
+.solar-progress {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.progress-label {
+  color: #B0D0FF;
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: var(--space-sm);
+  text-align: center;
+}
+
+.progress-track {
+  height: 8px;
+  background: rgba(10, 26, 47, 0.5);
+  border-radius: var(--radius-full);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(74, 138, 207, 0.3);
+}
+
+.progress-beam {
+  height: 100%;
+  background: linear-gradient(90deg, 
+    #4a8acf, 
+    #FF9800,
+    #FFC107
+  );
+  border-radius: var(--radius-full);
+  position: relative;
+  transition: width 0.5s ease;
+}
+
+.beam-core {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.1), 
+    transparent 30%
+  );
+  border-radius: var(--radius-full);
+}
+
+.beam-glow {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 204, 0, 0.3), 
+    transparent
+  );
+  border-radius: var(--radius-full);
+  filter: blur(3px);
+}
+
+.progress-markers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px;
+}
+
+.progress-marker {
+  width: 20px;
+  height: 20px;
+  background: rgba(10, 26, 47, 0.7);
+  border: 2px solid rgba(74, 138, 207, 0.3);
+  border-radius: 50%;
+  margin-top: -6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #B0D0FF;
+  font-size: 10px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.progress-marker.active {
+  background: linear-gradient(135deg, 
+    rgba(255, 204, 0, 0.8), 
+    rgba(255, 153, 0, 0.8)
+  );
+  border-color: #FFC107;
+  color: white;
+  box-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
 }
 
 .game1-header h1 {

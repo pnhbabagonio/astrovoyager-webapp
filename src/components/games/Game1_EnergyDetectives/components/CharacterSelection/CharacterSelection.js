@@ -24,14 +24,14 @@ const CharacterSelection = ({ characters, onCharacterSelect }) => {
   return (
     <div className="character-selection-container">
       <div className="selection-header">
-        <h2>Choose Your Energy Detective</h2>
-        <p className="subtitle">Select a character to explore the Sun's energy mysteries</p>
+        <h2>Choose Your Solar Explorer</h2>
+        <p className="subtitle">Select a character to investigate sun energy mysteries</p>
       </div>
 
       <div className="character-content">
-        {/* Left: Full Size Character Image */}
+        {/* Left: Character Image */}
         <div className="character-image-section">
-          <div className="character-image-wrapper">
+          <div className="character-image-wrapper sun-glow">
             <img 
               src={currentCharacter.avatar} 
               alt={currentCharacter.name}
@@ -41,27 +41,30 @@ const CharacterSelection = ({ characters, onCharacterSelect }) => {
                 e.target.src = `${process.env.PUBLIC_URL}/assets/images/characters/default.png`;
               }}
             />
+            <div className="character-image-overlay">
+              <div className="space-badge">Space Explorer</div>
+            </div>
           </div>
         </div>
 
         {/* Right: Character Information */}
         <div className="character-info-section">
-          <div className="character-info-content">
+          <div className="character-info-content space-panel">
             <h3 className="character-name-display">{currentCharacter.name}</h3>
             <p className="character-description-display">{currentCharacter.description}</p>
             
             <div className="character-attributes">
               <div className="attribute">
+                <span className="attribute-icon sun-glow">☀️</span>
+                <span className="attribute-text">Solar Expert</span>
+              </div>
+              <div className="attribute">
                 <span className="attribute-icon">🔍</span>
                 <span className="attribute-text">Investigator</span>
               </div>
               <div className="attribute">
-                <span className="attribute-icon">☀️</span>
-                <span className="attribute-text">Energy Expert</span>
-              </div>
-              <div className="attribute">
                 <span className="attribute-icon">🚀</span>
-                <span className="attribute-text">Space Explorer</span>
+                <span className="attribute-text">Space Traveler</span>
               </div>
             </div>
 
@@ -69,20 +72,20 @@ const CharacterSelection = ({ characters, onCharacterSelect }) => {
               className="select-character-button"
               onClick={handleSelectCharacter}
             >
-              Select {currentCharacter.name}
+              Select {currentCharacter.name} as Explorer
             </button>
           </div>
         </div>
       </div>
 
-      {/* Bottom: Navigation Buttons */}
+      {/* Bottom: Navigation */}
       <div className="navigation-section">
         <div className="navigation-controls">
           <button 
             className="nav-button prev-button"
             onClick={handlePrevious}
           >
-            ← Previous
+            ← Previous Explorer
           </button>
           
           <div className="character-indicators">
@@ -99,7 +102,7 @@ const CharacterSelection = ({ characters, onCharacterSelect }) => {
             className="nav-button next-button"
             onClick={handleNext}
           >
-            Next →
+            Next Explorer →
           </button>
         </div>
       </div>

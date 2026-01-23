@@ -14,7 +14,7 @@ const Scoreboard = ({ score, totalQuestions, character, onContinue }) => {
         <div className="score-circle">
           <div className="score-number">{score}<span className="score-total">/{totalQuestions}</span></div>
           <div className="score-label">Correct Answers</div>
-          <div className="score-percentage">{percentage}%</div>
+          {/* <div className="score-percentage">{percentage}%</div> */}
         </div>
         
         <div className="score-breakdown">

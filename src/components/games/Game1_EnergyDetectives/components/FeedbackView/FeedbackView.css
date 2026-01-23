@@ -1,3 +1,4 @@
+/* FeedbackView.css - UPDATED */
 .feedback-view {
   display: flex;
   flex-direction: column;
@@ -5,11 +6,18 @@
   max-width: 800px;
   margin: 0 auto;
   width: 100%;
+  background: rgba(10, 26, 47, 0.7);
+  border-radius: 20px;
+  padding: var(--space-xl);
+  border: 2px solid rgba(74, 138, 207, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .feedback-header {
   text-align: center;
   margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-lg);
+  border-bottom: 2px solid rgba(255, 204, 0, 0.3);
 }
 
 .result-badge {
@@ -19,24 +27,47 @@
   font-size: var(--font-size-lg);
   font-weight: bold;
   margin-bottom: var(--space-md);
+  text-transform: uppercase;
+  letter-spacing: 1px;
   animation: pulse 2s infinite;
+  border: 2px solid;
+  backdrop-filter: blur(5px);
 }
 
 .result-badge.correct {
-  background: linear-gradient(45deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.1));
-  border: 2px solid #4CAF50;
+  background: linear-gradient(135deg, 
+    rgba(76, 175, 80, 0.2), 
+    rgba(76, 175, 80, 0.1)
+  );
+  border-color: #4CAF50;
   color: #4CAF50;
+  box-shadow: 
+    0 0 20px rgba(76, 175, 80, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .result-badge.incorrect {
-  background: linear-gradient(45deg, rgba(244, 67, 54, 0.2), rgba(244, 67, 54, 0.1));
-  border: 2px solid #F44336;
+  background: linear-gradient(135deg, 
+    rgba(244, 67, 54, 0.2), 
+    rgba(244, 67, 54, 0.1)
+  );
+  border-color: #F44336;
   color: #F44336;
+  box-shadow: 
+    0 0 20px rgba(244, 67, 54, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .feedback-header h2 {
-  color: #FFC107;
+  background: linear-gradient(45deg, 
+    #FFC107, 
+    #4a8acf
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-size: var(--font-size-3xl);
+  margin-top: var(--space-sm);
   text-shadow: 0 0 15px rgba(255, 193, 7, 0.3);
 }
 
@@ -47,6 +78,7 @@
   gap: var(--space-xl);
 }
 
+/* Solar Analysis Cards */
 .scenario-review {
   display: flex;
   flex-direction: column;
@@ -54,107 +86,173 @@
 }
 
 .scenario-review-card {
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, 
+    rgba(10, 26, 47, 0.8), 
+    rgba(26, 58, 95, 0.8)
+  );
+  border-radius: 15px;
   padding: var(--space-lg);
-  border-left: 4px solid #2196F3;
+  border-left: 4px solid #4a8acf;
+  backdrop-filter: blur(5px);
 }
 
 .scenario-review-card h3 {
-  color: #2196F3;
+  color: #4a8acf;
   margin-bottom: var(--space-xs);
   font-size: var(--font-size-base);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .scenario-review-card p {
-  color: white;
+  color: #B0D0FF;
   font-size: var(--font-size-lg);
   line-height: 1.4;
 }
 
 .explanation-card {
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, 
+    rgba(255, 204, 0, 0.1), 
+    rgba(255, 153, 0, 0.05)
+  );
+  border-radius: 15px;
   padding: var(--space-xl);
-  border: 2px solid rgba(255, 152, 0, 0.3);
+  border: 2px solid rgba(255, 204, 0, 0.3);
+  backdrop-filter: blur(5px);
 }
 
 .explanation-card h3 {
   color: #FFC107;
   margin-bottom: var(--space-xs);
   font-size: var(--font-size-base);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .selected-answer {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
   padding: var(--space-md);
-  border-radius: var(--radius-md);
+  border-radius: 10px;
   margin: var(--space-sm) 0 var(--space-lg);
+  color: #FFC107;
   font-style: italic;
-  color: #E0E0E0;
+  border: 1px solid rgba(255, 204, 0, 0.2);
+  font-size: var(--font-size-base);
+  line-height: 1.4;
 }
 
 .explanation-text {
   background: rgba(255, 255, 255, 0.05);
   padding: var(--space-lg);
-  border-radius: var(--radius-md);
+  border-radius: 10px;
   margin: var(--space-sm) 0 var(--space-lg);
   line-height: 1.5;
+  color: #B0D0FF;
+  font-size: var(--font-size-base);
 }
 
 .explanation-text.correct {
   border-left: 4px solid #4CAF50;
+  background: linear-gradient(135deg, 
+    rgba(76, 175, 80, 0.05), 
+    transparent
+  );
 }
 
 .explanation-text.incorrect {
   border-left: 4px solid #F44336;
+  background: linear-gradient(135deg, 
+    rgba(244, 67, 54, 0.05), 
+    transparent
+  );
 }
 
+/* Solar Energy Tip */
 .energy-tip {
   display: flex;
   align-items: center;
-  background: rgba(255, 152, 0, 0.1);
+  background: linear-gradient(135deg, 
+    rgba(255, 204, 0, 0.15), 
+    rgba(255, 153, 0, 0.1)
+  );
   padding: var(--space-md);
-  border-radius: var(--radius-md);
+  border-radius: 10px;
   margin-top: var(--space-lg);
-  border: 1px solid rgba(255, 152, 0, 0.3);
+  border: 1px solid rgba(255, 204, 0, 0.3);
+  gap: var(--space-md);
 }
 
 .tip-icon {
   font-size: 32px;
-  margin-right: var(--space-md);
+  animation: float 3s ease-in-out infinite;
 }
 
 .tip-content {
-  color: #FFC107;
-  font-size: var(--font-size-sm);
+  flex: 1;
 }
 
+.tip-content strong {
+  color: #FFC107;
+  display: block;
+  margin-bottom: var(--space-xs);
+  font-size: var(--font-size-base);
+}
+
+.tip-content span {
+  color: #B0D0FF;
+  font-size: var(--font-size-sm);
+  line-height: 1.4;
+}
+
+/* Navigation */
 .feedback-footer {
   text-align: center;
   margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 2px solid rgba(255, 204, 0, 0.2);
 }
 
 .next-scenario-btn {
-  background: linear-gradient(45deg, #2196F3, #03A9F4);
+  background: linear-gradient(45deg, 
+    #4a8acf, 
+    #FF9800,
+    #FFC107
+  );
   color: white;
   border: none;
   padding: var(--space-lg) var(--space-xxl);
   font-size: var(--font-size-lg);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   cursor: pointer;
-  transition: var(--transition-normal);
+  transition: all 0.3s ease;
   font-weight: bold;
-  min-width: 200px;
+  min-width: 250px;
+  position: relative;
+  overflow: hidden;
+}
+
+.next-scenario-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.2), 
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.next-scenario-btn:hover::before {
+  left: 100%;
 }
 
 .next-scenario-btn:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(33, 150, 243, 0.4);
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  box-shadow: 
+    0 0 40px rgba(74, 138, 207, 0.6),
+    0 0 20px rgba(255, 193, 7, 0.4);
 }
