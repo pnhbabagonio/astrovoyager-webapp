@@ -1,3 +1,4 @@
+// ObservationalCheck.js - Updated with space theme
 import React, { useState } from 'react';
 import './ObservationalCheck.css';
 
@@ -28,6 +29,35 @@ const ObservationalCheck = ({ questions, onComplete }) => {
     const newAnswers = [...answers, answer];
     setAnswers(newAnswers);
     setShowSample(true);
+    
+    // Create observation effect
+    createObservationEffect(points);
+  };
+
+  const createObservationEffect = (points) => {
+    const colors = points >= currentQuestion.points / 2 
+      ? ['#4caf50', '#00f7ff']
+      : ['#ff5252', '#ff8e53'];
+    
+    for (let i = 0; i < 15; i++) {
+      setTimeout(() => {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.width = `${Math.random() * 4 + 1}px`;
+        particle.style.height = particle.style.width;
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.top = '60vh';
+        particle.style.backgroundColor = colors[i % 2];
+        particle.style.boxShadow = `0 0 ${Math.random() * 10 + 3}px currentColor`;
+        document.querySelector('.season-navigator-root').appendChild(particle);
+        
+        setTimeout(() => {
+          if (particle.parentNode) {
+            particle.parentNode.removeChild(particle);
+          }
+        }, 1500);
+      }, i * 30);
+    }
   };
 
   const handleContinue = () => {
@@ -44,10 +74,10 @@ const ObservationalCheck = ({ questions, onComplete }) => {
   return (
     <div className="observational-check">
       <div className="check-header">
-        <h2>🤔 Observational Check</h2>
-        <p className="subtitle">Reflect on what you've learned about seasons.</p>
+        <h2>🔭 Stellar Observation Report</h2>
+        <p className="subtitle">Record your observations of seasonal phenomena across the galaxy.</p>
         <div className="progress">
-          Question {currentQuestionIndex + 1} of {questions.length}
+          Observation {currentQuestionIndex + 1} of {questions.length}
         </div>
       </div>
 
@@ -60,8 +90,8 @@ const ObservationalCheck = ({ questions, onComplete }) => {
           <textarea
             value={userAnswer}
             onChange={(e) => setUserAnswer(e.target.value)}
-            placeholder="Type your reflection here..."
-            rows={6}
+            placeholder="Record your stellar observations here..."
+            rows={8}
             disabled={showSample}
           />
         </div>
@@ -73,28 +103,28 @@ const ObservationalCheck = ({ questions, onComplete }) => {
               disabled={!userAnswer.trim()}
               className="submit-button"
             >
-              Submit Reflection
+              Submit Observation
             </button>
           ) : (
             <button 
               onClick={handleContinue}
               className="continue-button"
             >
-              {currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Complete Reflection'}
+              {currentQuestionIndex < questions.length - 1 ? 'Next Observation' : 'Complete Analysis'}
             </button>
           )}
         </div>
 
         {showSample && (
           <div className="sample-answers">
-            <h4>Sample Answers:</h4>
+            <h4>📊 Analysis Data:</h4>
             <ul>
               {currentQuestion.sampleAnswers.map((sample, index) => (
                 <li key={index}>{sample}</li>
               ))}
             </ul>
             <p className="points-info">
-              You earned {answers[currentQuestionIndex]?.points || 0} out of {currentQuestion.points} points.
+              Observation Quality: {answers[currentQuestionIndex]?.points || 0}/{currentQuestion.points} points
             </p>
           </div>
         )}

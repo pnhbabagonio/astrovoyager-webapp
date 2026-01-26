@@ -1,3 +1,4 @@
+// GameProgress.js - Updated with space theme icons
 import React from 'react';
 import './GameProgress.css';
 
@@ -9,17 +10,17 @@ const GameProgress = ({
   completedRegions = []
 }) => {
   const steps = [
-    { number: 1, label: 'Region Selection', icon: '🌍' },
-    { number: 2, label: 'Fill-in-Blanks', icon: '📝' },
-    { number: 3, label: 'Teleportation Quiz', icon: '🚀' },
-    { number: 4, label: 'Observational Check', icon: '🤔' }
+    { number: 1, label: 'Planet Selection', icon: '🪐' },
+    { number: 2, label: 'Astronaut Log', icon: '📝' },
+    { number: 3, label: 'Wormhole Navigation', icon: '🌌' },
+    { number: 4, label: 'Stellar Observation', icon: '🔭' }
   ];
 
   return (
     <div className="game-progress">
-      {/* Progress Steps Section */}
+      {/* Mission Timeline */}
       <div className="progress-section">
-        <h3 className="section-title">Game Progress</h3>
+        <h3 className="section-title">Mission Timeline</h3>
         <div className="steps-container">
           {steps.map((step) => (
             <div 
@@ -31,9 +32,10 @@ const GameProgress = ({
               <div className="step-circle">
                 <span className="step-icon">{step.icon}</span>
                 <span className="step-number">{step.number}</span>
+                <div className="completion-status"></div>
               </div>
               <div className="step-info">
-                <span className="step-label">Step {step.number}</span>
+                <span className="step-label">Phase {step.number}</span>
                 <span className="step-name">{step.label}</span>
               </div>
             </div>
@@ -41,16 +43,16 @@ const GameProgress = ({
         </div>
       </div>
 
-      {/* Stats Section */}
+      {/* Mission Status */}
       <div className="stats-section">
-        <h3 className="section-title">Current Status</h3>
+        <h3 className="section-title">Mission Status</h3>
         <div className="stats-grid">
           <div className="stat-card">
             <div className="stat-icon">📍</div>
             <div className="stat-content">
-              <span className="stat-label">Selected Region</span>
+              <span className="stat-label">Current Planet</span>
               <span className="stat-value">
-                {selectedRegion?.name || 'None Selected'}
+                {selectedRegion?.name || 'Selecting...'}
               </span>
             </div>
           </div>
@@ -58,7 +60,7 @@ const GameProgress = ({
           <div className="stat-card">
             <div className="stat-icon">⭐</div>
             <div className="stat-content">
-              <span className="stat-label">Current Score</span>
+              <span className="stat-label">Mission Score</span>
               <span className="stat-value">{score} points</span>
             </div>
           </div>
@@ -67,7 +69,7 @@ const GameProgress = ({
             <div className="stat-card">
               <div className="stat-icon">✅</div>
               <div className="stat-content">
-                <span className="stat-label">Regions Completed</span>
+                <span className="stat-label">Planets Explored</span>
                 <span className="stat-value">
                   {completedRegions.length}/3
                 </span>

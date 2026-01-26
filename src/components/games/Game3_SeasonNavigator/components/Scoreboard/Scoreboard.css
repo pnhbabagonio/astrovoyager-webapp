@@ -1,75 +1,185 @@
+/* Scoreboard.css - Mission Command Center Theme */
 .scoreboard {
-  max-width: 700px;
-  margin: 0 auto;
-  animation: fadeIn 0.8s ease;
+  max-width: 800px;
+  width: 100%;
+  animation: commandCenterReveal 0.8s ease;
+}
+
+@keyframes commandCenterReveal {
+  from {
+    opacity: 0;
+    transform: translateY(30px) rotateX(10deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
 }
 
 .scoreboard-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, 
+    rgba(20, 25, 60, 0.9), 
+    rgba(10, 15, 35, 0.9));
+  border-radius: 20px;
+  border: 2px solid rgba(0, 247, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.scoreboard-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, 
+    #00f7ff, 
+    #9d4edd, 
+    #00f7ff);
+  animation: scanner 3s linear infinite;
 }
 
 .scoreboard-header h2 {
   font-size: 2.5rem;
-  color: #00d4ff;
-  margin-bottom: 0.5rem;
+  color: #00f7ff;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 20px rgba(0, 247, 255, 0.5);
+  position: relative;
+}
+
+.scoreboard-header h2::before {
+  content: '📊 ';
+  filter: drop-shadow(0 0 10px rgba(0, 247, 255, 0.7));
 }
 
 .subtitle {
-  color: #b0e0e6;
+  color: #a0a0ff;
   font-size: 1.2rem;
+  line-height: 1.6;
 }
 
 .score-display {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 15px;
-  padding: 2.5rem;
-  border: 2px solid rgba(0, 212, 255, 0.2);
+  background: linear-gradient(135deg, 
+    rgba(20, 25, 60, 0.95), 
+    rgba(10, 15, 35, 0.95));
+  border-radius: 20px;
+  padding: 3rem;
+  border: 2px solid rgba(0, 247, 255, 0.2);
   text-align: center;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
 }
 
+.score-display::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    #00f7ff, 
+    #9d4edd, 
+    #00f7ff, 
+    transparent);
+  animation: scanner 4s linear infinite;
+}
+
+/* Total Score - Command Center Display */
 .total-score {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .total-score h3 {
-  color: #b0e0e6;
+  color: #a0a0ff;
   font-size: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
 }
 
 .score-number {
-  font-size: 4rem;
+  font-size: 5rem;
   font-weight: bold;
   color: #ffd700;
   line-height: 1;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+  position: relative;
+  display: inline-block;
 }
 
 .score-number span {
-  font-size: 2rem;
-  color: #b0e0e6;
+  font-size: 2.5rem;
+  color: #a0a0ff;
+  text-shadow: 0 0 10px rgba(160, 160, 255, 0.3);
 }
 
 .score-percentage {
-  font-size: 1.2rem;
-  color: #00d4ff;
+  font-size: 1.5rem;
+  color: #00f7ff;
   margin-top: 0.5rem;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+  background: rgba(0, 247, 255, 0.1);
+  padding: 0.5rem 1.5rem;
+  border-radius: 20px;
+  display: inline-block;
+  border: 1px solid rgba(0, 247, 255, 0.3);
 }
 
+/* Breakdown - Mission Statistics */
 .breakdown {
-  margin: 2rem 0;
-  padding: 1.5rem;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
+  margin: 2.5rem 0;
+  padding: 2rem;
+  background: linear-gradient(135deg, 
+    rgba(30, 35, 70, 0.9), 
+    rgba(20, 25, 60, 0.9));
+  border-radius: 15px;
   text-align: left;
+  border: 2px solid rgba(0, 247, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(5px);
+}
+
+.breakdown::before {
+  content: 'MISSION STATISTICS';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 0.8rem;
+  color: rgba(0, 247, 255, 0.6);
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .breakdown-item {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(0, 247, 255, 0.1);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.breakdown-item:hover {
+  transform: translateX(10px);
+  border-bottom-color: rgba(157, 78, 221, 0.3);
 }
 
 .breakdown-item:last-child {
@@ -79,22 +189,73 @@
 }
 
 .breakdown-item .label {
-  color: #b0e0e6;
+  color: #a0a0ff;
+  font-size: 1.1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.breakdown-item .label::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: #00f7ff;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
 }
 
 .breakdown-item .value {
   color: #ffd700;
   font-weight: bold;
+  font-size: 1.3rem;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  background: rgba(255, 215, 0, 0.1);
+  padding: 0.5rem 1.2rem;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 215, 0, 0.2);
 }
 
+/* Incorrect Info - Alert System */
 .incorrect-info {
-  padding: 1rem;
-  background: rgba(255, 107, 107, 0.1);
-  border-radius: 10px;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, 
+    rgba(255, 82, 82, 0.2), 
+    rgba(183, 28, 28, 0.2));
+  border-radius: 15px;
   margin-bottom: 2rem;
-  color: #ff6b6b;
+  border: 2px solid rgba(255, 82, 82, 0.3);
+  color: #ff5252;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(5px);
+  animation: alertPulse 2s infinite;
 }
 
+.incorrect-info::before {
+  content: '⚠️';
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 5px rgba(255, 82, 82, 0.5));
+}
+
+@keyframes alertPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(255, 82, 82, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(255, 82, 82, 0.4); }
+}
+
+.incorrect-info p {
+  margin: 0;
+  padding-right: 2.5rem;
+}
+
+/* Scoreboard Controls - Command Buttons */
 .scoreboard-controls {
   display: flex;
   justify-content: center;
@@ -103,53 +264,192 @@
 }
 
 .review-button, .proceed-button {
-  padding: 1rem 2rem;
+  padding: 1.2rem 2.5rem;
   border-radius: 25px;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
   border: none;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  letter-spacing: 1px;
+  backdrop-filter: blur(5px);
+  min-width: 250px;
+}
+
+.review-button::before, .proceed-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.2), 
+    transparent);
+  transition: left 0.5s;
+}
+
+.review-button:hover::before, .proceed-button:hover::before {
+  left: 100%;
 }
 
 .review-button {
-  background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+  background: linear-gradient(45deg, #ff5252, #ff8e53);
   color: white;
+  box-shadow: 0 0 25px rgba(255, 82, 82, 0.3);
+}
+
+.review-button:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(255, 82, 82, 0.4);
 }
 
 .proceed-button {
-  background: linear-gradient(45deg, #00d4ff, #0099ff);
+  background: linear-gradient(45deg, #9d4edd, #00f7ff);
   color: white;
+  box-shadow: 0 0 25px rgba(157, 78, 221, 0.3);
 }
 
-.review-button:hover, .proceed-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+.proceed-button:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(157, 78, 221, 0.4);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Data Visualization Effect */
+.score-display::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, 
+    rgba(157, 78, 221, 0.1) 0%, 
+    transparent 70%);
+  filter: blur(20px);
+  z-index: 0;
+  animation: dataPulse 4s infinite alternate;
+}
+
+@keyframes dataPulse {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+  100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.5; }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .scoreboard-header h2 {
+    font-size: 2.2rem;
+  }
+  
+  .score-number {
+    font-size: 4.5rem;
+  }
+  
+  .score-number span {
+    font-size: 2.2rem;
+  }
+  
+  .breakdown-item .label {
+    font-size: 1rem;
+  }
+  
+  .breakdown-item .value {
+    font-size: 1.2rem;
+  }
+  
+  .review-button, .proceed-button {
+    min-width: 220px;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+  }
 }
 
 @media (max-width: 768px) {
-  .scoreboard-header h2 {
-    font-size: 2rem;
+  .scoreboard-header {
+    padding: 1.5rem;
   }
-
+  
   .score-display {
     padding: 1.5rem;
   }
+  
+  .scoreboard-header h2 {
+    font-size: 2rem;
+  }
+  
+  .score-number {
+    font-size: 3.5rem;
+  }
+  
+  .score-number span {
+    font-size: 2rem;
+  }
+  
+  .breakdown {
+    padding: 1.5rem;
+  }
+  
+  .scoreboard-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .review-button, .proceed-button {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .subtitle {
+    font-size: 1.1rem;
+  }
+}
 
+@media (max-width: 480px) {
+  .scoreboard-header h2 {
+    font-size: 1.8rem;
+  }
+  
   .score-number {
     font-size: 3rem;
   }
-
-  .scoreboard-controls {
-    flex-direction: column;
+  
+  .score-number span {
+    font-size: 1.8rem;
   }
-
+  
+  .breakdown-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .breakdown-item .value {
+    align-self: flex-end;
+  }
+  
+  .score-percentage {
+    font-size: 1.2rem;
+    padding: 0.4rem 1.2rem;
+  }
+  
+  .incorrect-info {
+    font-size: 1rem;
+    padding: 1.2rem;
+  }
+  
   .review-button, .proceed-button {
-    width: 100%;
+    padding: 0.9rem 1.8rem;
+    font-size: 1rem;
+    min-width: auto;
   }
 }
