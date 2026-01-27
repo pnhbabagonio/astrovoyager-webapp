@@ -276,10 +276,15 @@ const Game3_Root = ({ onComplete }) => {
 
       {/* Compact Header */}
       <div className="game3-header">
-        <button onClick={handleBackToMap} className="back-button">
-          <span></span>
-          <span>Map</span>
+        <button
+          onClick={handleBackToMap}
+          className="back-button"
+          aria-label="Return to mission map"
+        >
+          <span className="back-icon">←</span>
+          <span className="back-text">Mission Map</span>
         </button>
+
         
         <div className="header-content">
           <h1>🔭 Seasonal Navigator</h1>

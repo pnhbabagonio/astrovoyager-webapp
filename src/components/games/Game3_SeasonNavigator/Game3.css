@@ -64,7 +64,40 @@
   min-height: 60px;
 }
 
+.back-button {
+  display: flex;
+  align-items: center;
+  height: 36px; /* or match your progress line visual */
+}
 
+/* Arrow motion */
+.back-icon {
+  transition: transform 0.2s ease;
+  font-size: 1rem;
+}
+
+.back-button:hover .back-icon {
+  transform: translateX(-3px);
+}
+
+/* Glow sweep effect */
+.back-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+  transform: translateX(-100%);
+  transition: transform 0.4s ease;
+}
+
+.back-button:hover::after {
+  transform: translateX(100%);
+}
 /* Back Button */
 .back-button {
   background: transparent;
