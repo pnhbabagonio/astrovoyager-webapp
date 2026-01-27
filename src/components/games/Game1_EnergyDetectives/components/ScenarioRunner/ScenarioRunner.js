@@ -1,8 +1,26 @@
+// ScenarioRunner.js
+import React, { useState } from 'react';
 import ScenarioHeader from './ScenarioHeader';
 import ChoiceGrid from './ChoiceGrid';
 import './ScenarioRunner.css';
 
 const ScenarioRunner = ({ scenario, character, onChoiceSelect, scenarioNumber, totalScenarios }) => {
+  const [imageError, setImageError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
+
+  const handleImageLoad = () => {
+    setImageLoading(false);
+    setImageError(false);
+  };
+
+  const handleImageError = (e) => {
+    setImageError(true);
+    setImageLoading(false);
+    e.target.onerror = null;
+    e.target.src = `${process.env.PUBLIC_URL}/assets/images/game1/scenarios/default-scene.png`;
+    e.target.alt = "Scenario image not available";
+  };
+
   return (
     <div className="scenario-runner">
       <ScenarioHeader
@@ -13,10 +31,31 @@ const ScenarioRunner = ({ scenario, character, onChoiceSelect, scenarioNumber, t
       
       <div className="scenario-content">
         <div className="scenario-image-container">
-          <div className="scenario-image-placeholder">
-            <div className="sun-icon">☀️</div>
+          {imageLoading && (
+            <div className="loading-placeholder">
+              <div className="placeholder-sun">☀️</div>
+            </div>
+          )}
+          
+          {!imageError ? (
+            <img 
+              src={scenario.image} 
+              alt={`Scenario ${scenarioNumber}: ${scenario.title}`}
+              className="scenario-image"
+              onLoad={handleImageLoad}
+              onError={handleImageError}
+              style={{ display: imageLoading ? 'none' : 'block' }}
+            />
+          ) : (
+            <div className="scenario-image-container fallback">
+              <div className="sun-icon">☀️</div>
+              <div className="image-label">Scenario {scenarioNumber}</div>
+            </div>
+          )}
+          
+          {!imageError && !imageLoading && (
             <div className="image-label">Scenario {scenarioNumber}</div>
-          </div>
+          )}
         </div>
         
         <div className="scenario-text">

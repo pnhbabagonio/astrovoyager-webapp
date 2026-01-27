@@ -1,4 +1,4 @@
-/* ScenarioRunner.css - UPDATED */
+/* ScenarioRunner.css - UPDATED with responsive image support */
 .scenario-runner {
   display: flex;
   flex-direction: column;
@@ -84,40 +84,71 @@
   gap: var(--space-xl);
 }
 
-/* Summer/Solar Energy Scene */
+/* Actual Image Container Styles - UPDATED */
 .scenario-image-container {
   width: 100%;
-  height: 250px;
+  height: 450px; /* This is your desired height */
   border-radius: 15px;
   overflow: hidden;
-  background: linear-gradient(135deg, 
-    rgba(74, 138, 207, 0.2),  /* Sky blue */
-    rgba(255, 204, 0, 0.1),  /* Sun yellow */
-    rgba(255, 153, 0, 0.05)  /* Sun orange */
-  );
-  border: 2px solid rgba(255, 204, 0, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
+  /* Removed flex centering as it can shrink the image */
+  border: 2px solid rgba(255, 204, 0, 0.3);
 }
 
-.scenario-image-container::before {
+.scenario-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover; 
+  object-position: center;
+  display: block;
+  transition: transform 0.3s ease;
+  border-radius: 12px;
+}
+
+.scenario-image:hover {
+  transform: scale(1.02);
+}
+
+/* Add overlay for better text readability on images */
+.scenario-image-container::after {
   content: '';
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 70% 30%, rgba(255, 204, 0, 0.4) 0%, transparent 50%),
-    linear-gradient(180deg, rgba(74, 138, 207, 0.3) 0%, transparent 30%);
+  height: 40%;
+  background: linear-gradient(to top, 
+    rgba(10, 26, 47, 0.9), 
+    transparent
+  );
+  pointer-events: none;
+  border-radius: 15px;
 }
 
-.scenario-image-placeholder {
-  text-align: center;
-  z-index: 1;
-  position: relative;
+.image-label {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  color: #FFC107;
+  font-size: var(--font-size-sm);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  background: rgba(10, 26, 47, 0.8);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 204, 0, 0.3);
+  z-index: 2;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+/* Sun animation for fallback state */
+@keyframes sunGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.8));
+  }
+  50% {
+    filter: drop-shadow(0 0 30px rgba(255, 204, 0, 1));
+  }
 }
 
 .sun-icon {
@@ -127,14 +158,23 @@
   filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.8));
 }
 
-.image-label {
-  color: #FFC107;
-  font-size: var(--font-size-base);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  background: rgba(10, 26, 47, 0.7);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-full);
-  border: 1px solid rgba(255, 204, 0, 0.3);
+/* Loading placeholder */
+.loading-placeholder {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, 
+    rgba(74, 138, 207, 0.1),
+    rgba(255, 204, 0, 0.05)
+  );
+  border-radius: 12px;
+}
+
+.placeholder-sun {
+  font-size: 64px;
+  animation: sunGlow 2s ease-in-out infinite;
 }
 
 /* Scenario Text */
@@ -285,4 +325,57 @@
   letter-spacing: 1px;
   padding-top: var(--space-xs);
   border-top: 1px solid rgba(255, 204, 0, 0.2);
+}
+
+/* Loading state for images */
+@keyframes loadingShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Fallback styles for missing images */
+.scenario-image-container.fallback {
+  background: linear-gradient(135deg, 
+    rgba(74, 138, 207, 0.2),
+    rgba(255, 204, 0, 0.1),
+    rgba(255, 153, 0, 0.05)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 250px;
+  border-radius: 15px;
+}
+
+.scenario-image-container.fallback::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 70% 30%, rgba(255, 204, 0, 0.4) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(74, 138, 207, 0.3) 0%, transparent 30%);
+  border-radius: 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .scenario-image-container {
+    height: 350px; /* Control height via container, not image */
+  }
+  /* Remove .scenario-image { max-height } from here */
+}
+
+@media (max-width: 480px) {
+  .scenario-image-container {
+    height: 250px;
+  }
+  /* Remove .scenario-image { max-height } from here */
 }

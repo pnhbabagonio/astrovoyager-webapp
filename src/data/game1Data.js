@@ -1,3 +1,4 @@
+// game1Data.js
 export const game1Data = {
   title: "AstroVoyager - Energy Detectives",
   theme: "space",
@@ -33,7 +34,7 @@ export const game1Data = {
     {
       id: 1,
       title: "The Sun is shining strongly at noon.",
-      image: "placeholder-sun-noon.jpg",
+      image: `${process.env.PUBLIC_URL}/assets/images/game1/scenarios/scene-1.png`,
       choices: [
         {
           id: "1a",
@@ -52,7 +53,7 @@ export const game1Data = {
     {
       id: 2,
       title: "The Sun heats the land more than the sea.",
-      image: "placeholder-land-sea.jpg",
+      image: `${process.env.PUBLIC_URL}/assets/images/game1/scenarios/scene-2.png`,
       choices: [
         {
           id: "2a",
@@ -71,7 +72,7 @@ export const game1Data = {
     {
       id: 3,
       title: "There is less sunlight for many days.",
-      image: "placeholder-less-sunlight.jpg",
+      image: `${process.env.PUBLIC_URL}/assets/images/game1/scenarios/scene-3.png`,
       choices: [
         {
           id: "3a",
@@ -90,7 +91,7 @@ export const game1Data = {
     {
       id: 4,
       title: "The Sun heats water on the surface.",
-      image: "placeholder-water-surface.jpg",
+      image: `${process.env.PUBLIC_URL}/assets/images/game1/scenarios/scene-4.png`,
       choices: [
         {
           id: "4a",
@@ -109,7 +110,7 @@ export const game1Data = {
     {
       id: 5,
       title: "The atmosphere traps some of the Sun's heat.",
-      image: "placeholder-atmosphere.jpg",
+      image: `${process.env.PUBLIC_URL}/assets/images/game1/scenarios/scene-5.png`,
       choices: [
         {
           id: "5a",
@@ -128,7 +129,7 @@ export const game1Data = {
     {
       id: 6,
       title: "The Sun rises after a rainy night.",
-      image: "placeholder-sunrise-rain.jpg",
+      image: `${process.env.PUBLIC_URL}/assets/images/game1/scenarios/scene-6.png`,
       choices: [
         {
           id: "6a",
@@ -147,7 +148,7 @@ export const game1Data = {
     {
       id: 7,
       title: "A village spends long hours under strong sunlight.",
-      image: "placeholder-village-sun.jpg",
+      image: `${process.env.PUBLIC_URL}/assets/images/game1/scenarios/scene-7.png`,
       choices: [
         {
           id: "7a",
