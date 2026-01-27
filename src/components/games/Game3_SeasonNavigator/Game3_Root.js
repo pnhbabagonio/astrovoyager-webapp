@@ -1,4 +1,3 @@
-// Game3_Root.js - Fixed with particle container
 import React, { useState, useEffect, useRef } from 'react';
 import { useGameState } from '../../../contexts/GameStateContext';
 import { useAudio } from '../../../contexts/AudioContext';
@@ -22,18 +21,13 @@ const Game3_Root = ({ onComplete }) => {
   // Timer for analytics
   const startTimeRef = useRef(Date.now());
   const [timeElapsed, setTimeElapsed] = useState(0);
-  
-  // Track mounted state and timeouts for cleanup
-  const isMounted = useRef(true);
-  const timeoutRefs = useRef([]);
-  const particleContainerRef = useRef(null);
 
   // Game state
   const [gameState, setGameState] = useState({
-    currentStep: 1,
+    currentStep: 1, // 1: Region, 2: FillBlanks, 3: Quiz, 4: Observational, 5: RegionComplete
     selectedRegion: null,
     completedRegions: [],
-    regionScores: {},
+    regionScores: {}, // Store scores per region {regionId: score}
     fillBlankAnswers: [],
     quizAnswers: [],
     observationalAnswers: [],
@@ -44,125 +38,20 @@ const Game3_Root = ({ onComplete }) => {
     allRegionsCompleted: false
   });
 
-  // Initialize timer with cleanup
+  // Initialize timer
   useEffect(() => {
     const timer = setInterval(() => {
-      if (isMounted.current) {
-        setTimeElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
-      }
+      setTimeElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
     }, 1000);
 
     return () => clearInterval(timer);
   }, []);
 
-  // Initialize game with cleanup
+  // Initialize game
   useEffect(() => {
     audioActions.playVoiceover('welcome_season_navigator');
     audioActions.playBackgroundMusic('space_exploration');
-    
-    // Create initial particle effect after mount
-    if (isMounted.current) {
-      setTimeout(() => {
-        createParticles();
-      }, 500);
-    }
-
-    return () => {
-      // Clean up audio
-      audioActions.stopBackgroundMusic();
-    };
   }, [audioActions]);
-
-  // Set up mounted state and cleanup
-  useEffect(() => {
-    isMounted.current = true;
-    
-    return () => {
-      isMounted.current = false;
-      // Clear all timeouts
-      timeoutRefs.current.forEach(timeout => clearTimeout(timeout));
-      timeoutRefs.current = [];
-      
-      // Clean up particle container
-      if (particleContainerRef.current) {
-        particleContainerRef.current.innerHTML = '';
-      }
-    };
-  }, []);
-
-  // Helper function to safely add timeout
-  const safeSetTimeout = (callback, delay) => {
-    if (!isMounted.current) return null;
-    
-    const timeout = setTimeout(() => {
-      if (isMounted.current) {
-        callback();
-      }
-    }, delay);
-    
-    timeoutRefs.current.push(timeout);
-    return timeout;
-  };
-
-  // Get particle container safely
-  const getParticleContainer = () => {
-    if (!isMounted.current) return null;
-    
-    if (!particleContainerRef.current) {
-      // Try to find existing container or create new one
-      let container = document.querySelector('.particle-container');
-      if (!container) {
-        container = document.createElement('div');
-        container.className = 'particle-container';
-        document.querySelector('.season-navigator-root')?.appendChild(container);
-        particleContainerRef.current = container;
-      } else {
-        particleContainerRef.current = container;
-      }
-    }
-    
-    return particleContainerRef.current;
-  };
-
-  // Particle effect for space theme with safety checks
-  const createParticles = () => {
-    if (!isMounted.current) return;
-    
-    const container = getParticleContainer();
-    if (!container) return;
-    
-    // Limit number of particles
-    for (let i = 0; i < 30; i++) { // Reduced from 50
-      safeSetTimeout(() => {
-        if (!isMounted.current) return;
-        
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        const size = Math.random() * 2 + 1;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = `${Math.random() * 95}vw`; // Keep within viewport
-        particle.style.top = `${Math.random() * 90}vh`; // Keep within viewport
-        particle.style.opacity = Math.random() * 0.4 + 0.2;
-        
-        try {
-          container.appendChild(particle);
-        } catch (error) {
-          return;
-        }
-        
-        safeSetTimeout(() => {
-          if (particle.parentNode) {
-            try {
-              particle.parentNode.removeChild(particle);
-            } catch (error) {
-              // Particle already removed
-            }
-          }
-        }, 2500); // Reduced from 3000
-      }, i * 120); // Increased delay to reduce density
-    }
-  };
 
   // Reset region-specific data for new region
   const resetRegionData = () => {
@@ -184,82 +73,21 @@ const Game3_Root = ({ onComplete }) => {
     setGameState(prev => ({
       ...prev,
       selectedRegion: region,
-      currentStep: isReplaying ? 5 : 2,
+      currentStep: isReplaying ? 5 : 2, // If replaying, show completion screen
       showRegionComplete: isReplaying
     }));
     
     audioActions.playSoundEffect('teleport');
     
-    // Create wormhole particle effect
-    createTeleportEffect();
-    
     // If replaying, show the region completion screen with previous score
     if (isReplaying) {
-      safeSetTimeout(() => {
-        if (!isMounted.current) return;
-        
+      setTimeout(() => {
         setGameState(prev => ({
           ...prev,
-          currentStep: 2,
+          currentStep: 2, // Start the game for this region
           showRegionComplete: false
         }));
       }, 1000);
-    }
-  };
-
-  // Teleport effect with proper positioning
-  const createTeleportEffect = () => {
-    if (!isMounted.current) return;
-    
-    const container = getParticleContainer();
-    if (!container) return;
-    
-    // Clear existing particles first
-    container.innerHTML = '';
-    
-    // Create centered teleport effect
-    for (let i = 0; i < 20; i++) { // Reduced from 30
-      safeSetTimeout(() => {
-        if (!isMounted.current) return;
-        
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        const size = Math.random() * 3 + 1;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = '50%';
-        particle.style.top = '50%';
-        particle.style.transform = 'translate(-50%, -50%)';
-        particle.style.backgroundColor = i % 2 === 0 ? '#9d4edd' : '#00f7ff';
-        particle.style.boxShadow = `0 0 ${Math.random() * 8 + 3}px currentColor`;
-        
-        try {
-          container.appendChild(particle);
-        } catch (error) {
-          return;
-        }
-        
-        const angle = Math.random() * Math.PI * 2;
-        const distance = Math.random() * 100 + 50; // Reduced distance
-        
-        safeSetTimeout(() => {
-          if (particle.parentNode) {
-            particle.style.transition = 'all 0.8s ease-out';
-            particle.style.transform = `translate(-50%, -50%) translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`;
-            particle.style.opacity = '0';
-          }
-          
-          safeSetTimeout(() => {
-            if (particle.parentNode) {
-              try {
-                particle.parentNode.removeChild(particle);
-              } catch (error) {
-                // Particle already removed
-              }
-            }
-          }, 800);
-        }, 50);
-      }, i * 60); // Increased delay
     }
   };
 
@@ -275,48 +103,6 @@ const Game3_Root = ({ onComplete }) => {
     }));
     
     audioActions.playSoundEffect('success');
-    
-    // Celebration particles
-    createSuccessParticles();
-  };
-
-  const createSuccessParticles = () => {
-    if (!isMounted.current) return;
-    
-    const container = getParticleContainer();
-    if (!container) return;
-    
-    for (let i = 0; i < 15; i++) { // Reduced from 20
-      safeSetTimeout(() => {
-        if (!isMounted.current) return;
-        
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        const size = Math.random() * 3 + 1;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = `${Math.random() * 90}vw`; // Keep within bounds
-        particle.style.top = `${Math.random() * 80 + 10}vh`; // Keep within bounds
-        particle.style.backgroundColor = '#ffd700';
-        particle.style.boxShadow = '0 0 8px #ffd700';
-        
-        try {
-          container.appendChild(particle);
-        } catch (error) {
-          return;
-        }
-        
-        safeSetTimeout(() => {
-          if (particle.parentNode) {
-            try {
-              particle.parentNode.removeChild(particle);
-            } catch (error) {
-              // Particle already removed
-            }
-          }
-        }, 1800); // Reduced from 2000
-      }, i * 80); // Increased delay
-    }
   };
 
   // Handle quiz completion
@@ -397,8 +183,7 @@ const Game3_Root = ({ onComplete }) => {
     
     // If all regions completed, save game progress
     if (allRegionsCompleted) {
-      safeSetTimeout(() => {
-        if (!isMounted.current) return;
+      setTimeout(() => {
         completeGame();
       }, 2000);
     }
@@ -420,9 +205,7 @@ const Game3_Root = ({ onComplete }) => {
       }));
       audioActions.playSoundEffect('teleport');
     } else {
-      if (isMounted.current) {
-        completeGame();
-      }
+      completeGame();
     }
   };
 
@@ -439,8 +222,6 @@ const Game3_Root = ({ onComplete }) => {
 
   // Complete and save game (when all regions done)
   const completeGame = () => {
-    if (!isMounted.current) return;
-    
     const finalScore = {
       completed: true,
       totalScore: gameState.totalScore,
@@ -460,7 +241,7 @@ const Game3_Root = ({ onComplete }) => {
     playerActions.updatePlayerProgress('game3', finalScore);
 
     // Call completion callback
-    if (onComplete && isMounted.current) {
+    if (onComplete) {
       onComplete(finalScore);
     }
 
@@ -479,35 +260,22 @@ const Game3_Root = ({ onComplete }) => {
     return gameState.regionScores[gameState.selectedRegion.id] || 0;
   };
 
-  // Format time for display
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${minutes}:${secs.toString().padStart(2, '0')}`;
-  };
-
   return (
     <div className="season-navigator-root">
-      {/* Space Nebula Background */}
-      <div className="space-nebula"></div>
-      
-      {/* Particle Container - Will be created dynamically */}
-      
       <div className="game3-header">
         <button onClick={handleBackToMap} className="back-button">
-          Back to Starmap
+          ← Back to Map
         </button>
         <div className="header-content">
-          <h1>Season Navigator</h1>
+          <h1>🌎 Season Navigator</h1>
           <div className="header-subtitle">
-            <span>🚀 Mission Control</span>
-            <span>📍 Region: {gameState.selectedRegion?.name || 'Selecting...'}</span>
-            <span>⏱️ Mission Time: {formatTime(timeElapsed)}</span>
-            <span>✅ Regions: {gameState.completedRegions.length}/{game3Data.regions.length}</span>
+            <span>Selected Region: {gameState.selectedRegion?.name || 'None'}</span>
+            <span>Regions Completed: {gameState.completedRegions.length}/{game3Data.regions.length}</span>
+            <span>Time: {Math.floor(timeElapsed / 60)}:{String(timeElapsed % 60).padStart(2, '0')}</span>
           </div>
         </div>
         <div className="total-score-display">
-          <span className="score-label">Mission Score</span>
+          <span className="score-label">Total Score</span>
           <span className="score-value">{gameState.totalScore}</span>
         </div>
       </div>
@@ -516,7 +284,7 @@ const Game3_Root = ({ onComplete }) => {
         {/* Progress Indicator */}
         <GameProgress 
           currentStep={gameState.currentStep}
-          totalSteps={4}
+          totalSteps={5}
           selectedRegion={gameState.selectedRegion}
           score={gameState.totalScore}
           completedRegions={gameState.completedRegions}
@@ -591,23 +359,25 @@ const Game3_Root = ({ onComplete }) => {
         {gameState.allRegionsCompleted && (
           <div className="all-regions-completed">
             <div className="completion-content">
-              <h2>🌠 Mission Complete!</h2>
+              <h2>🎉 Mission Complete!</h2>
               <div className="completion-badge">
                 <span className="badge-icon">🏆</span>
-                <span className="badge-text">All Regions Successfully Explored!</span>
+                <span className="badge-text">All Regions Explored!</span>
               </div>
               
               <div className="final-stats">
                 <div className="stat-item">
-                  <span className="stat-label">Total Mission Score</span>
+                  <span className="stat-label">Total Score</span>
                   <span className="stat-value">{gameState.totalScore}</span>
                 </div>
                 <div className="stat-item">
-                  <span className="stat-label">Mission Duration</span>
-                  <span className="stat-value">{formatTime(timeElapsed)}</span>
+                  <span className="stat-label">Time</span>
+                  <span className="stat-value">
+                    {Math.floor(timeElapsed / 60)}m {timeElapsed % 60}s
+                  </span>
                 </div>
                 <div className="stat-item">
-                  <span className="stat-label">Regions Explored</span>
+                  <span className="stat-label">Regions</span>
                   <span className="stat-value">
                     {gameState.completedRegions.length}/{game3Data.regions.length}
                   </span>
@@ -615,13 +385,13 @@ const Game3_Root = ({ onComplete }) => {
               </div>
               
               <div className="region-scores-summary">
-                <h3>🌍 Regional Analysis Report</h3>
+                <h3>Region Scores</h3>
                 <div className="scores-grid">
                   {game3Data.regions.map(region => (
                     <div key={region.id} className="region-score-card">
                       <span className="region-name">{region.name}</span>
                       <span className="region-score">
-                        {gameState.regionScores[region.id] || 0} points
+                        {gameState.regionScores[region.id] || 0} pts
                       </span>
                     </div>
                   ))}
@@ -629,7 +399,7 @@ const Game3_Root = ({ onComplete }) => {
               </div>
               
               <button onClick={handleBackToMap} className="continue-button">
-                Return to Mission Control
+                Return to Mission Map
               </button>
             </div>
           </div>
