@@ -6,8 +6,8 @@ import RegionSelector from './components/RegionSelector/RegionSelector';
 import DragDropFillBlanks from './components/DragDropFillBlanks/DragDropFillBlanks';
 import SeasonalTeleportationQuiz from './components/SeasonalTeleportationQuiz/SeasonalTeleportationQuiz';
 import ObservationalCheck from './components/ObservationalCheck/ObservationalCheck';
-import GameProgress from './components/GameProgress/GameProgress';
 import Scoreboard from './components/Scoreboard/Scoreboard';
+import CompactGameProgress from './components/GameProgress/CompactGameProgress';
 import ReviewIncorrectAnswers from './components/ReviewIncorrectAnswers/ReviewIncorrectAnswers';
 import RegionCompletionScreen from './components/RegionCompletionScreen/RegionCompletionScreen';
 import { game3Data } from './game3Data';
@@ -18,16 +18,13 @@ const Game3_Root = ({ onComplete }) => {
   const { actions: audioActions } = useAudio();
   const { actions: playerActions } = usePlayer();
   
-  // Timer for analytics
   const startTimeRef = useRef(Date.now());
   const [timeElapsed, setTimeElapsed] = useState(0);
-
-  // Game state
   const [gameState, setGameState] = useState({
-    currentStep: 1, // 1: Region, 2: FillBlanks, 3: Quiz, 4: Observational, 5: RegionComplete
+    currentStep: 1,
     selectedRegion: null,
     completedRegions: [],
-    regionScores: {}, // Store scores per region {regionId: score}
+    regionScores: {},
     fillBlankAnswers: [],
     quizAnswers: [],
     observationalAnswers: [],
@@ -35,7 +32,8 @@ const Game3_Root = ({ onComplete }) => {
     showScoreboard: false,
     showReview: false,
     showRegionComplete: false,
-    allRegionsCompleted: false
+    allRegionsCompleted: false,
+    currentSeason: 'spring'
   });
 
   // Initialize timer
@@ -43,15 +41,24 @@ const Game3_Root = ({ onComplete }) => {
     const timer = setInterval(() => {
       setTimeElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
     }, 1000);
-
     return () => clearInterval(timer);
   }, []);
 
   // Initialize game
   useEffect(() => {
-    audioActions.playVoiceover('welcome_season_navigator');
-    audioActions.playBackgroundMusic('space_exploration');
+    audioActions.playVoiceover('welcome_celestial_observatory');
+    audioActions.playBackgroundMusic('celestial_exploration');
   }, [audioActions]);
+
+  // Update season based on selected region
+  useEffect(() => {
+    if (gameState.selectedRegion) {
+      setGameState(prev => ({
+        ...prev,
+        currentSeason: gameState.selectedRegion.currentSeason.toLowerCase()
+      }));
+    }
+  }, [gameState.selectedRegion]);
 
   // Reset region-specific data for new region
   const resetRegionData = () => {
@@ -67,24 +74,22 @@ const Game3_Root = ({ onComplete }) => {
 
   // Handle region selection
   const handleRegionSelect = (region) => {
-    // Check if region was already completed
     const isReplaying = gameState.completedRegions.includes(region.id);
     
     setGameState(prev => ({
       ...prev,
       selectedRegion: region,
-      currentStep: isReplaying ? 5 : 2, // If replaying, show completion screen
+      currentStep: isReplaying ? 5 : 2,
       showRegionComplete: isReplaying
     }));
     
-    audioActions.playSoundEffect('teleport');
+    audioActions.playSoundEffect('telescope_focus');
     
-    // If replaying, show the region completion screen with previous score
     if (isReplaying) {
       setTimeout(() => {
         setGameState(prev => ({
           ...prev,
-          currentStep: 2, // Start the game for this region
+          currentStep: 2,
           showRegionComplete: false
         }));
       }, 1000);
@@ -102,7 +107,7 @@ const Game3_Root = ({ onComplete }) => {
       currentStep: 3
     }));
     
-    audioActions.playSoundEffect('success');
+    audioActions.playSoundEffect('data_analysis_complete');
   };
 
   // Handle quiz completion
@@ -118,7 +123,7 @@ const Game3_Root = ({ onComplete }) => {
       showReview: incorrectAnswers.length > 0
     }));
     
-    audioActions.playSoundEffect('quiz_complete');
+    audioActions.playSoundEffect('warp_complete');
   };
 
   // Handle proceed after scoreboard
@@ -128,7 +133,7 @@ const Game3_Root = ({ onComplete }) => {
       showScoreboard: false,
       currentStep: 4
     }));
-    audioActions.playSoundEffect('buttonClick');
+    audioActions.playSoundEffect('control_click');
   };
 
   // Handle review incorrect answers
@@ -138,7 +143,7 @@ const Game3_Root = ({ onComplete }) => {
       showScoreboard: false,
       showReview: true
     }));
-    audioActions.playSoundEffect('buttonClick');
+    audioActions.playSoundEffect('control_click');
   };
 
   // Handle return from review
@@ -148,7 +153,7 @@ const Game3_Root = ({ onComplete }) => {
       showReview: false,
       currentStep: 4
     }));
-    audioActions.playSoundEffect('buttonClick');
+    audioActions.playSoundEffect('control_click');
   };
 
   // Handle observational check completion
@@ -156,12 +161,10 @@ const Game3_Root = ({ onComplete }) => {
     const points = answers.reduce((sum, answer) => sum + answer.points, 0);
     const regionId = gameState.selectedRegion.id;
     
-    // Calculate region score
     const fillBlankScore = gameState.fillBlankAnswers.reduce((sum, a) => sum + (a.isCorrect ? a.points : 0), 0);
     const quizScore = gameState.quizAnswers.reduce((sum, a) => sum + (a.isCorrect ? a.points : 0), 0);
     const regionTotalScore = fillBlankScore + quizScore + points;
     
-    // Check if all regions are now completed
     const newCompletedRegions = [...new Set([...gameState.completedRegions, regionId])];
     const allRegionsCompleted = newCompletedRegions.length === game3Data.regions.length;
     
@@ -179,9 +182,8 @@ const Game3_Root = ({ onComplete }) => {
       currentStep: 5
     }));
     
-    audioActions.playSoundEffect('region_complete');
+    audioActions.playSoundEffect('discovery_complete');
     
-    // If all regions completed, save game progress
     if (allRegionsCompleted) {
       setTimeout(() => {
         completeGame();
@@ -203,7 +205,7 @@ const Game3_Root = ({ onComplete }) => {
         currentStep: 1,
         showRegionComplete: false
       }));
-      audioActions.playSoundEffect('teleport');
+      audioActions.playSoundEffect('telescope_scan');
     } else {
       completeGame();
     }
@@ -217,10 +219,10 @@ const Game3_Root = ({ onComplete }) => {
       currentStep: 2,
       showRegionComplete: false
     }));
-    audioActions.playSoundEffect('restart');
+    audioActions.playSoundEffect('reset_scan');
   };
 
-  // Complete and save game (when all regions done)
+  // Complete and save game
   const completeGame = () => {
     const finalScore = {
       completed: true,
@@ -231,26 +233,23 @@ const Game3_Root = ({ onComplete }) => {
       dateCompleted: new Date().toISOString()
     };
 
-    // Update global progress
     gameDispatch({
       type: 'UPDATE_PROGRESS',
       payload: { game: 'game3', progress: finalScore }
     });
 
-    // Save to player progress
     playerActions.updatePlayerProgress('game3', finalScore);
 
-    // Call completion callback
     if (onComplete) {
       onComplete(finalScore);
     }
 
-    audioActions.playSoundEffect('game_complete');
+    audioActions.playSoundEffect('mission_complete');
   };
 
   // Handle back to map
   const handleBackToMap = () => {
-    audioActions.playSoundEffect('buttonClick');
+    audioActions.playSoundEffect('control_click');
     gameDispatch({ type: 'SET_VIEW', payload: 'mission-map' });
   };
 
@@ -260,37 +259,49 @@ const Game3_Root = ({ onComplete }) => {
     return gameState.regionScores[gameState.selectedRegion.id] || 0;
   };
 
+  // Format time for display
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   return (
-    <div className="season-navigator-root">
+    <div className={`season-navigator-root ${gameState.currentSeason}`}>
+      {/* Celestial Background Overlay */}
+      <div className={`season-overlay ${gameState.currentSeason}-overlay`}></div>
+      
+      {/* Telescope Focus Effect */}
+      <div className="telescope-focus"></div>
+
+      {/* Compact Header */}
       <div className="game3-header">
         <button onClick={handleBackToMap} className="back-button">
-          ← Back to Map
+          <span></span>
+          <span>Map</span>
         </button>
+        
         <div className="header-content">
-          <h1>🌎 Season Navigator</h1>
+          <h1>🔭 Seasonal Navigator</h1>
           <div className="header-subtitle">
-            <span>Selected Region: {gameState.selectedRegion?.name || 'None'}</span>
-            <span>Regions Completed: {gameState.completedRegions.length}/{game3Data.regions.length}</span>
-            <span>Time: {Math.floor(timeElapsed / 60)}:{String(timeElapsed % 60).padStart(2, '0')}</span>
+            <span>⏱️ {formatTime(timeElapsed)}</span>
+            <span>📍 {gameState.selectedRegion?.name || 'No Target'}</span>
+            <span>★ {gameState.completedRegions.length}/{game3Data.regions.length}</span>
           </div>
-        </div>
-        <div className="total-score-display">
-          <span className="score-label">Total Score</span>
-          <span className="score-value">{gameState.totalScore}</span>
-        </div>
+        </div>   
       </div>
 
-      <div className="game3-content">
-        {/* Progress Indicator */}
-        <GameProgress 
-          currentStep={gameState.currentStep}
-          totalSteps={5}
-          selectedRegion={gameState.selectedRegion}
-          score={gameState.totalScore}
-          completedRegions={gameState.completedRegions}
-        />
+      {/* Compact Status Bar */}
+      <CompactGameProgress 
+        currentStep={gameState.currentStep}
+        selectedRegion={gameState.selectedRegion}
+        score={gameState.totalScore}
+        completedRegions={gameState.completedRegions}
+        totalRegions={game3Data.regions.length}
+      />
 
-        {/* Main Game Steps */}
+      {/* Main Game Content */}
+      <div className="game3-content">
         {gameState.currentStep === 1 && !gameState.showScoreboard && !gameState.showReview && (
           <RegionSelector 
             regions={game3Data.regions}
@@ -359,39 +370,37 @@ const Game3_Root = ({ onComplete }) => {
         {gameState.allRegionsCompleted && (
           <div className="all-regions-completed">
             <div className="completion-content">
-              <h2>🎉 Mission Complete!</h2>
+              <h2>🌌 Mission Complete!</h2>
               <div className="completion-badge">
                 <span className="badge-icon">🏆</span>
-                <span className="badge-text">All Regions Explored!</span>
+                <span className="badge-text">All Constellations Charted</span>
               </div>
               
               <div className="final-stats">
-                <div className="stat-item">
-                  <span className="stat-label">Total Score</span>
-                  <span className="stat-value">{gameState.totalScore}</span>
+                <div className="stat-item large">
+                  <span className="stat-label large">Total Energy</span>
+                  <span className="stat-value large">{gameState.totalScore}</span>
                 </div>
-                <div className="stat-item">
-                  <span className="stat-label">Time</span>
-                  <span className="stat-value">
-                    {Math.floor(timeElapsed / 60)}m {timeElapsed % 60}s
-                  </span>
+                <div className="stat-item large">
+                  <span className="stat-label large">Mission Time</span>
+                  <span className="stat-value large">{formatTime(timeElapsed)}</span>
                 </div>
-                <div className="stat-item">
-                  <span className="stat-label">Regions</span>
-                  <span className="stat-value">
+                <div className="stat-item large">
+                  <span className="stat-label large">Constellations</span>
+                  <span className="stat-value large">
                     {gameState.completedRegions.length}/{game3Data.regions.length}
                   </span>
                 </div>
               </div>
               
               <div className="region-scores-summary">
-                <h3>Region Scores</h3>
+                <h3>Constellation Energy Readings</h3>
                 <div className="scores-grid">
                   {game3Data.regions.map(region => (
                     <div key={region.id} className="region-score-card">
                       <span className="region-name">{region.name}</span>
                       <span className="region-score">
-                        {gameState.regionScores[region.id] || 0} pts
+                        {gameState.regionScores[region.id] || 0} units
                       </span>
                     </div>
                   ))}

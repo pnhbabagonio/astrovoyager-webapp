@@ -8,14 +8,14 @@ const ReviewIncorrectAnswers = ({ incorrectAnswers, scenarios, onReturn }) => {
 
   return (
     <div className="review-incorrect">
-      <div className="review-header">
-        <h2>📝 Review Incorrect Answers</h2>
-        <p className="subtitle">Learn from your mistakes before proceeding.</p>
+      <div className="anomaly-analysis-header">
+        <h2>⚠️ Anomaly Analysis</h2>
+        <p className="anomaly-subtitle">Review and recalibrate navigation systems</p>
       </div>
 
-      <div className="review-content">
+      <div className="anomaly-console">
         {incorrectAnswers.length === 0 ? (
-          <p className="no-incorrect">No incorrect answers to review!</p>
+          <p className="system-clear">All systems operating normally</p>
         ) : (
           incorrectAnswers.map((answer, index) => {
             const scenario = getScenario(answer.scenarioId);
@@ -23,23 +23,23 @@ const ReviewIncorrectAnswers = ({ incorrectAnswers, scenarios, onReturn }) => {
             const correctOption = scenario.options.find(opt => opt.correct);
 
             return (
-              <div key={index} className="review-item">
-                <h3>Scenario {index + 1}</h3>
-                <p className="question">{scenario.question}</p>
+              <div key={index} className="anomaly-investigation">
+                <h3>Anomaly {index + 1}</h3>
+                <p className="celestial-event">{scenario.question}</p>
                 
-                <div className="answer-comparison">
-                  <div className="answer wrong-answer">
-                    <span className="label">Your Answer:</span>
-                    <span className="text">{selectedOption.text}</span>
+                <div className="signal-analysis">
+                  <div className="signal anomaly-signal">
+                    <span className="signal-label">YOUR COURSE:</span>
+                    <span className="signal-data">{selectedOption.text}</span>
                   </div>
-                  <div className="answer correct-answer">
-                    <span className="label">Correct Answer:</span>
-                    <span className="text">{correctOption.text}</span>
+                  <div className="signal correct-signal">
+                    <span className="signal-label">OPTIMAL COURSE:</span>
+                    <span className="signal-data">{correctOption.text}</span>
                   </div>
                 </div>
 
-                <div className="explanation">
-                  <h4>Explanation:</h4>
+                <div className="transmission-decode">
+                  <h4>📡 Transmission Decode:</h4>
                   <p>{scenario.explanation}</p>
                 </div>
               </div>
@@ -48,9 +48,9 @@ const ReviewIncorrectAnswers = ({ incorrectAnswers, scenarios, onReturn }) => {
         )}
       </div>
 
-      <div className="review-controls">
-        <button onClick={onReturn} className="return-button">
-          Return to Scoreboard
+      <div className="analysis-protocol">
+        <button onClick={onReturn} className="recalibrate-button">
+          Return to Analysis Report
         </button>
       </div>
     </div>

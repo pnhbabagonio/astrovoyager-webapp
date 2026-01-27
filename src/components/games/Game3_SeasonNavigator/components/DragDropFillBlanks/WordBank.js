@@ -1,5 +1,5 @@
 import React from 'react';
-import './DragDropFillBlanks.css'; // We'll use the same CSS
+import './DragDropFillBlanks.css';
 
 const WordBank = ({ words, onDragStart, usedWords }) => {
   const handleDragStart = (e, word) => {
@@ -8,15 +8,15 @@ const WordBank = ({ words, onDragStart, usedWords }) => {
   };
 
   return (
-    <div className="word-bank">
-      <h3>Word Bank</h3>
-      <div className="words-container">
+    <div className="astral-database">
+      <h3>Spectral Database</h3>
+      <div className="database-entries">
         {words.map((word, index) => {
           const isUsed = usedWords.includes(word);
           return (
             <div
               key={index}
-              className={`word-item ${isUsed ? 'used' : ''}`}
+              className={`database-entry ${isUsed ? 'used' : ''}`}
               draggable={!isUsed}
               onDragStart={(e) => !isUsed && handleDragStart(e, word)}
             >

@@ -4,51 +4,66 @@ import './Scoreboard.css';
 const Scoreboard = ({ totalScore, maxScore, fillBlankAnswers, quizAnswers, hasIncorrect, onProceed, onReview }) => {
   const fillBlankScore = fillBlankAnswers.reduce((sum, a) => sum + (a.isCorrect ? a.points : 0), 0);
   const quizScore = quizAnswers.reduce((sum, a) => sum + (a.isCorrect ? a.points : 0), 0);
-  const totalMaxScore = 40 + 90; // 40 from fillBlank, 90 from quiz
+  const totalMaxScore = 40 + 90;
 
   return (
     <div className="scoreboard">
-      <div className="scoreboard-header">
-        <h2>📊 Scoreboard</h2>
-        <p className="subtitle">Your performance so far</p>
+      <div className="analysis-report-header">
+        <h2>📊 Observatory Analysis Report</h2>
+        <p className="report-subtitle">Mission performance assessment</p>
       </div>
 
-      <div className="score-display">
-        <div className="total-score">
-          <h3>Total Score</h3>
+      <div className="mission-analysis-report">
+        <div className="mission-score">
+          <h3>Mission Efficiency Score</h3>
           <div className="score-number">{totalScore}<span>/{totalMaxScore}</span></div>
-          <div className="score-percentage">
-            {Math.round((totalScore / totalMaxScore) * 100)}%
+          <div className="efficiency-rating">
+            {Math.round((totalScore / totalMaxScore) * 100)}% Efficiency
           </div>
         </div>
 
-        <div className="breakdown">
-          <div className="breakdown-item">
-            <span className="label">Fill-in-the-Blanks:</span>
-            <span className="value">{fillBlankScore}/40</span>
+        <div className="system-analysis">
+          <h4>System Performance Analysis</h4>
+          <div className="analysis-item">
+            <div className="system">
+              <span className="system-icon">📡</span>
+              <span>Data Analysis System</span>
+            </div>
+            <span className="performance">{fillBlankScore}/40</span>
           </div>
-          <div className="breakdown-item">
-            <span className="label">Teleportation Quiz:</span>
-            <span className="value">{quizScore}/90</span>
+          <div className="analysis-item">
+            <div className="system">
+              <span className="system-icon">🌌</span>
+              <span>Navigation System</span>
+            </div>
+            <span className="performance">{quizScore}/90</span>
           </div>
         </div>
 
-        <div className="incorrect-info">
-          {hasIncorrect ? (
-            <p>You have some incorrect answers. You can review them before proceeding.</p>
-          ) : (
-            <p>Great job! All answers are correct.</p>
-          )}
+        <div className={hasIncorrect ? 'anomaly-detection' : 'mission-success'}>
+          <p>
+            {hasIncorrect ? (
+              <>
+                <span>⚠️</span>
+                Anomalies detected in navigation data. Review recommended.
+              </>
+            ) : (
+              <>
+                <span>✅</span>
+                All systems operating optimally. Proceed to observation.
+              </>
+            )}
+          </p>
         </div>
 
-        <div className="scoreboard-controls">
+        <div className="mission-control">
           {hasIncorrect && (
-            <button onClick={onReview} className="review-button">
-              Review Incorrect Answers
+            <button onClick={onReview} className="review-anomalies-button">
+              Review Anomalies
             </button>
           )}
-          <button onClick={onProceed} className="proceed-button">
-            Proceed to Observational Check
+          <button onClick={onProceed} className="proceed-mission-button">
+            Continue Mission
           </button>
         </div>
       </div>

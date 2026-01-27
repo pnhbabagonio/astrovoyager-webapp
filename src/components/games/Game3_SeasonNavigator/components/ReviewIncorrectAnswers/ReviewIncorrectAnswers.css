@@ -1,495 +1,269 @@
-/* ReviewIncorrectAnswers.css - Mission Debrief Theme */
 .review-incorrect {
-  max-width: 900px;
-  width: 100%;
-  animation: debriefReveal 0.8s ease;
+  max-width: 800px;
+  margin: 0 auto;
+  animation: anomalyReveal 0.8s ease;
+  position: relative;
+  z-index: 2;
 }
 
-@keyframes debriefReveal {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.review-header {
+.anomaly-analysis-header {
   text-align: center;
-  margin-bottom: 2.5rem;
-  padding: 2rem;
-  background: linear-gradient(135deg, 
-    rgba(20, 25, 60, 0.9), 
-    rgba(10, 15, 35, 0.9));
-  border-radius: 20px;
-  border: 2px solid rgba(255, 82, 82, 0.3);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-}
-
-.review-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, 
-    #ff5252, 
-    #ff8e53, 
-    #ff5252);
-  animation: scanner 3s linear infinite;
-}
-
-.review-header h2 {
-  font-size: 2.2rem;
-  color: #ff5252;
-  margin-bottom: 1rem;
-  text-shadow: 0 0 20px rgba(255, 82, 82, 0.5);
-}
-
-.review-header h2::before {
-  content: '📝 ';
-  filter: drop-shadow(0 0 10px rgba(255, 82, 82, 0.7));
-}
-
-.subtitle {
-  color: #a0a0ff;
-  font-size: 1.1rem;
-  line-height: 1.6;
-}
-
-.review-content {
-  background: linear-gradient(135deg, 
-    rgba(20, 25, 60, 0.95), 
-    rgba(10, 15, 35, 0.95));
-  border-radius: 20px;
-  padding: 2.5rem;
-  border: 2px solid rgba(255, 82, 82, 0.2);
   margin-bottom: 2rem;
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
+  padding: 2rem;
+  background: rgba(13, 27, 42, 0.8);
+  border-radius: 20px;
+  border: 2px solid #d32f2f;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.anomaly-analysis-header h2 {
+  font-size: 2.2rem;
+  background: linear-gradient(45deg, #ff6b6b, #d32f2f);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.5rem;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.anomaly-subtitle {
+  color: #ff6b6b;
+  font-size: 1.1rem;
+  font-style: italic;
+}
+
+/* Anomaly Console */
+.anomaly-console {
+  background: linear-gradient(135deg, rgba(19, 42, 65, 0.9), rgba(30, 60, 90, 0.8));
+  border-radius: 20px;
+  padding: 2rem;
+  border: 2px solid #d32f2f;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  margin-bottom: 2rem;
 }
 
-.review-content::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, 
-    transparent, 
-    #ff5252, 
-    #ff8e53, 
-    #ff5252, 
-    transparent);
-  animation: scanner 4s linear infinite;
-}
-
-.no-incorrect {
+/* System Clear */
+.system-clear {
   text-align: center;
   color: #4caf50;
-  font-size: 1.3rem;
-  padding: 3rem;
-  background: linear-gradient(135deg, 
-    rgba(76, 175, 80, 0.2), 
-    rgba(46, 125, 50, 0.2));
+  font-size: 1.2rem;
+  padding: 2rem;
+  background: rgba(46, 125, 50, 0.2);
   border-radius: 15px;
-  border: 2px solid rgba(76, 175, 80, 0.3);
-  font-weight: bold;
-  text-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
-  animation: successPulse 2s infinite;
+  border: 2px solid #4caf50;
+  animation: systemPulse 2s infinite;
 }
 
-@keyframes successPulse {
-  0%, 100% { box-shadow: 0 0 15px rgba(76, 175, 80, 0.2); }
-  50% { box-shadow: 0 0 25px rgba(76, 175, 80, 0.4); }
+.system-clear::before {
+  content: '✅ ';
+  font-size: 1.5rem;
 }
 
-/* Review Item - Debrief Analysis */
-.review-item {
-  margin-bottom: 2.5rem;
-  padding-bottom: 2.5rem;
-  border-bottom: 3px solid rgba(255, 82, 82, 0.2);
-  position: relative;
-  transition: all 0.3s ease;
+/* Anomaly Investigation */
+.anomaly-investigation {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px dashed rgba(255, 107, 107, 0.3);
 }
 
-.review-item:hover {
-  border-bottom-color: rgba(255, 82, 82, 0.4);
-  transform: translateX(10px);
-}
-
-.review-item:last-child {
+.anomaly-investigation:last-child {
   border-bottom: none;
   margin-bottom: 0;
   padding-bottom: 0;
 }
 
-.review-item h3 {
+.anomaly-investigation h3 {
   color: #ffd700;
-  font-size: 1.6rem;
-  margin-bottom: 1.5rem;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.5rem;
 }
 
-.review-item h3::before {
-  content: '📌';
-  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
-}
-
-.question {
-  color: #ffffff;
-  font-size: 1.2rem;
-  line-height: 1.6;
+/* Celestial Event */
+.celestial-event {
+  color: #e0e1dd;
+  font-size: 1.1rem;
+  line-height: 1.5;
   margin-bottom: 1.5rem;
-  padding: 1.5rem;
-  background: linear-gradient(135deg, 
-    rgba(30, 35, 70, 0.9), 
-    rgba(20, 25, 60, 0.9));
-  border-radius: 12px;
-  border-left: 5px solid #00f7ff;
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(5px);
+  padding: 1rem;
+  background: rgba(13, 27, 42, 0.8);
+  border-radius: 10px;
+  border-left: 4px solid #ff6b6b;
+  font-family: 'Courier New', monospace;
 }
 
-.question::before {
-  content: 'QUESTION ANALYSIS';
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  font-size: 0.7rem;
-  color: rgba(0, 247, 255, 0.6);
-  font-weight: bold;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-/* Answer Comparison - Data Analysis */
-.answer-comparison {
+/* Signal Analysis */
+.signal-analysis {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin-bottom: 2rem;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 @media (max-width: 768px) {
-  .answer-comparison {
+  .signal-analysis {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
   }
 }
 
-.answer {
-  padding: 1.5rem;
-  border-radius: 15px;
+.signal {
+  padding: 1rem;
+  border-radius: 10px;
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(5px);
-  transition: all 0.3s ease;
 }
 
-.answer:hover {
-  transform: translateY(-5px);
-}
-
-.answer .label {
+.signal .signal-label {
   display: block;
   font-weight: bold;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  font-family: 'Orbitron', sans-serif;
   letter-spacing: 1px;
 }
 
-.answer .text {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: #ffffff;
+.signal .signal-data {
+  font-size: 1rem;
+  font-family: 'Courier New', monospace;
 }
 
-.wrong-answer {
-  background: linear-gradient(135deg, 
-    rgba(255, 82, 82, 0.2), 
-    rgba(183, 28, 28, 0.2));
-  border: 2px solid #ff5252;
+.anomaly-signal {
+  background: rgba(211, 47, 47, 0.2);
+  border: 2px solid #ff6b6b;
 }
 
-.wrong-answer .label {
-  color: #ff5252;
-  text-shadow: 0 0 10px rgba(255, 82, 82, 0.3);
+.anomaly-signal .signal-label {
+  color: #ff6b6b;
 }
 
-.wrong-answer:hover {
-  box-shadow: 0 10px 25px rgba(255, 82, 82, 0.2);
-}
-
-.correct-answer {
-  background: linear-gradient(135deg, 
-    rgba(76, 175, 80, 0.2), 
-    rgba(46, 125, 50, 0.2));
+.correct-signal {
+  background: rgba(46, 125, 50, 0.2);
   border: 2px solid #4caf50;
 }
 
-.correct-answer .label {
+.correct-signal .signal-label {
   color: #4caf50;
-  text-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
 }
 
-.correct-answer:hover {
-  box-shadow: 0 10px 25px rgba(76, 175, 80, 0.2);
+/* Transmission Decode */
+.transmission-decode {
+  padding: 1rem;
+  background: rgba(13, 27, 42, 0.9);
+  border-radius: 10px;
+  border-top: 3px solid #4cc9f0;
 }
 
-/* Explanation - Mission Intelligence */
-.explanation {
-  padding: 1.5rem;
-  background: linear-gradient(135deg, 
-    rgba(0, 247, 255, 0.2), 
-    rgba(157, 78, 221, 0.2));
-  border-radius: 12px;
-  border: 2px solid rgba(0, 247, 255, 0.3);
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(5px);
-  transition: all 0.3s ease;
-}
-
-.explanation:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 247, 255, 0.2);
-}
-
-.explanation h4 {
-  color: #00f7ff;
+.transmission-decode h4 {
+  color: #4cc9f0;
   margin-top: 0;
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
-  text-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+  margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.5rem;
 }
 
-.explanation h4::before {
-  content: '💡';
-  filter: drop-shadow(0 0 5px rgba(0, 247, 255, 0.5));
-}
-
-.explanation p {
-  color: #e0e0ff;
+.transmission-decode p {
+  color: #b8c2cc;
   line-height: 1.6;
   margin: 0;
+  font-family: 'Courier New', monospace;
 }
 
-.review-controls {
+/* Analysis Protocol */
+.analysis-protocol {
   text-align: center;
-  padding: 2rem;
-  background: linear-gradient(135deg, 
-    rgba(20, 25, 60, 0.9), 
-    rgba(10, 15, 35, 0.9));
-  border-radius: 20px;
-  border: 2px solid rgba(0, 247, 255, 0.3);
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.review-controls::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, 
-    #00f7ff, 
-    #9d4edd, 
-    #00f7ff);
-  animation: scanner 3s linear infinite;
-}
-
-.return-button {
-  background: linear-gradient(45deg, #9d4edd, #00f7ff);
+.recalibrate-button {
+  background: linear-gradient(45deg, #4361ee, #4cc9f0);
   color: white;
   border: none;
-  padding: 1.2rem 3rem;
-  border-radius: 30px;
-  font-size: 1.2rem;
+  padding: 1rem 2.5rem;
+  border-radius: 25px;
+  font-size: 1.1rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 0 25px rgba(157, 78, 221, 0.3);
-  letter-spacing: 1px;
-  display: inline-flex;
+}
+
+.recalibrate-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 20px rgba(67, 97, 238, 0.4);
+}
+
+.recalibrate-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: button-glow 2s linear infinite;
+}
+
+/* Anomaly Status Indicators */
+.anomaly-investigation::before {
+  content: '⚠️';
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  font-size: 1.5rem;
+  background: rgba(13, 27, 42, 0.9);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.8rem;
+  border: 2px solid #ff6b6b;
 }
 
-.return-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, 
-    transparent, 
-    rgba(255, 255, 255, 0.2), 
-    transparent);
-  transition: left 0.5s;
+@keyframes anomalyReveal {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px) scale(0.95); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
 }
 
-.return-button:hover::before {
-  left: 100%;
+@keyframes systemPulse {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4); 
+  }
+  50% { 
+    box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); 
+  }
 }
 
-.return-button:hover {
-  transform: translateY(-5px) scale(1.05);
-  box-shadow: 0 15px 40px rgba(157, 78, 221, 0.4);
-}
-
-/* Debrief Analysis Effect */
-.review-content::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background: radial-gradient(circle, 
-    rgba(255, 82, 82, 0.1) 0%, 
-    transparent 70%);
-  filter: blur(15px);
-  z-index: -1;
-  animation: analysisPulse 4s infinite alternate;
-}
-
-@keyframes analysisPulse {
-  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
-  100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.5; }
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-  .review-header h2 {
-    font-size: 2rem;
-  }
-  
-  .review-item h3 {
-    font-size: 1.5rem;
-  }
-  
-  .question {
-    font-size: 1.1rem;
-  }
-  
-  .answer .text {
-    font-size: 1rem;
-  }
-  
-  .explanation h4 {
-    font-size: 1.2rem;
-  }
-  
-  .explanation p {
-    font-size: 1rem;
-  }
+@keyframes button-glow {
+  0% { transform: rotate(0deg) translate(-50%, -50%); }
+  100% { transform: rotate(360deg) translate(-50%, -50%); }
 }
 
 @media (max-width: 768px) {
-  .review-header {
-    padding: 1.5rem;
-  }
-  
-  .review-content {
-    padding: 1.5rem;
-  }
-  
-  .review-header h2 {
+  .anomaly-analysis-header h2 {
     font-size: 1.8rem;
   }
-  
-  .review-item h3 {
-    font-size: 1.4rem;
-  }
-  
-  .question {
-    font-size: 1rem;
-    padding: 1.2rem;
-  }
-  
-  .answer {
-    padding: 1.2rem;
-  }
-  
-  .explanation {
-    padding: 1.2rem;
-  }
-  
-  .return-button {
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
-  }
-  
-  .review-controls {
+
+  .anomaly-console {
     padding: 1.5rem;
   }
-}
 
-@media (max-width: 480px) {
-  .review-header h2 {
-    font-size: 1.6rem;
-  }
-  
-  .review-item h3 {
-    font-size: 1.3rem;
-  }
-  
-  .question {
-    font-size: 0.95rem;
-    padding: 1rem;
-  }
-  
-  .answer .label {
-    font-size: 0.9rem;
-  }
-  
-  .answer .text {
-    font-size: 0.95rem;
-  }
-  
-  .explanation h4 {
-    font-size: 1.1rem;
-  }
-  
-  .explanation p {
-    font-size: 0.95rem;
-  }
-  
-  .no-incorrect {
-    font-size: 1.1rem;
-    padding: 2rem;
-  }
-  
-  .return-button {
-    width: 100%;
-    padding: 0.9rem 1.8rem;
+  .celestial-event {
     font-size: 1rem;
   }
 }

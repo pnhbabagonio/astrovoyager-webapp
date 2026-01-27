@@ -5,8 +5,7 @@ const ScenarioCard = ({ scenario, selectedOptionId, showResult, onOptionSelect }
   return (
     <div className="scenario-card">
       <div className="scenario-image">
-        <img src={scenario.image} alt="Scenario" />
-        <div className="image-overlay">Teleportation Scenario</div>
+        <div className="image-overlay">Navigation Waypoint</div>
       </div>
       
       <div className="scenario-question">
@@ -27,19 +26,19 @@ const ScenarioCard = ({ scenario, selectedOptionId, showResult, onOptionSelect }
             }
           }
 
-          return (
-            <div
-              key={option.id}
-              className={optionClass}
-              onClick={() => onOptionSelect(option.id)}
-            >
-              <span className="option-letter">{option.id.toUpperCase()}</span>
-              <span className="option-text">{option.text}</span>
-              {showResult && option.correct && (
-                <span className="checkmark">✓</span>
-              )}
-            </div>
-          );
+          // return (
+          //   <div
+          //     key={option.id}
+          //     className={optionClass}
+          //     onClick={() => onOptionSelect(option.id)}
+          //   >
+          //     <span className="option-letter">{option.id.toUpperCase()}</span>
+          //     <span className="option-text">{option.text}</span>
+          //     {showResult && option.correct && (
+          //       <span className="checkmark">✓</span>
+          //     )}
+          //   </div>
+          // );
         })}
       </div>
     </div>

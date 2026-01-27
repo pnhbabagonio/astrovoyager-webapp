@@ -1,457 +1,296 @@
-/* ObservationalCheck.css - Stellar Observation Theme */
 .observational-check {
-  max-width: 900px;
-  width: 100%;
-  animation: observationReveal 1s ease;
-}
-
-@keyframes observationReveal {
-  0% {
-    opacity: 0;
-    transform: translateY(30px) scale(0.95);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.check-header {
-  text-align: center;
-  margin-bottom: 2.5rem;
-  padding: 2rem;
-  background: linear-gradient(135deg, 
-    rgba(20, 25, 60, 0.9), 
-    rgba(10, 15, 35, 0.9));
-  border-radius: 20px;
-  border: 2px solid rgba(0, 247, 255, 0.3);
+  max-width: 800px;
+  margin: 0 auto;
+  animation: focusIn 0.8s ease;
   position: relative;
-  overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  z-index: 2;
 }
 
-.check-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, 
-    #00f7ff, 
-    #9d4edd, 
-    #00f7ff);
-  animation: scanner 3s linear infinite;
+.telescope-observation-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: rgba(13, 27, 42, 0.8);
+  border-radius: 20px;
+  border: 2px solid #4361ee;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-.check-header h2 {
+.telescope-observation-header h2 {
   font-size: 2.2rem;
-  color: #00f7ff;
-  margin-bottom: 1rem;
-  text-shadow: 0 0 15px rgba(0, 247, 255, 0.5);
+  background: linear-gradient(45deg, #4cc9f0, #4361ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.5rem;
 }
 
-.check-header h2::before {
-  content: '🔭 ';
-  filter: drop-shadow(0 0 10px rgba(0, 247, 255, 0.7));
-}
-
-.subtitle {
-  color: #a0a0ff;
+.observation-subtitle {
+  color: #b8c2cc;
   font-size: 1.1rem;
   margin-bottom: 1.5rem;
-  line-height: 1.6;
 }
 
-.check-header .progress {
+.observation-progress {
   display: inline-block;
-  padding: 0.8rem 2rem;
-  background: linear-gradient(135deg, 
-    rgba(0, 247, 255, 0.2), 
-    rgba(157, 78, 221, 0.2));
-  border-radius: 25px;
-  color: #00f7ff;
+  padding: 0.5rem 1.5rem;
+  background: rgba(76, 201, 240, 0.2);
+  border-radius: 20px;
+  color: #4cc9f0;
   font-weight: bold;
-  border: 1px solid rgba(0, 247, 255, 0.3);
-  backdrop-filter: blur(5px);
-  font-size: 1.1rem;
-  margin-top: 1rem;
+  border: 1px solid rgba(76, 201, 240, 0.3);
+  font-family: 'Courier New', monospace;
 }
 
-.check-content {
-  background: linear-gradient(135deg, 
-    rgba(20, 25, 60, 0.95), 
-    rgba(10, 15, 35, 0.95));
+/* Observation Chamber */
+.observation-chamber {
+  background: linear-gradient(135deg, rgba(19, 42, 65, 0.9), rgba(30, 60, 90, 0.8));
   border-radius: 20px;
-  padding: 2.5rem;
-  border: 2px solid rgba(0, 247, 255, 0.2);
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border: 2px solid #7209b7;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
 }
 
-.check-content::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, 
-    transparent, 
-    #00f7ff, 
-    #9d4edd, 
-    #00f7ff, 
-    transparent);
-  animation: scanner 4s linear infinite;
-}
-
-/* Observation Question */
-.question {
-  margin-bottom: 2.5rem;
-  padding: 2rem;
-  background: linear-gradient(135deg, 
-    rgba(30, 35, 70, 0.9), 
-    rgba(20, 25, 60, 0.9));
+/* Astronomical Phenomena */
+.astronomical-phenomenon {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(13, 27, 42, 0.9);
   border-radius: 15px;
-  border: 2px solid rgba(0, 247, 255, 0.2);
+  border: 1px solid rgba(76, 201, 240, 0.2);
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(5px);
 }
 
-.question::before {
-  content: 'OBSERVATION POINT';
+.astronomical-phenomenon h3 {
+  margin: 0;
+  color: #ffd700;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.astronomical-phenomenon::before {
+  content: '🔭';
   position: absolute;
   top: 10px;
-  left: 10px;
-  font-size: 0.8rem;
-  color: rgba(0, 247, 255, 0.6);
-  font-weight: bold;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.question h3 {
-  margin: 0;
-  color: #ffffff;
+  right: 10px;
   font-size: 1.5rem;
-  line-height: 1.6;
-  text-align: center;
-  padding: 1rem 0;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  opacity: 0.3;
 }
 
-/* Answer Section - Observation Console */
-.answer-section {
-  margin-bottom: 2.5rem;
-}
-
-.answer-section textarea {
+/* Observation Log */
+.observation-log textarea {
   width: 100%;
-  padding: 1.5rem;
-  border-radius: 15px;
-  border: 2px solid rgba(0, 247, 255, 0.5);
-  background: rgba(10, 15, 35, 0.7);
-  color: #ffffff;
-  font-size: 1.1rem;
-  font-family: 'Courier New', monospace;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 2px solid rgba(76, 201, 240, 0.5);
+  background: rgba(13, 27, 42, 0.9);
+  color: #e0e1dd;
+  font-size: 1rem;
   resize: vertical;
-  min-height: 200px;
+  min-height: 150px;
   margin-bottom: 1.5rem;
+  font-family: 'Courier New', monospace;
   transition: all 0.3s ease;
-  line-height: 1.6;
-  backdrop-filter: blur(5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
-.answer-section textarea:focus {
+.observation-log textarea:focus {
   outline: none;
-  border-color: #9d4edd;
-  box-shadow: 0 0 30px rgba(157, 78, 221, 0.4);
-  background: rgba(10, 15, 35, 0.9);
-  transform: translateY(-3px);
+  border-color: #4cc9f0;
+  box-shadow: 0 0 20px rgba(76, 201, 240, 0.5);
+  background: rgba(13, 27, 42, 0.95);
 }
 
-.answer-section textarea::placeholder {
-  color: rgba(160, 160, 255, 0.6);
-  font-style: italic;
-}
-
-.answer-section textarea:disabled {
+.observation-log textarea:disabled {
   opacity: 0.7;
   cursor: not-allowed;
-  background: rgba(30, 30, 60, 0.7);
+  border-color: #5a6c7d;
 }
 
-/* Controls - Console Buttons */
-.controls {
+/* Analysis Controls */
+.analysis-controls {
   text-align: center;
-  margin: 2.5rem 0;
+  margin: 2rem 0;
 }
 
-.submit-button, .continue-button {
-  background: linear-gradient(45deg, #9d4edd, #00f7ff);
+.record-observation-button, 
+.confirm-analysis-button {
+  background: linear-gradient(45deg, #4361ee, #7209b7);
   color: white;
   border: none;
-  padding: 1.2rem 3rem;
-  border-radius: 30px;
-  font-size: 1.2rem;
+  padding: 1rem 2.5rem;
+  border-radius: 25px;
+  font-size: 1.1rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 0 25px rgba(157, 78, 221, 0.3);
-  letter-spacing: 1px;
 }
 
-.submit-button::before, .continue-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, 
-    transparent, 
-    rgba(255, 255, 255, 0.2), 
-    transparent);
-  transition: left 0.5s;
+.record-observation-button:hover:not(:disabled), 
+.confirm-analysis-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 20px rgba(67, 97, 238, 0.4);
 }
 
-.submit-button:hover::before, .continue-button:hover::before {
-  left: 100%;
-}
-
-.submit-button:hover:not(:disabled), .continue-button:hover {
-  transform: translateY(-5px) scale(1.05);
-  box-shadow: 0 15px 40px rgba(157, 78, 221, 0.4);
-}
-
-.submit-button:disabled {
+.record-observation-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  transform: none;
-  box-shadow: 0 0 15px rgba(157, 78, 221, 0.1);
 }
 
-/* Sample Answers - Stellar Data */
-.sample-answers {
-  margin-top: 2.5rem;
-  padding: 2rem;
-  background: linear-gradient(135deg, 
-    rgba(30, 35, 70, 0.9), 
-    rgba(20, 25, 60, 0.9));
+.record-observation-button::before,
+.confirm-analysis-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: button-glow 2s linear infinite;
+}
+
+/* Spectrograph Analysis */
+.spectrograph-analysis {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: rgba(13, 27, 42, 0.9);
   border-radius: 15px;
-  border-left: 6px solid #ffd700;
-  position: relative;
-  overflow: hidden;
-  animation: dataReveal 0.5s ease;
-  backdrop-filter: blur(5px);
+  border-left: 5px solid #ffd700;
+  animation: slideDown 0.5s ease;
 }
 
-@keyframes dataReveal {
+.spectrograph-analysis h4 {
+  color: #ffd700;
+  margin-top: 0;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.spectrograph-analysis ul {
+  color: #b8c2cc;
+  line-height: 1.6;
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+}
+
+.spectrograph-analysis li {
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.spectrograph-analysis li::before {
+  content: '✦';
+  position: absolute;
+  left: -1.2rem;
+  color: #4cc9f0;
+}
+
+.research-points {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+  padding: 0.5rem;
+  background: rgba(255, 215, 0, 0.1);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+/* Observatory Reference Display */
+.reference-display {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(19, 42, 65, 0.9), rgba(30, 60, 90, 0.8));
+  border-radius: 15px;
+  border: 2px dashed rgba(76, 201, 240, 0.4);
+}
+
+.reference-display h4 {
+  color: #4cc9f0;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.celestial-data {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.data-point {
+  padding: 0.8rem;
+  background: rgba(13, 27, 42, 0.6);
+  border-radius: 10px;
+  border: 1px solid rgba(76, 201, 240, 0.2);
+}
+
+.data-label {
+  display: block;
+  color: #b8c2cc;
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
+}
+
+.data-value {
+  display: block;
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+@keyframes focusIn {
+  from { 
+    opacity: 0; 
+    transform: scale(0.95); 
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+}
+
+@keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateX(-30px);
+    transform: translateY(-20px);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
   }
 }
 
-.sample-answers::before {
-  content: 'STELLAR ANALYSIS DATA';
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  font-size: 0.8rem;
-  color: rgba(255, 215, 0, 0.6);
-  font-weight: bold;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.sample-answers h4 {
-  color: #ffd700;
-  margin-top: 0;
-  font-size: 1.4rem;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-  margin-bottom: 1.5rem;
-  padding-left: 0.5rem;
-}
-
-.sample-answers h4::before {
-  content: '📊 ';
-  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
-}
-
-.sample-answers ul {
-  color: #e0e0ff;
-  line-height: 1.8;
-  padding-left: 2rem;
-  margin: 0;
-}
-
-.sample-answers li {
-  margin-bottom: 1rem;
-  position: relative;
-  padding-left: 1.5rem;
-}
-
-.sample-answers li::before {
-  content: '✦';
-  position: absolute;
-  left: 0;
-  color: #00f7ff;
-  font-size: 1.2rem;
-  line-height: 1;
-}
-
-.points-info {
-  color: #ffd700;
-  font-weight: bold;
-  font-size: 1.2rem;
-  margin-top: 1.5rem;
-  text-align: center;
-  padding: 1rem;
-  background: linear-gradient(135deg, 
-    rgba(255, 215, 0, 0.1), 
-    rgba(255, 152, 0, 0.1));
-  border-radius: 12px;
-  border: 1px solid rgba(255, 215, 0, 0.3);
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-  animation: pulsePoints 2s infinite;
-}
-
-/* Observation Console Effects */
-.check-content::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background: radial-gradient(circle, 
-    rgba(0, 247, 255, 0.05) 0%, 
-    transparent 70%);
-  filter: blur(15px);
-  z-index: -1;
-  animation: observationPulse 4s infinite alternate;
-}
-
-@keyframes observationPulse {
-  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
-  100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.5; }
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-  .check-header h2 {
-    font-size: 2rem;
-  }
-  
-  .question h3 {
-    font-size: 1.4rem;
-  }
-  
-  .answer-section textarea {
-    min-height: 180px;
-    font-size: 1.05rem;
-  }
+@keyframes button-glow {
+  0% { transform: rotate(0deg) translate(-50%, -50%); }
+  100% { transform: rotate(360deg) translate(-50%, -50%); }
 }
 
 @media (max-width: 768px) {
-  .check-header {
-    padding: 1.5rem;
-  }
-  
-  .check-content {
-    padding: 1.5rem;
-  }
-  
-  .check-header h2 {
+  .telescope-observation-header h2 {
     font-size: 1.8rem;
   }
-  
-  .question {
-    padding: 1.5rem;
-  }
-  
-  .question h3 {
-    font-size: 1.3rem;
-    line-height: 1.5;
-  }
-  
-  .answer-section textarea {
-    padding: 1.2rem;
-    font-size: 1rem;
-    min-height: 160px;
-  }
-  
-  .sample-answers {
-    padding: 1.5rem;
-  }
-  
-  .sample-answers h4 {
-    font-size: 1.2rem;
-  }
-  
-  .sample-answers li {
-    font-size: 0.95rem;
-    line-height: 1.6;
-  }
-  
-  .submit-button, .continue-button {
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
-  }
-}
 
-@media (max-width: 480px) {
-  .check-header h2 {
-    font-size: 1.6rem;
+  .observation-chamber {
+    padding: 1.5rem;
   }
-  
-  .question h3 {
+
+  .astronomical-phenomenon h3 {
     font-size: 1.2rem;
   }
-  
-  .answer-section textarea {
-    padding: 1rem;
-    font-size: 0.95rem;
-    min-height: 140px;
-  }
-  
-  .sample-answers {
-    padding: 1.2rem;
-  }
-  
-  .sample-answers h4 {
-    font-size: 1.1rem;
-  }
-  
-  .sample-answers ul {
-    padding-left: 1.5rem;
-  }
-  
-  .sample-answers li {
-    font-size: 0.9rem;
-    padding-left: 1.2rem;
-    margin-bottom: 0.8rem;
-  }
-  
-  .points-info {
-    font-size: 1rem;
-    padding: 0.8rem;
-  }
-  
-  .subtitle {
-    font-size: 1rem;
+
+  .celestial-data {
+    grid-template-columns: 1fr;
   }
 }

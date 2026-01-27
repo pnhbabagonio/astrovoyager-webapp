@@ -1,204 +1,282 @@
-.game-progress {
+.observatory-status {
   width: 100%;
   max-width: 1000px;
   margin: 0 auto 2rem;
-  padding: 0 20px;
-}
-
-.progress-steps-container {
-  position: relative;
-  margin-bottom: 3rem;
-  padding-top: 10px;
-}
-
-/* The horizontal line track */
-.progress-line-bg {
-  position: absolute;
-  top: 40px; /* Center of the 60px icon */
-  left: 5%;
-  right: 5%;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.2);
-  z-index: 0;
-}
-
-/* The colored progress line */
-.progress-line-fill {
-  position: absolute;
-  top: 40px;
-  left: 5%;
-  height: 2px;
-  background: #00ff00;
-  transition: width 0.4s ease;
-  z-index: 0;
-}
-
-.progress-steps {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  z-index: 1;
-}
-
-.step {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  flex: 1;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 2;
 }
 
-.step-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.8rem;
-  background: #1a2a44; /* Solid background prevents line showing through */
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  margin-bottom: 0.75rem;
-  transition: all 0.3s ease;
+.status-panel {
+  background: linear-gradient(135deg, rgba(19, 42, 65, 0.9), rgba(30, 60, 90, 0.8));
+  border-radius: 20px;
+  padding: 1.5rem;
+  border: 2px solid #4361ee;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
 }
 
-.step.active .step-icon {
-  border-color: #00d4ff;
-  background: rgba(0, 212, 255, 0.2);
-  transform: scale(1.1);
-  box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
-}
-
-.step.completed .step-icon {
-  border-color: #00ff00;
-  background: rgba(0, 255, 0, 0.2);
-}
-
-.step-info {
+.panel-title {
+  color: #4cc9f0;
+  font-size: 1.3rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
   text-align: center;
-  min-height: 50px;
-}
-
-.step-number {
-  font-size: 0.85rem;
-  color: #b0e0e6;
-  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(76, 201, 240, 0.3);
+  font-family: 'Orbitron', sans-serif;
   letter-spacing: 1px;
 }
 
-.step-name {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #fff;
-  margin-top: 4px;
+/* Mission Phases */
+.mission-phases {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
 }
 
-/* Progress Info Box */
-.progress-info {
+.mission-phase {
   display: flex;
-  justify-content: space-around;
   align-items: center;
-  padding: 2.5rem 1rem; /* Added even more vertical padding */
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 12px;
-  border: 1px solid rgba(0, 212, 255, 0.3);
-  backdrop-filter: blur(10px);
-  margin-top: 2rem;
-  min-height: 120px; /* Forces the box to be tall enough */
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(13, 27, 42, 0.6);
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
 }
 
-.info-item {
+.mission-phase.active {
+  border-color: #4cc9f0;
+  background: rgba(76, 201, 240, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(76, 201, 240, 0.3);
+}
+
+.mission-phase.completed {
+  border-color: #2e7d32;
+  background: rgba(46, 125, 50, 0.15);
+}
+
+.mission-phase::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mission-phase:hover::before {
+  opacity: 1;
+}
+
+.phase-indicator {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(13, 27, 42, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(76, 201, 240, 0.3);
+}
+
+.mission-phase.active .phase-indicator {
+  border-color: #4cc9f0;
+  background: rgba(76, 201, 240, 0.2);
+  box-shadow: 0 0 15px rgba(76, 201, 240, 0.4);
+}
+
+.mission-phase.completed .phase-indicator {
+  border-color: #2e7d32;
+  background: rgba(46, 125, 50, 0.2);
+}
+
+.phase-icon {
+  font-size: 1.8rem;
+  display: block;
+}
+
+.phase-number {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  background: #7209b7;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.phase-info {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  min-width: 0;
   flex: 1;
-  /* Reset any potential inherited height issues */
-  height: auto; 
 }
 
-.label {
-  display: block; /* Forces it to act as a block */
-  font-size: 0.8rem;
-  color: #b0e0e6;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 12px; /* Physical margin to push the value down */
-  line-height: 1;
+.phase-label {
+  font-size: 0.85rem;
+  color: #b8c2cc;
+  margin-bottom: 0.3rem;
+  font-family: 'Courier New', monospace;
 }
 
-.value {
-  display: block; /* Forces it to act as a block */
-  font-size: 1.5rem; /* Larger font for better visibility */
+.phase-name {
+  font-size: 1.1rem;
   font-weight: bold;
-  color: #00d4ff;
-  text-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
-  text-align: center;
-  line-height: 1.2;
-  margin: 0; /* Reset margins */
-  padding-top: 5px; /* Extra internal breathing room */
+  color: #e0e1dd;
+  word-break: break-word;
 }
 
-/* Ensure the progress steps don't shrink */
-.progress-steps {
+/* Observatory Metrics */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.metric-card {
   display: flex;
-  justify-content: space-between;
-  width: 100%;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(13, 27, 42, 0.6);
+  border-radius: 15px;
+  border: 2px solid rgba(76, 201, 240, 0.2);
+  transition: transform 0.3s ease;
   position: relative;
-  z-index: 1;
+  overflow: hidden;
 }
 
-.step.active .step-name {
-  color: #00d4ff;
+.metric-card:hover {
+  transform: translateY(-2px);
+  border-color: #4cc9f0;
+  box-shadow: 0 5px 15px rgba(76, 201, 240, 0.2);
 }
 
-.step.completed .step-name {
-  color: #00ff00;
+.metric-icon {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(67, 97, 238, 0.2), rgba(76, 201, 240, 0.2));
+  border-radius: 12px;
+  border: 1px solid rgba(76, 201, 240, 0.3);
+  font-size: 1.8rem;
 }
 
-.step-connector {
+.metric-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.metric-label {
+  font-size: 0.9rem;
+  color: #b8c2cc;
+  margin-bottom: 0.3rem;
+  white-space: nowrap;
+}
+
+.metric-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ffd700;
+  word-break: break-word;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* Connection Lines */
+.mission-phase::after {
+  content: '→';
   position: absolute;
-  top: 30px; /* vertical center of 60px icon */
-  left: calc(50% + 30px); /* center + radius */
-  width: calc(100% - 60px);
-  height: 2px;
-  background: rgba(255, 255, 255, 0.3);
-  z-index: 0;
+  right: -20px;
+  color: rgba(76, 201, 240, 0.5);
+  font-size: 1.5rem;
 }
 
-.step.completed .step-connector {
-  background: #00ff00;
+.mission-phase:last-child::after {
+  display: none;
 }
 
-
+/* Responsive Design */
 @media (max-width: 768px) {
-  .progress-line-bg, .progress-line-fill {
-    display: none;
+  .observatory-status {
+    padding: 0 1rem;
   }
-  .progress-steps {
-    flex-wrap: wrap;
-    gap: 20px;
+  
+  .status-panel {
+    padding: 1rem;
   }
-
-  .step {
-    flex: 0 0 calc(50% - 1.5rem);
-    margin-bottom: 1.5rem;
+  
+  .mission-phases {
+    grid-template-columns: 1fr;
   }
-
-  .step {
-      flex: 0 0 45%;
+  
+  .metrics-grid {
+    grid-template-columns: 1fr;
   }
-
-  .progress-info {
-      flex-direction: column;
-      gap: 20px;
+  
+  .mission-phase {
+    padding: 0.8rem;
   }
-
-  .info-item {
-    width: 100%;
+  
+  .phase-indicator {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .phase-icon {
+    font-size: 1.5rem;
+  }
+  
+  .mission-phase::after {
+    content: '↓';
+    right: 50%;
+    transform: translateX(50%);
+    bottom: -25px;
+    top: auto;
   }
 }
 
 @media (max-width: 480px) {
-  .step {
-    flex: 0 0 100%;
+  .panel-title {
+    font-size: 1.1rem;
+  }
+  
+  .mission-phase {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  
+  .metric-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.8rem;
+  }
+  
+  .metric-content {
+    align-items: center;
   }
 }
