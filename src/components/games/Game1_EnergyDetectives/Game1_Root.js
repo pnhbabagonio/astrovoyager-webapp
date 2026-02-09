@@ -136,7 +136,7 @@ const Game1_Root = ({ onComplete }) => {
     <div className="game1-root solar-voyager-theme">
       <div className="game1-header space-panel">
         <button onClick={handleBackToMap} className="back-button space-button">
-          <span className="button-text">Mission Control</span>
+          <span className="button-text">Back to Mission Map</span>
         </button>
         <div className="header-center">
           <div className="mission-title">

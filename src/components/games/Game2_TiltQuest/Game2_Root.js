@@ -180,7 +180,7 @@ const Game2_Root = ({ onComplete }) => {
     <div className="astro-game-root">
       <div className="astro-header">
         <button onClick={handleBackToMap} className="astro-back-button">
-          ← Back to Mission Map
+          Back to Mission Map
         </button>
         <div className="astro-title">
           <h1>🌌 ASTROVOYAGER – TILTQUEST</h1>

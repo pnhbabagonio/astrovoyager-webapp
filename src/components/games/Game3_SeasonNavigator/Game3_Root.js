@@ -281,8 +281,7 @@ const Game3_Root = ({ onComplete }) => {
           className="back-button"
           aria-label="Return to mission map"
         >
-          <span className="back-icon">←</span>
-          <span className="back-text">Mission Map</span>
+          <span className="back-text">Back to Mission Map</span>
         </button>
 
         
