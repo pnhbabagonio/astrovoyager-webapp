@@ -3,7 +3,56 @@ import './EarthVisualization.css';
 
 const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProceed }) => {
   const [daylightHours, setDaylightHours] = useState(12);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const earthRef = useRef(null);
+  
+  // Set default image sizes
+  const imageSizes = {
+    earth: 300,  // X-Large Earth size (previously 200)
+    sun: 120     // X-Large Sun size (previously 80)
+  };
+  
+  // Image paths
+  const earthImages = {
+    tiltOff: `${process.env.PUBLIC_URL}/assets/images/game2/illustrations/tilt-off.png`,
+    tiltOn: `${process.env.PUBLIC_URL}/assets/images/game2/illustrations/tilt-on.png`
+  };
+  
+  const sunImage = `${process.env.PUBLIC_URL}/assets/images/game2/illustrations/sun.png`;
+  
+  // Preload images for better performance
+  useEffect(() => {
+    const preloadImages = () => {
+      const imageUrls = [
+        earthImages.tiltOff,
+        earthImages.tiltOn,
+        sunImage
+      ];
+      
+      let loadedCount = 0;
+      const totalImages = imageUrls.length;
+      
+      imageUrls.forEach(url => {
+        const img = new Image();
+        img.src = url;
+        img.onload = () => {
+          loadedCount++;
+          if (loadedCount === totalImages) {
+            setImagesLoaded(true);
+          }
+        };
+        img.onerror = () => {
+          console.error(`Failed to load image: ${url}`);
+          loadedCount++;
+          if (loadedCount === totalImages) {
+            setImagesLoaded(true);
+          }
+        };
+      });
+    };
+    
+    preloadImages();
+  }, [earthImages.tiltOff, earthImages.tiltOn, sunImage]);
   
   // Calculate daylight based on earth state
   useEffect(() => {
@@ -35,13 +84,6 @@ const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProcee
     
     setDaylightHours(calculateDaylight());
   }, [earthState, location.id]);
-  
-  const handleTiltToggle = () => {
-    onUpdateEarthState({
-      ...earthState,
-      tilt: !earthState.tilt
-    });
-  };
   
   const handleSliderChange = (e) => {
     const value = parseInt(e.target.value);
@@ -78,8 +120,16 @@ const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProcee
       <div className="simulation-area">
         {/* Sun */}
         <div className="sun">
-          <div className="sun-core"></div>
-          <div className="sun-rays"></div>
+          <img 
+            src={sunImage} 
+            alt="Sun" 
+            className="sun-image"
+            style={{ 
+              width: `${imageSizes.sun}px`,
+              height: `${imageSizes.sun}px`,
+              opacity: imagesLoaded ? 1 : 0 
+            }}
+          />
           <span className="sun-label">Sun</span>
         </div>
         
@@ -88,17 +138,23 @@ const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProcee
           <div 
             ref={earthRef}
             className={`earth ${earthState.tilt ? 'tilted' : ''}`}
-            style={{ transform: earthState.tilt ? 'rotate(23.5deg)' : 'rotate(0deg)' }}
+            style={{ 
+              width: `${imageSizes.earth}px`,
+              height: `${imageSizes.earth}px`,
+              transform: earthState.tilt ? 'rotate(23.5deg)' : 'rotate(0deg)' 
+            }}
           >
-            {/* Earth Image with labels would go here */}
             <div className="earth-image">
-              {/* This would be your Earth image */}
-              <div className="earth-labels">
-                <div className="label axis">Earth's Axis</div>
-                <div className="label equator">Equator</div>
-                <div className="label tropic-cancer">Tropic of Cancer</div>
-                <div className="label tropic-capricorn">Tropic of Capricorn</div>
-              </div>
+              <img 
+                src={earthState.tilt ? earthImages.tiltOn : earthImages.tiltOff}
+                alt="Earth"
+                className="earth-real-image"
+                style={{ 
+                  opacity: imagesLoaded ? 1 : 0,
+                  transform: earthState.tilt ? 'rotate(-23.5deg)' : 'rotate(0deg)'
+                }}
+              />
+              
               
               {/* Location Dot */}
               <div 
@@ -128,6 +184,14 @@ const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProcee
             ></div>
           ))}
         </div>
+        
+        {/* Loading overlay */}
+        {!imagesLoaded && (
+          <div className="loading-overlay">
+            <div className="loading-spinner"></div>
+            <p>Loading images...</p>
+          </div>
+        )}
       </div>
       
       {/* Controls */}
@@ -206,11 +270,15 @@ const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProcee
       
       {/* Navigation */}
       <div className="visualization-footer">
-        <button className="proceed-button" onClick={onProceed}>
-          Continue to Observation Check →
+        <button 
+          className="proceed-button" 
+          onClick={onProceed}
+          disabled={!imagesLoaded}
+        >
+          {imagesLoaded ? "Continue to Observation Check →" : "Loading images..."}
         </button>
         <p className="observation-tip">
-          👁️ Observe how the daylight bar changes as you adjust tilt and position!
+          👁️ Earth and Sun are displayed at optimal size (Earth: 300px, Sun: 120px) for better visibility!
         </p>
       </div>
     </div>

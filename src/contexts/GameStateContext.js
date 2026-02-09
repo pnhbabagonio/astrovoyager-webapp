@@ -3,8 +3,16 @@ import { IndexedDBService } from '../services/storage';
 
 const GameStateContext = createContext();
 
+const DEV_START_VIEW = 'game2';
+// examples:
+// 'mission-map'
+// 'game1'
+// 'game2'
+// 'game3'
+
+
 const initialState = {
-  currentView: 'loading',
+  currentView: DEV_START_VIEW || 'loading',
   playerData: null,
   gameProgress: {
     game1: { completed: false, score: 0, resiliencePoints: 0 },
