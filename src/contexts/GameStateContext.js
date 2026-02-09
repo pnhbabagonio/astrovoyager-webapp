@@ -1,29 +1,40 @@
+// GameStateContext.js
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { IndexedDBService } from '../services/storage';
 
 const GameStateContext = createContext();
 
-const DEV_START_VIEW = 'game2';
-// examples:
-// 'mission-map'
-// 'game1'
-// 'game2'
-// 'game3'
-
-
 const initialState = {
-  currentView: DEV_START_VIEW || 'loading',
+  currentView: 'loading',
   playerData: null,
   gameProgress: {
-    game1: { completed: false, score: 0, resiliencePoints: 0 },
-    game2: { completed: false, score: 0, preparednessPoints: 0 },
-    game3: { completed: false, score: 0, accuracyPoints: 0 }
+    game1: { 
+      completed: false, 
+      score: 0,
+      maxScore: 0,
+      completionDate: null,
+      character: null
+    },
+    game2: { 
+      completed: false, 
+      score: 0,
+      maxScore: 0,
+      completionDate: null,
+      locationsCompleted: 0
+    },
+    game3: { 
+      completed: false, 
+      score: 0,
+      maxScore: 0,
+      completionDate: null,
+      completedRegions: []
+    }
   },
   audioEnabled: true,
   isLoading: false,
   error: null,
   isOnline: navigator.onLine,
-  isDataLoaded: false // New flag to track data loading
+  isDataLoaded: false
 };
 
 function gameReducer(state, action) {
@@ -80,21 +91,15 @@ function gameReducer(state, action) {
 export function GameStateProvider({ children }) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
-  // Load saved data on app start - NON-BLOCKING
   useEffect(() => {
     const loadSavedData = async () => {
       try {
-        // Don't await init here - it's already handled in App.js
-        // Just try to load the data quickly
-        
-        // Try to load the last active player
         const players = await IndexedDBService.getAllPlayers();
         const lastPlayer = players[players.length - 1];
         
         if (lastPlayer) {
           dispatch({ type: 'SET_PLAYER_DATA', payload: lastPlayer });
           
-          // Load progress for this player - don't wait for this to complete
           IndexedDBService.getGameProgress(lastPlayer.id)
             .then(progress => {
               progress.forEach(item => {
@@ -106,23 +111,18 @@ export function GameStateProvider({ children }) {
             })
             .catch(error => {
               console.log('Error loading progress:', error);
-              // Continue anyway - progress will be empty
             });
         }
       } catch (error) {
-        console.log('No saved data found or error loading data:', error);
-        // Continue anyway - this is not critical
+        console.log('No saved data found:', error);
       } finally {
-        // Mark data as loaded regardless of success/failure
         dispatch({ type: 'SET_DATA_LOADED' });
       }
     };
 
-    // Start loading data but don't block the app
     loadSavedData();
   }, []);
 
-  // Online/offline detection
   useEffect(() => {
     const handleOnline = () => dispatch({ type: 'SET_ONLINE_STATUS', payload: true });
     const handleOffline = () => dispatch({ type: 'SET_ONLINE_STATUS', payload: false });

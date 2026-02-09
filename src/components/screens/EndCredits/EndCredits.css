@@ -1,0 +1,438 @@
+/* EndCredits.css */
+.end-credits-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  overflow: hidden;
+  font-family: 'Arial', sans-serif;
+  perspective: 500px;
+}
+
+.space-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at center, 
+    #000000 0%,
+    #0a0a2a 40%,
+    #000033 70%,
+    #000022 100%);
+  z-index: 1;
+}
+
+.starfield-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+    radial-gradient(2px 2px at 40px 70px, #fff, transparent),
+    radial-gradient(1px 1px at 90px 40px, #ddd, transparent),
+    radial-gradient(1px 1px at 130px 80px, #fff, transparent),
+    radial-gradient(2px 2px at 160px 120px, #eee, transparent);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: starfield 20s linear infinite;
+  z-index: 2;
+  opacity: 0.3;
+}
+
+@keyframes starfield {
+  from { background-position: 0 0; }
+  to { background-position: 0 200px; }
+}
+
+.credits-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 3;
+  scroll-behavior: smooth;
+}
+
+.credits-content {
+  width: 100%;
+  min-height: 200vh;
+  padding-top: 100vh;
+  padding-bottom: 100vh;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transform-style: preserve-3d;
+}
+
+.opening-title {
+  margin: 50vh 0 40vh;
+  text-align: center;
+  animation: titleEntrance 2s ease-out;
+}
+
+@keyframes titleEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(100px) rotateX(20deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+}
+
+.mission-title {
+  font-size: 4rem;
+  font-weight: 900;
+  letter-spacing: 0.3em;
+  margin-bottom: 2rem;
+  color: #fff;
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(79, 195, 247, 0.8),
+               0 0 40px rgba(79, 195, 247, 0.4);
+}
+
+.title-subtext {
+  font-size: 1.5rem;
+  letter-spacing: 0.2em;
+  color: #bbdefb;
+  text-transform: uppercase;
+}
+
+.credits-section {
+  width: 80%;
+  max-width: 800px;
+  margin: 15vh 0;
+  padding: 2rem;
+  background: rgba(0, 20, 40, 0.7);
+  border: 1px solid rgba(100, 200, 255, 0.2);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  transform: translateZ(20px);
+}
+
+.section-title {
+  font-size: 1.8rem;
+  color: #4fc3f7;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(79, 195, 247, 0.3);
+}
+
+.score-row, .team-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 1.2rem;
+}
+
+.game-name, .role {
+  text-align: left;
+  flex: 2;
+  color: #bbdefb;
+}
+
+.game-score, .name {
+  flex: 1;
+  text-align: center;
+  font-weight: bold;
+  color: #fff;
+}
+
+.game-status {
+  flex: 1;
+  text-align: right;
+  color: #64dd17;
+  font-weight: bold;
+}
+
+.total-score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
+  margin-top: 1rem;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+  font-size: 1.5rem;
+}
+
+.total-label {
+  color: #ffd740;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.total-value {
+  color: #ffd740;
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.quote-section {
+  text-align: center;
+}
+
+.quote {
+  font-size: 2rem;
+  font-style: italic;
+  line-height: 1.4;
+  color: #fff;
+  margin-bottom: 1rem;
+  padding: 0 1rem;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.quote-author {
+  font-size: 1.3rem;
+  color: #4fc3f7;
+  letter-spacing: 0.1em;
+}
+
+.thanks-message, .final-text {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #e3f2fd;
+  margin: 1rem 0;
+}
+
+.role-group {
+  margin: 2rem 0;
+}
+
+.group-title {
+  font-size: 1.3rem;
+  color: #82b1ff;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.role-row {
+  font-size: 1.1rem;
+  color: #bbdefb;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.final-quote {
+  font-size: 1.3rem;
+  font-style: italic;
+  color: #b388ff;
+  margin-top: 2rem;
+  padding: 1rem;
+  border-left: 3px solid #b388ff;
+  background: rgba(179, 136, 255, 0.1);
+}
+
+.end-card {
+  margin: 20vh 0 40vh;
+  padding: 3rem;
+  background: linear-gradient(135deg, 
+    rgba(0, 30, 60, 0.9) 0%,
+    rgba(0, 50, 100, 0.9) 100%);
+  border: 2px solid rgba(79, 195, 247, 0.5);
+  border-radius: 20px;
+  transform: translateZ(50px);
+  animation: endCardGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes endCardGlow {
+  from {
+    box-shadow: 0 0 30px rgba(79, 195, 247, 0.3),
+                inset 0 0 30px rgba(79, 195, 247, 0.1);
+  }
+  to {
+    box-shadow: 0 0 50px rgba(79, 195, 247, 0.5),
+                inset 0 0 50px rgba(79, 195, 247, 0.2);
+  }
+}
+
+.thank-you {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+.game-title {
+  font-size: 2rem;
+  color: #4fc3f7;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 2rem;
+}
+
+.copyright {
+  font-size: 1rem;
+  color: #90a4ae;
+  margin-bottom: 3rem;
+}
+
+.return-to-launch {
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: bold;
+  box-shadow: 0 5px 20px rgba(118, 74, 162, 0.4);
+}
+
+.return-to-launch:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(118, 74, 162, 0.6);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.scroll-controls {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.scroll-control-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(0, 20, 40, 0.8);
+  border: 2px solid rgba(79, 195, 247, 0.5);
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.scroll-control-btn:hover {
+  background: rgba(79, 195, 247, 0.2);
+  transform: scale(1.1);
+}
+
+.auto-scroll-indicator {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 20, 40, 0.8);
+  padding: 10px 20px;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(79, 195, 247, 0.3);
+  animation: pulse 2s infinite;
+  z-index: 1000;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(79, 195, 247, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(79, 195, 247, 0.6);
+  }
+}
+
+.indicator-text {
+  color: #4fc3f7;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.indicator-subtext {
+  color: #90a4ae;
+  font-size: 0.8rem;
+  margin-top: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .mission-title {
+    font-size: 2.5rem;
+    letter-spacing: 0.2em;
+  }
+  
+  .title-subtext {
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+  }
+  
+  .credits-section {
+    width: 95%;
+    padding: 1rem;
+  }
+  
+  .score-row, .team-row {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  
+  .game-name, .role,
+  .game-score, .name,
+  .game-status {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .quote {
+    font-size: 1.5rem;
+  }
+  
+  .thank-you {
+    font-size: 2rem;
+    letter-spacing: 0.2em;
+  }
+  
+  .scroll-controls {
+    bottom: 10px;
+    right: 10px;
+  }
+  
+  .scroll-control-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+}
+
+/* Fade effects for scrolling */
+.credits-section {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.credits-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.credits-container::-webkit-scrollbar-track {
+  background: rgba(0, 20, 40, 0.3);
+}
+
+.credits-container::-webkit-scrollbar-thumb {
+  background: rgba(79, 195, 247, 0.5);
+  border-radius: 4px;
+}
+
+.credits-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(79, 195, 247, 0.8);
+}

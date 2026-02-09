@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { GameStateProvider, useGameState } from './contexts/GameStateContext';
 import { AudioProvider, useAudio } from './contexts/AudioContext';
 import { PlayerProvider, usePlayer } from './contexts/PlayerContext';
@@ -27,24 +27,85 @@ function AppContent() {
   const [showJourneyLoading, setShowJourneyLoading] = useState(false);
   const [playerData, setPlayerData] = useState(null);
 
-  // Wait for GameStateProvider to be fully initialized, but don't block transitions
+  // DEVELOPMENT SHORTCUTS: Ctrl+Shift+E to jump to end credits
   useEffect(() => {
-    if (gameState.currentView !== 'loading' && gameState.isInitialized) {
+    const handleKeyDown = (event) => {
+      // Ctrl+Shift+E to jump to end credits (development only)
+      if (event.ctrlKey && event.shiftKey && event.key === 'E') {
+        event.preventDefault();
+        console.log('🎮 DEV: Jumping to end credits');
+        
+        // Set all games as completed with high scores
+        const dummyScores = {
+          game1: { completed: true, score: 950, resiliencePoints: 500 },
+          game2: { completed: true, score: 900, preparednessPoints: 450 },
+          game3: { completed: true, score: 920, accuracyPoints: 480 }
+        };
+
+        // Update progress for all games
+        Object.keys(dummyScores).forEach(game => {
+          gameDispatch({
+            type: 'UPDATE_PROGRESS',
+            payload: { game, progress: dummyScores[game] }
+          });
+          
+          playerActions.updatePlayerProgress(game, dummyScores[game]);
+        });
+
+        // Go to end credits
+        gameDispatch({ type: 'SET_VIEW', payload: 'end-credits' });
+        audioActions.playSoundEffect('success');
+        
+        // Show dev notification
+        alert('DEV: Jumped to end credits!');
+      }
+      
+      // Ctrl+Shift+M to go back to mission map
+      if (event.ctrlKey && event.shiftKey && event.key === 'M') {
+        event.preventDefault();
+        console.log('🎮 DEV: Going to mission map');
+        gameDispatch({ type: 'SET_VIEW', payload: 'mission-map' });
+      }
+      
+      // Ctrl+Shift+R to reset game
+      if (event.ctrlKey && event.shiftKey && event.key === 'R') {
+        event.preventDefault();
+        console.log('🎮 DEV: Resetting game');
+        gameDispatch({ type: 'RESET_GAME' });
+        gameDispatch({ type: 'SET_VIEW', payload: 'launch' });
+      }
+      
+      // Ctrl+Shift+L to go to launch screen
+      if (event.ctrlKey && event.shiftKey && event.key === 'L') {
+        event.preventDefault();
+        console.log('🎮 DEV: Going to launch screen');
+        gameDispatch({ type: 'SET_VIEW', payload: 'launch' });
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [gameDispatch, playerActions, audioActions]);
+
+  // Wait for GameStateProvider to be fully initialized
+  useEffect(() => {
+    if (gameState.currentView !== 'loading' && gameState.isDataLoaded) {
       setIsAppReady(true);
     }
-  }, [gameState.currentView, gameState.isInitialized]);
+  }, [gameState.currentView, gameState.isDataLoaded]);
 
-  // Simplified background music management
+  // Background music management
   useEffect(() => {
     if (!gameState.audioEnabled) return;
 
-    // Stop music when video is showing or during journey loading
     if (showLaunchVideo || showJourneyLoading) {
       audioActions.stopBackgroundMusic();
       return;
     }
 
-    // Play appropriate music based on current view
     switch (gameState.currentView) {
       case 'launch':
         audioActions.playBackgroundMusic('space');
@@ -58,7 +119,8 @@ function AppContent() {
         audioActions.playBackgroundMusic('adventure');
         break;
       case 'end-credits':
-        audioActions.playBackgroundMusic('victory');
+        // Don't play background music here - EndCredits component handles its own music
+        audioActions.stopBackgroundMusic();
         break;
       default:
         audioActions.stopBackgroundMusic();
@@ -74,7 +136,6 @@ function AppContent() {
     audioActions.playSoundEffect('rocketLaunch');
     
     try {
-      // Create player data
       const playerData = {
         name: playerName,
         encodedName: `Astronaut ${playerName}`,
@@ -83,14 +144,11 @@ function AppContent() {
         lastPlayed: new Date().toISOString()
       };
 
-      // Save player using PlayerContext (DB is initialized in GameStateContext)
       await playerActions.createPlayer(playerData);
       
-      // Store player data and show journey loading
       setPlayerData(playerData);
       setShowJourneyLoading(true);
       
-      // After 5 seconds, show the video
       setTimeout(() => {
         setShowJourneyLoading(false);
         setShowLaunchVideo(true);
@@ -108,47 +166,76 @@ function AppContent() {
   };
 
   const handleVideoComplete = () => {
-    // After video completes, go to mission map
     setShowLaunchVideo(false);
     gameDispatch({ type: 'SET_VIEW', payload: 'mission-map' });
     audioActions.playSoundEffect('gameStart');
     audioActions.playVoiceover('welcome');
   };
 
-  const handleGameComplete = (gameName, scoreData) => {
-    // Update progress in both contexts
+  // FIXED: Use useCallback to memoize the function
+  const handleGameComplete = useCallback((gameName, scoreData) => {
+    // First, update the progress in the state
     gameDispatch({
       type: 'UPDATE_PROGRESS',
       payload: { game: gameName, progress: scoreData }
     });
 
+    // Save to player progress
     playerActions.updatePlayerProgress(gameName, scoreData);
 
-    // Check if all games are completed
-    const allGamesCompleted = Object.values(gameState.gameProgress).every(
-      game => game.completed
+    // IMPORTANT: We need to check the NEW state after update
+    // Since state updates are async, we'll simulate what the new state would be
+    const updatedProgress = {
+      ...gameState.gameProgress,
+      [gameName]: {
+        ...gameState.gameProgress[gameName],
+        ...scoreData
+      }
+    };
+
+    // Check if all games are completed with the updated progress
+    const allGamesCompleted = Object.values(updatedProgress).every(
+      game => game.completed === true
     );
 
+    console.log('Game completed:', gameName);
+    console.log('All games completed check:', allGamesCompleted);
+    console.log('Current progress:', updatedProgress);
+
     if (allGamesCompleted) {
+      console.log('All games completed! Showing end credits.');
       gameDispatch({ type: 'SET_VIEW', payload: 'end-credits' });
       audioActions.playSoundEffect('success');
     } else {
+      console.log('Not all games completed. Returning to mission map.');
       gameDispatch({ type: 'SET_VIEW', payload: 'mission-map' });
     }
-  };
+  }, [gameDispatch, playerActions, gameState.gameProgress, audioActions]);
+
+  // Alternative approach: Use useEffect to watch for completion
+  useEffect(() => {
+    // Check if all games are completed whenever gameProgress changes
+    const allGamesCompleted = Object.values(gameState.gameProgress).every(
+      game => game.completed === true
+    );
+
+    // Only trigger if we're not already on end-credits and all games are completed
+    if (allGamesCompleted && gameState.currentView !== 'end-credits') {
+      console.log('All games completed via useEffect!');
+      gameDispatch({ type: 'SET_VIEW', payload: 'end-credits' });
+      audioActions.playSoundEffect('success');
+    }
+  }, [gameState.gameProgress, gameState.currentView, gameDispatch, audioActions]);
 
   const renderCurrentView = () => {
-    // Show Journey Loading after clicking BEGIN JOURNEY
     if (showJourneyLoading) {
       return <LoadingSpinner message="Launching rocket" />;
     }
 
-    // Show LaunchVideo component when triggered
     if (showLaunchVideo) {
       return <LaunchVideo onSkip={handleVideoComplete} />;
     }
 
-    // Show RocketLoader during initial loading state
     if (gameState.currentView === 'loading') {
       return <RocketLoader onComplete={handleLoadingComplete} duration={2000} />;
     }
@@ -179,15 +266,30 @@ function AppContent() {
 
   return (
     <div className="astrovoyager-app">
-      {/* Show AudioControls as soon as we're past the loading screen and not in video/journey loading */}
+      {/* Development shortcut hint - visible in development only */}
+      {/* {process.env.NODE_ENV === 'development' && (
+        <div className="dev-hint" style={{
+          position: 'fixed',
+          bottom: '10px',
+          right: '10px',
+          backgroundColor: 'rgba(0,0,0,0.7)',
+          color: '#0f0',
+          padding: '5px 10px',
+          borderRadius: '5px',
+          fontSize: '12px',
+          zIndex: 9999,
+          fontFamily: 'monospace'
+        }}>
+          Dev: Ctrl+Shift+E for End Credits
+        </div>
+      )} */}
+      
       {gameState.currentView !== 'loading' && !showLaunchVideo && !showJourneyLoading && <AudioControls />}
       
-      {/* Loading Overlay for general app loading */}
       {gameState.isLoading && (
         <LoadingSpinner message="Preparing mission..." />
       )}
       
-      {/* Error Banner */}
       {gameState.error && (
         <div className="error-banner">
           <div className="error-content">
@@ -203,7 +305,6 @@ function AppContent() {
         </div>
       )}
       
-      {/* Main Content */}
       <div className="app-content">
         {renderCurrentView()}
       </div>
