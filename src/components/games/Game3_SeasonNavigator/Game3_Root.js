@@ -157,38 +157,33 @@ const Game3_Root = ({ onComplete }) => {
   };
 
   // Handle observational check completion
-  const handleObservationalComplete = (answers) => {
-    const points = answers.reduce((sum, answer) => sum + answer.points, 0);
-    const regionId = gameState.selectedRegion.id;
-    
-    const fillBlankScore = gameState.fillBlankAnswers.reduce((sum, a) => sum + (a.isCorrect ? a.points : 0), 0);
-    const quizScore = gameState.quizAnswers.reduce((sum, a) => sum + (a.isCorrect ? a.points : 0), 0);
-    const regionTotalScore = fillBlankScore + quizScore + points;
-    
-    const newCompletedRegions = [...new Set([...gameState.completedRegions, regionId])];
-    const allRegionsCompleted = newCompletedRegions.length === game3Data.regions.length;
-    
-    setGameState(prev => ({
-      ...prev,
-      observationalAnswers: answers,
-      totalScore: prev.totalScore + points,
-      regionScores: {
-        ...prev.regionScores,
-        [regionId]: regionTotalScore
-      },
-      completedRegions: newCompletedRegions,
-      showRegionComplete: true,
-      allRegionsCompleted: allRegionsCompleted,
-      currentStep: 5
-    }));
+const handleObservationalComplete = (answers) => {
+  const points = answers.reduce((sum, answer) => sum + answer.points, 0);
+  const regionId = gameState.selectedRegion.id;
+  
+  const fillBlankScore = gameState.fillBlankAnswers.reduce((sum, a) => sum + (a.isCorrect ? a.points : 0), 0);
+  const quizScore = gameState.quizAnswers.reduce((sum, a) => sum + (a.isCorrect ? a.points : 0), 0);
+  const regionTotalScore = fillBlankScore + quizScore + points;
+  
+  const newCompletedRegions = [...new Set([...gameState.completedRegions, regionId])];
+  const allRegionsCompleted = newCompletedRegions.length === game3Data.regions.length;
+  
+  setGameState(prev => ({
+    ...prev,
+    observationalAnswers: answers,
+    totalScore: prev.totalScore + points,
+    regionScores: {
+      ...prev.regionScores,
+      [regionId]: regionTotalScore
+    },
+    completedRegions: newCompletedRegions,
+    showRegionComplete: true,
+    allRegionsCompleted: allRegionsCompleted,
+    currentStep: 5
+  }));
     
     audioActions.playSoundEffect('discovery_complete');
     
-    if (allRegionsCompleted) {
-      setTimeout(() => {
-        completeGame();
-      }, 2000);
-    }
   };
 
   // Handle continue to next region
@@ -224,6 +219,9 @@ const Game3_Root = ({ onComplete }) => {
 
   // Complete and save game
   const completeGame = () => {
+    // Optional: Add a confirmation effect
+    audioActions.playSoundEffect('mission_complete');
+    
     const finalScore = {
       completed: true,
       totalScore: gameState.totalScore,
@@ -243,8 +241,6 @@ const Game3_Root = ({ onComplete }) => {
     if (onComplete) {
       onComplete(finalScore);
     }
-
-    audioActions.playSoundEffect('mission_complete');
   };
 
   // Handle back to map
@@ -371,52 +367,64 @@ const Game3_Root = ({ onComplete }) => {
           />
         )}
 
-        {gameState.allRegionsCompleted && (
-          <div className="all-regions-completed">
-            <div className="completion-content">
-              <h2>🌌 Mission Complete!</h2>
-              <div className="completion-badge">
-                <span className="badge-icon">🏆</span>
-                <span className="badge-text">All Constellations Charted</span>
+          {gameState.allRegionsCompleted && (
+            <div className="all-regions-completed">
+              <div className="completion-content">
+                <h2>🌌 Mission Complete!</h2>
+                <div className="completion-badge">
+                  <span className="badge-icon">🏆</span>
+                  <span className="badge-text">All Constellations Charted</span>
+                </div>
+                
+                <div className="final-stats">
+                  <div className="stat-item large">
+                    <span className="stat-label large">Total Energy</span>
+                    <span className="stat-value large">{gameState.totalScore}</span>
+                  </div>
+                  <div className="stat-item large">
+                    <span className="stat-label large">Mission Time</span>
+                    <span className="stat-value large">{formatTime(timeElapsed)}</span>
+                  </div>
+                  <div className="stat-item large">
+                    <span className="stat-label large">Constellations</span>
+                    <span className="stat-value large">
+                      {gameState.completedRegions.length}/{game3Data.regions.length}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="region-scores-summary">
+                  <h3>Constellation Energy Readings</h3>
+                  <div className="scores-grid">
+                    {game3Data.regions.map(region => (
+                      <div key={region.id} className="region-score-card">
+                        <span className="region-name">{region.name}</span>
+                        <span className="region-score">
+                          {gameState.regionScores[region.id] || 0} units
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* ADD THESE TWO BUTTONS */}
+                <div className="completion-buttons">
+                  <button 
+                    onClick={completeGame} 
+                    className="complete-mission-button"
+                  >
+                    Complete Mission & Return to Map
+                  </button>
+                  <button 
+                    onClick={handleBackToMap} 
+                    className="continue-button secondary"
+                  >
+                    Return to Mission Map (Unsaved)
+                  </button>
+                </div>
               </div>
-              
-              <div className="final-stats">
-                <div className="stat-item large">
-                  <span className="stat-label large">Total Energy</span>
-                  <span className="stat-value large">{gameState.totalScore}</span>
-                </div>
-                <div className="stat-item large">
-                  <span className="stat-label large">Mission Time</span>
-                  <span className="stat-value large">{formatTime(timeElapsed)}</span>
-                </div>
-                <div className="stat-item large">
-                  <span className="stat-label large">Constellations</span>
-                  <span className="stat-value large">
-                    {gameState.completedRegions.length}/{game3Data.regions.length}
-                  </span>
-                </div>
-              </div>
-              
-              <div className="region-scores-summary">
-                <h3>Constellation Energy Readings</h3>
-                <div className="scores-grid">
-                  {game3Data.regions.map(region => (
-                    <div key={region.id} className="region-score-card">
-                      <span className="region-name">{region.name}</span>
-                      <span className="region-score">
-                        {gameState.regionScores[region.id] || 0} units
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              <button onClick={handleBackToMap} className="continue-button">
-                Return to Mission Map
-              </button>
             </div>
-          </div>
-        )}
+          )}
       </div>
     </div>
   );

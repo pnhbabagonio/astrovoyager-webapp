@@ -551,3 +551,60 @@
     font-size: 0.8rem;
   }
 }
+
+/* Add these styles for the completion buttons */
+/* Update the completion-buttons styles */
+.completion-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 30px auto 0; /* Centers horizontally with auto left/right margins */
+  width: 100%;
+  max-width: 400px;
+  align-items: center; /* Centers items inside the container */
+}
+
+/* Optional: Make the completion content better for centering */
+.completion-content {
+  background: rgba(13, 27, 42, 0.9);
+  border-radius: 15px;
+  padding: 2rem;
+  text-align: center;
+  border: 2px solid var(--secondary-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* This ensures child elements are centered */
+  width: 100%;
+}
+
+/* Update button widths for better centering */
+.complete-mission-button {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  color: white;
+  border: none;
+  padding: 18px 24px;
+  border-radius: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 15px rgba(46, 125, 50, 0.4);
+  position: relative;
+  overflow: hidden;
+  width: 100%; /* Make button take full width of container */
+  max-width: 400px; /* Optional: limit max width */
+}
+
+.continue-button.secondary {
+  background: linear-gradient(135deg, #757575, #424242);
+  color: white;
+  border: none;
+  padding: 15px 24px;
+  border-radius: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.8;
+  width: 100%; /* Make button take full width of container */
+  max-width: 400px; /* Optional: limit max width */
+}
