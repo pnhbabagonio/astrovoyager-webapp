@@ -8,6 +8,8 @@ const DragDropFillBlanks = ({ sentences, wordBank, selectedRegion, onComplete })
   const [draggedWord, setDraggedWord] = useState(null);
   const [sentenceBlanks, setSentenceBlanks] = useState([]);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [currentFeedback, setCurrentFeedback] = useState(null);
 
   // Initialize the blanks for the current sentence
   useEffect(() => {
@@ -18,14 +20,18 @@ const DragDropFillBlanks = ({ sentences, wordBank, selectedRegion, onComplete })
       isCorrect: null
     }));
     setSentenceBlanks(blanks);
+    setShowFeedback(false);
+    setCurrentFeedback(null);
   }, [currentSentenceIndex, sentences]);
 
   const handleDragStart = (word) => {
-    setDraggedWord(word);
+    if (!showFeedback) {
+      setDraggedWord(word);
+    }
   };
 
   const handleDrop = (blankId) => {
-    if (!draggedWord) return;
+    if (!draggedWord || showFeedback) return;
 
     const updatedBlanks = sentenceBlanks.map(blank => {
       if (blank.id === blankId) {
@@ -42,7 +48,7 @@ const DragDropFillBlanks = ({ sentences, wordBank, selectedRegion, onComplete })
     e.preventDefault();
   };
 
-  const handleSubmitSentence = () => {
+  const checkAnswer = () => {
     const currentSentence = sentences[currentSentenceIndex];
     const isCorrect = sentenceBlanks.every((blank, index) => 
       blank.word === currentSentence.correctAnswers[index]
@@ -59,15 +65,31 @@ const DragDropFillBlanks = ({ sentences, wordBank, selectedRegion, onComplete })
       explanation: currentSentence.explanation
     };
 
-    const newUserAnswers = [...userAnswers, answer];
-    setUserAnswers(newUserAnswers);
+    // Set feedback for current sentence
+    setCurrentFeedback({
+      isCorrect,
+      correctAnswers: currentSentence.correctAnswers,
+      userAnswers: sentenceBlanks.map(blank => blank.word),
+      explanation: currentSentence.explanation
+    });
+    
+    setShowFeedback(true);
+    setUserAnswers(prev => [...prev, answer]);
 
-    // Move to next sentence or complete
+    // Update blanks to show correct/incorrect state
+    const updatedBlanks = sentenceBlanks.map((blank, index) => ({
+      ...blank,
+      isCorrect: blank.word === currentSentence.correctAnswers[index]
+    }));
+    setSentenceBlanks(updatedBlanks);
+  };
+
+  const handleNext = () => {
     if (currentSentenceIndex < sentences.length - 1) {
       setCurrentSentenceIndex(prev => prev + 1);
     } else {
       setIsCompleted(true);
-      onComplete(newUserAnswers);
+      onComplete(userAnswers);
     }
   };
 
@@ -81,15 +103,28 @@ const DragDropFillBlanks = ({ sentences, wordBank, selectedRegion, onComplete })
         <span>{part}</span>
         {index < parts.length - 1 && (
           <div 
-            className="data-port"
+            className={`data-port ${showFeedback ? 
+              (sentenceBlanks[index]?.isCorrect ? 'correct' : 'incorrect') : ''}`}
             onDragOver={handleDragOver}
             onDrop={() => handleDrop(currentSentence.blanks[index])}
           >
             {sentenceBlanks[index]?.word || '[Drop Data]'}
+            {showFeedback && !sentenceBlanks[index]?.isCorrect && (
+              <div className="correct-answer-hint">
+                Correct: {currentSentence.correctAnswers[index]}
+              </div>
+            )}
           </div>
         )}
       </React.Fragment>
     ));
+  };
+
+  // Get all available words (filter out used ones)
+  const getAvailableWords = () => {
+    const usedWords = sentenceBlanks.map(blank => blank.word).filter(Boolean);
+    const allWords = [...wordBank.correctWords, ...wordBank.distractorWords];
+    return allWords.filter(word => !usedWords.includes(word) || showFeedback);
   };
 
   return (
@@ -97,34 +132,94 @@ const DragDropFillBlanks = ({ sentences, wordBank, selectedRegion, onComplete })
       <div className="observatory-analysis-header">
         <h2>📡 Astral Data Analysis</h2>
         <p className="analysis-subtitle">Complete the celestial data streams by dragging spectral data points</p>
-        <div className="analysis-progress">Data Stream {currentSentenceIndex + 1} of {sentences.length}</div>
+        <div className="analysis-progress">
+          Data Stream {currentSentenceIndex + 1} of {sentences.length}
+          <div className="progress-bar">
+            <div 
+              className="progress-fill"
+              style={{ width: `${((currentSentenceIndex + 1) / sentences.length) * 100}%` }}
+            />
+          </div>
+        </div>
       </div>
 
       <div className="data-terminal">
         <div className="sentence-display">
-          <div className="sentence">{renderSentence()}</div>
+          <div className="sentence-container">
+            <div className="sentence">{renderSentence()}</div>
+          </div>
         </div>
 
-        <WordBank 
-          words={[...wordBank.correctWords, ...wordBank.distractorWords]}
-          onDragStart={handleDragStart}
-          usedWords={sentenceBlanks.map(blank => blank.word).filter(Boolean)}
-        />
+        {!showFeedback && (
+          <WordBank 
+            words={getAvailableWords()}
+            onDragStart={handleDragStart}
+            usedWords={sentenceBlanks.map(blank => blank.word).filter(Boolean)}
+          />
+        )}
+
+        {showFeedback && currentFeedback && (
+          <div className={`feedback-container ${currentFeedback.isCorrect ? 'correct-feedback' : 'incorrect-feedback'}`}>
+            <div className="feedback-header">
+              <span className="feedback-icon">
+                {currentFeedback.isCorrect ? '✅' : '❌'}
+              </span>
+              <h3>{currentFeedback.isCorrect ? 'Data Stream Analyzed!' : 'Data Stream Analysis Error'}</h3>
+            </div>
+            <div className="feedback-details">
+              <div className="answer-comparison">
+                <div className="comparison-row">
+                  <span className="comparison-label">Your answer:</span>
+                  <span className={`user-answer ${currentFeedback.isCorrect ? 'correct' : 'incorrect'}`}>
+                    {currentFeedback.userAnswers.join(', ')}
+                  </span>
+                </div>
+                {!currentFeedback.isCorrect && (
+                  <div className="comparison-row">
+                    <span className="comparison-label">Correct answer:</span>
+                    <span className="correct-answer">
+                      {currentFeedback.correctAnswers.join(', ')}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div className="feedback-explanation">
+                <p>{currentFeedback.explanation}</p>
+              </div>
+              <div className="feedback-points">
+                {currentFeedback.isCorrect ? `+${sentences[currentSentenceIndex].points} energy units` : 'No energy units gained'}
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="analysis-controls">
-          <button 
-            onClick={handleSubmitSentence}
-            disabled={sentenceBlanks.some(blank => !blank.word)}
-            className="analyze-button"
-          >
-            {currentSentenceIndex < sentences.length - 1 ? 'Analyze Next Stream' : 'Complete Analysis'}
-          </button>
+          {!showFeedback ? (
+            <button 
+              onClick={checkAnswer}
+              disabled={sentenceBlanks.some(blank => !blank.word)}
+              className="analyze-button"
+            >
+              Analyze Stream
+            </button>
+          ) : (
+            <button 
+              onClick={handleNext}
+              className="next-button"
+            >
+              {currentSentenceIndex < sentences.length - 1 ? 'Next Stream' : 'Complete Analysis'}
+            </button>
+          )}
         </div>
       </div>
 
       {isCompleted && (
         <div className="data-transmission-complete">
-          <p>✓ All data streams analyzed! Proceeding to navigation phase...</p>
+          <div className="completion-badge">
+            <span className="badge-icon">📡</span>
+            <span className="badge-text">All Data Streams Analyzed</span>
+          </div>
+          <p>Proceeding to navigation phase...</p>
         </div>
       )}
     </div>

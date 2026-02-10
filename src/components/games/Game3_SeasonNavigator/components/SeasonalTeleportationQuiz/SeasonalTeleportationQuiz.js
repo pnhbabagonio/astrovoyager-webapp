@@ -8,6 +8,26 @@ const SeasonalTeleportationQuiz = ({ scenarios, selectedRegion, onComplete }) =>
   const [selectedOption, setSelectedOption] = useState(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [shuffledOptions, setShuffledOptions] = useState([]);
+
+  // Function to shuffle array
+  const shuffleArray = (array) => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  };
+
+  // Shuffle options when scenario changes
+  useEffect(() => {
+    if (scenarios[currentScenarioIndex]) {
+      setShuffledOptions(shuffleArray(scenarios[currentScenarioIndex].options));
+      setSelectedOption(null);
+      setShowFeedback(false);
+    }
+  }, [currentScenarioIndex, scenarios]);
 
   const currentScenario = scenarios[currentScenarioIndex];
 
@@ -15,16 +35,20 @@ const SeasonalTeleportationQuiz = ({ scenarios, selectedRegion, onComplete }) =>
     if (showFeedback) return;
     
     setSelectedOption(optionId);
-    const correct = currentScenario.options.find(opt => opt.id === optionId)?.correct || false;
-    setIsCorrect(correct);
     
+    // Find the correct option (from original options to check correctness)
+    const correctOption = currentScenario.options.find(opt => opt.correct);
+    const isCorrectSelection = optionId === correctOption.id;
+    
+    setIsCorrect(isCorrectSelection);
     setShowFeedback(true);
     
     const answerEntry = {
       scenarioId: currentScenario.id,
       selectedOptionId: optionId,
-      isCorrect: correct,
-      points: correct ? currentScenario.points : 0
+      isCorrect: isCorrectSelection,
+      points: isCorrectSelection ? currentScenario.points : 0,
+      correctOptionId: correctOption.id
     };
     
     setAnswers(prev => [...prev, answerEntry]);
@@ -32,8 +56,6 @@ const SeasonalTeleportationQuiz = ({ scenarios, selectedRegion, onComplete }) =>
     setTimeout(() => {
       if (currentScenarioIndex < scenarios.length - 1) {
         setCurrentScenarioIndex(prev => prev + 1);
-        setSelectedOption(null);
-        setShowFeedback(false);
       } else {
         onComplete(answers.concat(answerEntry));
       }
@@ -45,6 +67,10 @@ const SeasonalTeleportationQuiz = ({ scenarios, selectedRegion, onComplete }) =>
     if (optionText.includes('Southern')) return '🌎↓';
     if (optionText.includes('Equator')) return '🌎→';
     return '❓';
+  };
+
+  const getOptionLetter = (index) => {
+    return String.fromCharCode(65 + index); // A, B, C...
   };
 
   return (
@@ -79,16 +105,22 @@ const SeasonalTeleportationQuiz = ({ scenarios, selectedRegion, onComplete }) =>
         />
 
         <div className="destination-grid">
-          {currentScenario.options.map(option => (
+          {shuffledOptions.map((option, index) => (
             <button
               key={option.id}
               className={`destination-card 
                 ${selectedOption === option.id ? 'selected' : ''}
-                ${showFeedback ? (option.correct ? 'correct' : selectedOption === option.id ? 'incorrect' : '') : ''}
+                ${showFeedback ? (
+                  option.correct ? 'correct' : 
+                  selectedOption === option.id ? 'incorrect' : ''
+                ) : ''}
               `}
               onClick={() => handleOptionSelect(option.id)}
               disabled={showFeedback}
             >
+              <div className="destination-marker">
+                <span className="option-letter">{getOptionLetter(index)}</span>
+              </div>
               <div className="destination-icon">{getRegionIcon(option.text)}</div>
               <div className="destination-content">
                 <span className="destination-text">{option.text}</span>
@@ -110,6 +142,11 @@ const SeasonalTeleportationQuiz = ({ scenarios, selectedRegion, onComplete }) =>
             <div className="energy-expended">
               {isCorrect ? `+${currentScenario.points} energy units` : 'Energy conservation mode'}
             </div>
+            {!isCorrect && (
+              <div className="correct-answer-hint">
+                Correct destination: {currentScenario.options.find(opt => opt.correct).text}
+              </div>
+            )}
           </div>
         )}
 

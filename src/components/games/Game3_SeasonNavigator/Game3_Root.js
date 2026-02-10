@@ -1,3 +1,4 @@
+// Game3_Root.js - Fixed version with proper database saving
 import React, { useState, useEffect, useRef } from 'react';
 import { useGameState } from '../../../contexts/GameStateContext';
 import { useAudio } from '../../../contexts/AudioContext';
@@ -35,6 +36,10 @@ const Game3_Root = ({ onComplete }) => {
     allRegionsCompleted: false,
     currentSeason: 'spring'
   });
+
+  // Calculate max scores
+  const maxScorePerRegion = 150; // 40 (fill blanks) + 90 (quiz) + 20 (observational)
+  const MAX_TOTAL_SCORE = maxScorePerRegion * game3Data.regions.length; // 450 total
 
   // Initialize timer
   useEffect(() => {
@@ -157,33 +162,53 @@ const Game3_Root = ({ onComplete }) => {
   };
 
   // Handle observational check completion
-const handleObservationalComplete = (answers) => {
-  const points = answers.reduce((sum, answer) => sum + answer.points, 0);
-  const regionId = gameState.selectedRegion.id;
-  
-  const fillBlankScore = gameState.fillBlankAnswers.reduce((sum, a) => sum + (a.isCorrect ? a.points : 0), 0);
-  const quizScore = gameState.quizAnswers.reduce((sum, a) => sum + (a.isCorrect ? a.points : 0), 0);
-  const regionTotalScore = fillBlankScore + quizScore + points;
-  
-  const newCompletedRegions = [...new Set([...gameState.completedRegions, regionId])];
-  const allRegionsCompleted = newCompletedRegions.length === game3Data.regions.length;
-  
-  setGameState(prev => ({
-    ...prev,
-    observationalAnswers: answers,
-    totalScore: prev.totalScore + points,
-    regionScores: {
-      ...prev.regionScores,
-      [regionId]: regionTotalScore
-    },
-    completedRegions: newCompletedRegions,
-    showRegionComplete: true,
-    allRegionsCompleted: allRegionsCompleted,
-    currentStep: 5
-  }));
+  const handleObservationalComplete = (answers) => {
+    const points = answers.reduce((sum, answer) => sum + answer.points, 0);
+    const regionId = gameState.selectedRegion.id;
     
+    const fillBlankScore = gameState.fillBlankAnswers.reduce((sum, a) => sum + (a.isCorrect ? a.points : 0), 0);
+    const quizScore = gameState.quizAnswers.reduce((sum, a) => sum + (a.isCorrect ? a.points : 0), 0);
+    const regionTotalScore = fillBlankScore + quizScore + points;
+    
+    const newCompletedRegions = [...new Set([...gameState.completedRegions, regionId])];
+    const allRegionsCompleted = newCompletedRegions.length === game3Data.regions.length;
+    
+    // Save intermediate progress when region is completed
+    const currentProgress = {
+      completed: allRegionsCompleted,
+      score: gameState.totalScore + points,
+      maxScore: MAX_TOTAL_SCORE,
+      completionDate: allRegionsCompleted ? new Date().toISOString() : null,
+      completedRegions: newCompletedRegions,
+      regionScores: {
+        ...gameState.regionScores,
+        [regionId]: regionTotalScore
+      },
+      timeElapsed: timeElapsed
+    };
+    
+    // Save progress after each region completion
+    playerActions.updatePlayerProgress('game3', currentProgress);
+    gameDispatch({
+      type: 'UPDATE_PROGRESS',
+      payload: { game: 'game3', progress: currentProgress }
+    });
+    
+    setGameState(prev => ({
+      ...prev,
+      observationalAnswers: answers,
+      totalScore: prev.totalScore + points,
+      regionScores: {
+        ...prev.regionScores,
+        [regionId]: regionTotalScore
+      },
+      completedRegions: newCompletedRegions,
+      showRegionComplete: true,
+      allRegionsCompleted: allRegionsCompleted,
+      currentStep: 5
+    }));
+      
     audioActions.playSoundEffect('discovery_complete');
-    
   };
 
   // Handle continue to next region
@@ -222,24 +247,30 @@ const handleObservationalComplete = (answers) => {
     // Optional: Add a confirmation effect
     audioActions.playSoundEffect('mission_complete');
     
-    const finalScore = {
+    const finalProgress = {
       completed: true,
-      totalScore: gameState.totalScore,
-      regionScores: gameState.regionScores,
+      score: gameState.totalScore,
+      maxScore: MAX_TOTAL_SCORE,
+      completionDate: new Date().toISOString(),
+      // Store additional game3-specific data
       completedRegions: gameState.completedRegions,
-      timeElapsed: timeElapsed,
-      dateCompleted: new Date().toISOString()
+      regionScores: gameState.regionScores,
+      timeElapsed: timeElapsed
     };
 
+    console.log('Saving Game 3 progress:', finalProgress); // Debug log
+
+    // Update game state context
     gameDispatch({
       type: 'UPDATE_PROGRESS',
-      payload: { game: 'game3', progress: finalScore }
+      payload: { game: 'game3', progress: finalProgress }
     });
 
-    playerActions.updatePlayerProgress('game3', finalScore);
+    // Save to player context (which saves to IndexedDB)
+    playerActions.updatePlayerProgress('game3', finalProgress);
 
     if (onComplete) {
-      onComplete(finalScore);
+      onComplete(finalProgress);
     }
   };
 
@@ -379,7 +410,7 @@ const handleObservationalComplete = (answers) => {
                 <div className="final-stats">
                   <div className="stat-item large">
                     <span className="stat-label large">Total Energy</span>
-                    <span className="stat-value large">{gameState.totalScore}</span>
+                    <span className="stat-value large">{gameState.totalScore}/{MAX_TOTAL_SCORE}</span>
                   </div>
                   <div className="stat-item large">
                     <span className="stat-label large">Mission Time</span>
@@ -400,20 +431,19 @@ const handleObservationalComplete = (answers) => {
                       <div key={region.id} className="region-score-card">
                         <span className="region-name">{region.name}</span>
                         <span className="region-score">
-                          {gameState.regionScores[region.id] || 0} units
+                          {gameState.regionScores[region.id] || 0}/{maxScorePerRegion} units
                         </span>
                       </div>
                     ))}
                   </div>
                 </div>
                 
-                {/* ADD THESE TWO BUTTONS */}
                 <div className="completion-buttons">
                   <button 
                     onClick={completeGame} 
                     className="complete-mission-button"
                   >
-                    Complete Mission & Return to Map
+                    Complete Mission & Save Progress
                   </button>
                   <button 
                     onClick={handleBackToMap} 
