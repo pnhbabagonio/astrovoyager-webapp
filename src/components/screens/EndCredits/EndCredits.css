@@ -289,12 +289,21 @@
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
 }
 
+/* Game title image styles */
 .game-title {
-  font-size: 2rem;
-  color: #4fc3f7;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 2rem;
+}
+
+.game-title-image {
+  max-width: 600px;
+  width: 80%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 0 10px rgba(79, 195, 247, 0.5));
 }
 
 .copyright {
@@ -415,7 +424,7 @@
 .auto-scroll-indicator {
   position: fixed;
   bottom: 20px;
-  left: 50%;
+  left: 20px;
   transform: translateX(-50%);
   background: rgba(0, 20, 40, 0.9);
   padding: 12px 25px;
@@ -613,4 +622,5 @@
     height: 30px;
     font-size: 0.9rem;
   }
+  
 }

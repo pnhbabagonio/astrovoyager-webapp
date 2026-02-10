@@ -304,7 +304,13 @@ const EndCredits = () => {
           {/* End Card */}
           <div ref={endCardRef} className="end-card">
             <div className="thank-you">THANK YOU FOR PLAYING</div>
-            <div className="game-title">ASTROVOYAGER</div>
+            <div className="game-title">
+              <img 
+                src={`${process.env.PUBLIC_URL}/assets/images/ui/astrovoyager-title.png`} 
+                alt="Astrovoyager"
+                className="game-title-image"
+              />
+            </div>
             <div className="copyright">© 2026 All Rights Reserved</div>
             
             <button 
