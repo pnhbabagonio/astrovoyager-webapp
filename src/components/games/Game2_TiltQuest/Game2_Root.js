@@ -102,6 +102,9 @@ const Game2_Root = ({ onComplete }) => {
     if (conceptAnswers.concept1 === 'days-change') calculatedScore += 1;
     if (conceptAnswers.concept2 === 'earth-tilted') calculatedScore += 1;
     
+    // Get current observation before updating state
+    const currentObservation = locationProgress[selectedLocation.id].observation;
+    
     // Update location progress
     setLocationProgress(prev => ({
       ...prev,
@@ -116,6 +119,23 @@ const Game2_Root = ({ onComplete }) => {
     
     setCurrentLocationScore(calculatedScore);
     setCurrentStage('score-display');
+    
+    // Save progress for this location immediately
+    const locationResult = {
+      gameName: 'game2_location',
+      locationId: selectedLocation.id,
+      completed: true,
+      score: calculatedScore,
+      maxScore: 3,
+      details: {
+        observation: currentObservation,
+        concept1: conceptAnswers.concept1,
+        concept2: conceptAnswers.concept2
+      },
+      completionDate: new Date().toISOString()
+    };
+    
+    playerActions.updatePlayerProgress('game2', locationResult);
     
     audioActions.playSoundEffect(calculatedScore > 0 ? 'success' : 'error');
   };
@@ -132,14 +152,18 @@ const Game2_Root = ({ onComplete }) => {
   const handleCompleteAllLocations = () => {
     const totalScore = Object.values(locationProgress).reduce((sum, loc) => sum + loc.score, 0);
     const maxScore = 9; // 3 locations * 3 points each
+    const now = new Date().toISOString();
     
+    // Create properly structured game progress data
     const gameResult = {
       completed: true,
       score: totalScore,
       maxScore: maxScore,
       locationsCompleted: Object.values(locationProgress).filter(loc => loc.completed).length,
       details: locationProgress,
-      date: new Date().toISOString()
+      date: now,
+      // Ensure all required fields for IndexedDB are present
+      completionDate: now // This is required for the IndexedDB index
     };
 
     // Update global progress
@@ -148,7 +172,7 @@ const Game2_Root = ({ onComplete }) => {
       payload: { game: 'game2', progress: gameResult }
     });
 
-    // Save to player progress
+    // Save to player progress - ensure proper structure
     playerActions.updatePlayerProgress('game2', gameResult);
 
     // Call completion callback

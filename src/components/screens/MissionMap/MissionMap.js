@@ -1,5 +1,5 @@
-// MissionMap.js - Updated with audio greeting
-import React, { useEffect, useState, useRef } from 'react'; // Added hooks
+// MissionMap.js - Updated with audio greeting and admin access
+import React, { useEffect, useState, useRef } from 'react';
 import { useGameState } from '../../../contexts/GameStateContext';
 import { useAudio } from '../../../contexts/AudioContext';
 import './MissionMap.css';
@@ -16,7 +16,10 @@ const MissionMap = () => {
   const { actions: audioActions } = useAudio();
   const [greetingPlayed, setGreetingPlayed] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [showAdmin, setShowAdmin] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
   const greetingRef = useRef(null);
+  const clickTimerRef = useRef(null);
 
   const games = [
     {
@@ -47,6 +50,34 @@ const MissionMap = () => {
       disabled: false
     },
   ];
+
+  // Handle secret admin clicks
+  const handleSecretClick = () => {
+    const newCount = clickCount + 1;
+    setClickCount(newCount);
+    
+    // Clear existing timer
+    if (clickTimerRef.current) {
+      clearTimeout(clickTimerRef.current);
+    }
+    
+    // Show admin panel after 5 clicks
+    if (newCount >= 5) {
+      setShowAdmin(true);
+      setClickCount(0);
+      audioActions.playSoundEffect?.('success');
+      
+      // Hide after 10 seconds
+      setTimeout(() => {
+        setShowAdmin(false);
+      }, 10000);
+    } else {
+      // Reset counter after 2 seconds
+      clickTimerRef.current = setTimeout(() => {
+        setClickCount(0);
+      }, 2000);
+    }
+  };
 
   // Play Annie's greeting when component mounts
   useEffect(() => {
@@ -89,6 +120,9 @@ const MissionMap = () => {
     return () => {
       clearTimeout(delayTimer);
       clearTimeout(visibilityTimer);
+      if (clickTimerRef.current) {
+        clearTimeout(clickTimerRef.current);
+      }
       
       // Clean up any playing audio if component unmounts
       if (greetingRef.current && greetingRef.current.stop) {
@@ -136,6 +170,11 @@ const MissionMap = () => {
     dispatch({ type: 'SET_VIEW', payload: 'launch' });
   };
 
+  const handleAdminClick = () => {
+    audioActions.playSoundEffect?.('buttonClick');
+    dispatch({ type: 'SET_VIEW', payload: 'data-export' });
+  };
+
   return (
     <div
       className={`mission-map ${isVisible ? 'visible' : ''}`}
@@ -145,6 +184,7 @@ const MissionMap = () => {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
       }}
+      onClick={handleSecretClick} // Secret click detection on the whole map
     >
       <div className="overlay" />
 
@@ -158,7 +198,25 @@ const MissionMap = () => {
           <span className="back-text">Base Camp</span>
           <div className="back-btn-shine"></div>
         </button>
+
+        {/* Hidden Admin Button - Shows after secret clicks */}
+        {showAdmin && (
+          <button 
+            onClick={handleAdminClick} 
+            className="admin-button"
+            title="Access Admin Panel to export player data"
+          >
+            🔧 Admin Panel
+          </button>
+        )}
       </header>
+
+      {/* Click counter indicator (hidden but shows when clicking) */}
+      {clickCount > 0 && clickCount < 5 && (
+        <div className="click-counter">
+          {clickCount} / 5 clicks for admin
+        </div>
+      )}
 
       {/* Character and Text Bubble at Center - Now clickable */}
       <div className="character-container">
@@ -175,13 +233,6 @@ const MissionMap = () => {
           title="Click to hear greeting again"
         />
       </div>
-
-      {/* Optional: Audio status indicator */}
-      {/* {greetingPlayed && (
-        <div className="audio-status-indicator">
-          🔊 Annie is here to guide you!
-        </div>
-      )} */}
 
       <div className="islands-layer">
         {games.map((g) => (

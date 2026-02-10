@@ -12,6 +12,7 @@ import EndCredits from './components/screens/EndCredits/EndCredits';
 import AudioControls from './components/common/AudioControls/AudioControls';
 import LoadingSpinner from './components/common/LoadingSpinner/LoadingSpinner';
 import LaunchVideo from './components/screens/LaunchVideo/LaunchVideo';
+import DataExport from './components/admin/DataExport';
 
 import './styles/globals/reset.css';
 import './styles/globals/variables.css';
@@ -282,6 +283,9 @@ function AppContent() {
       
       case 'mission-map':
         return <MissionMap />;
+      
+      case 'data-export':
+        return <DataExport />;
       
       case 'game1':
         return <Game1_Root onComplete={(score) => handleGameComplete('game1', score)} />;
