@@ -27,6 +27,33 @@ function AppContent() {
   const [showJourneyLoading, setShowJourneyLoading] = useState(false);
   const [playerData, setPlayerData] = useState(null);
 
+  // Detect page refresh and ensure we start from loading screen
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Clear any session flags on unload
+      sessionStorage.removeItem('astrovoyager_session_active');
+    };
+
+    // Check if this is a fresh page load (not a navigation within the app)
+    const isPageRefresh = !sessionStorage.getItem('astrovoyager_session_active');
+    
+    if (isPageRefresh) {
+      // This is a fresh page load/refresh - reset to loading
+      console.log('🔄 Page refreshed - resetting to loading screen');
+      gameDispatch({ type: 'SET_VIEW', payload: 'loading' });
+      gameDispatch({ type: 'RESET_GAME' });
+    }
+    
+    // Mark that we're in an active session
+    sessionStorage.setItem('astrovoyager_session_active', 'true');
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [gameDispatch]);
+
   // DEVELOPMENT SHORTCUTS: Ctrl+Shift+E to jump to end credits
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -51,6 +78,9 @@ function AppContent() {
           
           playerActions.updatePlayerProgress(game, dummyScores[game]);
         });
+
+        // Mark as not initial load to allow navigation
+        gameDispatch({ type: 'SET_INITIAL_LOAD_COMPLETE' });
 
         // Go to end credits
         gameDispatch({ type: 'SET_VIEW', payload: 'end-credits' });
@@ -212,8 +242,14 @@ function AppContent() {
     }
   }, [gameDispatch, playerActions, gameState.gameProgress, audioActions]);
 
-  // Alternative approach: Use useEffect to watch for completion
+  // FIXED: Auto-navigation to end-credits only if NOT initial page load
   useEffect(() => {
+    // DON'T auto-navigate on initial page load/refresh
+    if (gameState.isInitialLoad) {
+      console.log('🔄 Initial page load - skipping auto-navigation to end-credits');
+      return;
+    }
+
     // Check if all games are completed whenever gameProgress changes
     const allGamesCompleted = Object.values(gameState.gameProgress).every(
       game => game.completed === true
@@ -225,7 +261,7 @@ function AppContent() {
       gameDispatch({ type: 'SET_VIEW', payload: 'end-credits' });
       audioActions.playSoundEffect('success');
     }
-  }, [gameState.gameProgress, gameState.currentView, gameDispatch, audioActions]);
+  }, [gameState.gameProgress, gameState.currentView, gameState.isInitialLoad, gameDispatch, audioActions]);
 
   const renderCurrentView = () => {
     if (showJourneyLoading) {

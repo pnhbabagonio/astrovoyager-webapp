@@ -1,5 +1,5 @@
 // EndCredits.js
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Howl } from 'howler';
 import { useGameState } from '../../../contexts/GameStateContext';
 import { useAudio } from '../../../contexts/AudioContext';
@@ -7,14 +7,14 @@ import './EndCredits.css';
 
 const EndCredits = () => {
   const { state: gameState, dispatch } = useGameState();
-  const { actions: audioActions } = useAudio();
-  const creditsContainerRef = useRef(null);
+  const { actions: audioActions, state: audioState } = useAudio();
+  const endingMusicRef = useRef(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const [hasReachedEnd, setHasReachedEnd] = useState(false);
   const creditsContentRef = useRef(null);
-  const [isAutoScrolling, setIsAutoScrolling] = useState(true);
-  const [scrollSpeed, setScrollSpeed] = useState(40); // pixels per second
-  const [userInteracted, setUserInteracted] = useState(false);
-  const [endingMusic, setEndingMusic] = useState(null);
-  
+  const endCardRef = useRef(null);
+  const animationRef = useRef(null);
+
   // Calculate total score
   const calculateTotalScore = () => {
     const { game1, game2, game3 } = gameState.gameProgress;
@@ -32,172 +32,156 @@ const EndCredits = () => {
 
   const scores = calculateTotalScore();
 
-  // Format dates for display
-  const formatDate = (dateString) => {
-    if (!dateString) return 'Not completed';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
-    });
-  };
+  // Stop animation when end card is in view
+  const checkEndPosition = useCallback(() => {
+    if (!creditsContentRef.current || !endCardRef.current || hasReachedEnd) return;
 
-  // Play ending credits music when component mounts
+    const contentRect = creditsContentRef.current.getBoundingClientRect();
+    const endCardRect = endCardRef.current.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    
+    // Check if end card is approximately centered in viewport
+    const endCardTopRelativeToViewport = endCardRect.top - contentRect.top;
+    const targetPosition = viewportHeight / 2 - endCardRect.height / 2;
+    
+    // If end card is near the center of the viewport, stop the animation
+    if (Math.abs(endCardTopRelativeToViewport - targetPosition) < 10) {
+      setHasReachedEnd(true);
+      setIsPaused(true);
+      
+      // Stop the CSS animation
+      if (creditsContentRef.current) {
+        creditsContentRef.current.style.animationPlayState = 'paused';
+      }
+    }
+  }, [hasReachedEnd]);
+
+  // Play ending credits music
   useEffect(() => {
     audioActions.stopBackgroundMusic();
     
-    const sound = new Howl({
-      src: [`${process.env.PUBLIC_URL}/assets/audio/ending-credits-bg.mp3`],
-      loop: true,
-      volume: 0.3,
-      autoplay: true,
-      onloaderror: (id, error) => {
-        console.warn('Could not load ending credits music:', error);
-      },
-      onplayerror: (id, error) => {
-        console.warn('Could not play ending credits music:', error);
+    const timer = setTimeout(() => {
+      const sound = new Howl({
+        src: [`${process.env.PUBLIC_URL}/assets/audio/ending-credits-bg.mp3`],
+        loop: true,
+        volume: audioState.muted ? 0 : 0.3,
+        autoplay: true,
+        html5: true,
+        onloaderror: (id, error) => {
+          console.warn('Could not load ending credits music:', error);
+        }
+      });
+
+      endingMusicRef.current = sound;
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+      if (endingMusicRef.current) {
+        endingMusicRef.current.stop();
+        endingMusicRef.current = null;
       }
+    };
+  }, [audioActions, audioState.muted]);
+
+  // Set up animation and check position
+  useEffect(() => {
+    if (!creditsContentRef.current) return;
+
+    // Set up animation
+    animationRef.current = requestAnimationFrame(function animate() {
+      checkEndPosition();
+      animationRef.current = requestAnimationFrame(animate);
     });
 
-    setEndingMusic(sound);
-
     return () => {
-      if (sound) {
-        sound.stop();
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [audioActions]);
-
-  // Auto-scroll functionality
-  useEffect(() => {
-    if (!isAutoScrolling || !creditsContainerRef.current || userInteracted) return;
-
-    let animationId;
-    let lastTime = 0;
-
-    const scrollCredits = (timestamp) => {
-      if (!lastTime) lastTime = timestamp;
-      const delta = timestamp - lastTime;
-      lastTime = timestamp;
-
-      if (creditsContainerRef.current) {
-        const scrollAmount = (scrollSpeed * delta) / 1000;
-        creditsContainerRef.current.scrollTop += scrollAmount;
-
-        // Check if we've reached the bottom
-        const { scrollTop, scrollHeight, clientHeight } = creditsContainerRef.current;
-        if (scrollTop + clientHeight >= scrollHeight - 10) {
-          setIsAutoScrolling(false);
-        }
-      }
-
-      if (isAutoScrolling) {
-        animationId = requestAnimationFrame(scrollCredits);
-      }
-    };
-
-    animationId = requestAnimationFrame(scrollCredits);
-
-    return () => {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-      }
-    };
-  }, [isAutoScrolling, scrollSpeed, userInteracted]);
-
-  // Handle user interaction
-  const handleUserInteraction = () => {
-    if (!userInteracted) {
-      setUserInteracted(true);
-      setIsAutoScrolling(false);
-    }
-  };
-
-  // Handle mouse wheel events
-  useEffect(() => {
-    const container = creditsContainerRef.current;
-    if (!container) return;
-
-    const handleWheel = (e) => {
-      handleUserInteraction();
-    };
-
-    const handleTouchStart = () => {
-      handleUserInteraction();
-    };
-
-    container.addEventListener('wheel', handleWheel);
-    container.addEventListener('touchstart', handleTouchStart);
-
-    return () => {
-      container.removeEventListener('wheel', handleWheel);
-      container.removeEventListener('touchstart', handleTouchStart);
-    };
-  }, []);
+  }, [checkEndPosition]);
 
   const handleReturnToLaunch = () => {
-    if (endingMusic) {
-      endingMusic.stop();
+    // Stop the ending music
+    if (endingMusicRef.current) {
+      endingMusicRef.current.stop();
+      endingMusicRef.current = null;
     }
     
+    // Clear session flag to allow fresh start
+    sessionStorage.removeItem('astrovoyager_session_active');
+    
+    // Reset the game state
     dispatch({ type: 'RESET_GAME' });
+    
+    // Go back to loading screen for a fresh start
+    dispatch({ type: 'SET_VIEW', payload: 'loading' });
   };
 
-  const toggleAutoScroll = () => {
-    if (userInteracted) {
-      setIsAutoScrolling(!isAutoScrolling);
+  const togglePause = () => {
+    const newPausedState = !isPaused;
+    setIsPaused(newPausedState);
+    
+    if (creditsContentRef.current && !hasReachedEnd) {
+      creditsContentRef.current.style.animationPlayState = newPausedState ? 'paused' : 'running';
     }
   };
 
-  const adjustScrollSpeed = (faster) => {
-    setScrollSpeed(prev => {
-      const newSpeed = faster ? prev + 20 : prev - 20;
-      return Math.max(20, Math.min(100, newSpeed));
-    });
+  // Handle manual scroll when paused
+  const handleManualScroll = (direction) => {
+    if (!creditsContentRef.current || !isPaused) return;
+    
+    const currentTransform = window.getComputedStyle(creditsContentRef.current).transform;
+    const matrix = new DOMMatrixReadOnly(currentTransform);
+    const currentY = matrix.m42;
+    
+    const scrollAmount = direction === 'up' ? 50 : -50;
+    creditsContentRef.current.style.transform = `translateY(${currentY + scrollAmount}px)`;
+    creditsContentRef.current.style.animation = 'none';
   };
 
   return (
     <div className="end-credits-container">
       <div className="space-background"></div>
-      
-      {/* Starfield overlay for cinematic effect */}
       <div className="starfield-overlay"></div>
       
-      {/* Auto-scroll controls */}
+      {/* Scroll controls */}
       <div className="scroll-controls">
         <button 
           className="scroll-control-btn"
-          onClick={toggleAutoScroll}
-          title={isAutoScrolling ? "Pause Auto-scroll" : "Resume Auto-scroll"}
+          onClick={togglePause}
+          title={isPaused ? "Resume Credits" : "Pause Credits"}
+          disabled={hasReachedEnd}
         >
-          {isAutoScrolling ? '⏸️' : '▶️'}
+          {isPaused ? '▶️' : '⏸️'}
         </button>
-        <button 
-          className="scroll-control-btn"
-          onClick={() => adjustScrollSpeed(false)}
-          title="Slower"
-        >
-          ➖
-        </button>
-        <button 
-          className="scroll-control-btn"
-          onClick={() => adjustScrollSpeed(true)}
-          title="Faster"
-        >
-          ➕
-        </button>
+        
+        {isPaused && !hasReachedEnd && (
+          <div className="manual-scroll-controls">
+            <button 
+              className="scroll-arrow-btn"
+              onClick={() => handleManualScroll('up')}
+              title="Scroll Up"
+            >
+              ↑
+            </button>
+            <button 
+              className="scroll-arrow-btn"
+              onClick={() => handleManualScroll('down')}
+              title="Scroll Down"
+            >
+              ↓
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Credits Content */}
-      <div 
-        className="credits-container"
-        ref={creditsContainerRef}
-        onWheel={handleUserInteraction}
-        onTouchStart={handleUserInteraction}
-        onMouseDown={handleUserInteraction}
-      >
-        <div className="credits-content" ref={creditsContentRef}>
+      {/* Credits Content - Carousel */}
+      <div className="credits-carousel">
+        <div 
+          ref={creditsContentRef}
+          className={`credits-content ${isPaused ? 'paused' : ''} ${hasReachedEnd ? 'reached-end' : ''}`}
+        >
           {/* Opening Title */}
           <div className="opening-title">
             <h1 className="mission-title">MISSION ACCOMPLISHED</h1>
@@ -214,7 +198,7 @@ const EndCredits = () => {
               <span className="game-name">ENERGY DETECTIVES</span>
               <span className="game-score">{scores.game1Score} points</span>
               <span className="game-status">
-                {gameState.gameProgress.game1.completed ? 'COMPLETED' : 'INCOMPLETE'}
+                {gameState.gameProgress.game1.completed ? '✅ COMPLETED' : '❌ INCOMPLETE'}
               </span>
             </div>
             
@@ -222,7 +206,7 @@ const EndCredits = () => {
               <span className="game-name">TILT QUEST</span>
               <span className="game-score">{scores.game2Score} points</span>
               <span className="game-status">
-                {gameState.gameProgress.game2.completed ? 'COMPLETED' : 'INCOMPLETE'}
+                {gameState.gameProgress.game2.completed ? '✅ COMPLETED' : '❌ INCOMPLETE'}
               </span>
             </div>
             
@@ -230,7 +214,7 @@ const EndCredits = () => {
               <span className="game-name">SEASON NAVIGATOR</span>
               <span className="game-score">{scores.game3Score} points</span>
               <span className="game-status">
-                {gameState.gameProgress.game3.completed ? 'COMPLETED' : 'INCOMPLETE'}
+                {gameState.gameProgress.game3.completed ? '✅ COMPLETED' : '❌ INCOMPLETE'}
               </span>
             </div>
             
@@ -318,7 +302,7 @@ const EndCredits = () => {
           </div>
 
           {/* End Card */}
-          <div className="end-card">
+          <div ref={endCardRef} className="end-card">
             <div className="thank-you">THANK YOU FOR PLAYING</div>
             <div className="game-title">ASTROVOYAGER</div>
             <div className="copyright">© 2026 All Rights Reserved</div>
@@ -333,11 +317,19 @@ const EndCredits = () => {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      {!userInteracted && (
+      {/* Auto-scroll indicator */}
+      {!isPaused && !hasReachedEnd && (
         <div className="auto-scroll-indicator">
-          <div className="indicator-text">AUTO-SCROLLING CREDITS</div>
-          <div className="indicator-subtext">Scroll or click to take control</div>
+          <div className="indicator-text">CREDITS ROLLING</div>
+          <div className="indicator-subtext">Click pause to stop</div>
+        </div>
+      )}
+
+      {/* End reached indicator */}
+      {hasReachedEnd && (
+        <div className="end-reached-indicator">
+          <div className="indicator-text">CREDITS COMPLETE</div>
+          <div className="indicator-subtext">Click button to continue</div>
         </div>
       )}
     </div>

@@ -28,7 +28,7 @@ export const game3Data = {
   
   wordBank: {
     correctWords: ["longer", "shorter", "warmer", "cooler", "summer", "winter", "almost the same"],
-    distractorWords: ["hotter", "colder", "spring", "fall", "variable", "extreme", "moderate"]
+    distractorWords: ["hotter", "colder"]
   },
   
   fillInBlanks: [
