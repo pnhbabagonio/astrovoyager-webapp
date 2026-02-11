@@ -196,6 +196,7 @@ const EndCredits = () => {
             
             <div className="score-row">
               <span className="game-name">ENERGY DETECTIVES</span>
+              <span className="game-score">{scores.game1Score} points</span>
               <span className="game-status">
                 {gameState.gameProgress.game1.completed ? '✅ COMPLETED' : '❌ INCOMPLETE'}
               </span>
