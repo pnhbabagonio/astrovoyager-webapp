@@ -1,13 +1,14 @@
 .game1-root.astro-theme {
   min-height: 100vh;
-  background: linear-gradient(135deg, 
-    #0a1a2f 0%,     /* Deep space blue */
-    #1a3a5f 30%,    /* Mid space blue */
-    #2a5a8f 60%,    /* Sky blue */
-    #4a8acf 100%    /* Bright sky */
+  background: linear-gradient(160deg, 
+    #0d0d1a 0%,      /* Deep dark */
+    #1a1a2e 25%,     /* Rich midnight */
+    #16213e 50%,     /* Deep navy */
+    #1a3a5f 75%,     /* Space blue */
+    #0f3460 100%     /* Dark ocean */
   );
-  background-size: 400% 400%;
-  animation: spaceShift 20s ease infinite;
+  background-size: 200% 200%;
+  animation: modernSpaceShift 30s ease-in-out infinite;
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -25,90 +26,107 @@
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(circle at 20% 10%, rgba(255, 204, 0, 0.3) 0%, transparent 40%),
-    radial-gradient(circle at 80% 90%, rgba(255, 153, 0, 0.2) 0%, transparent 40%),
-    radial-gradient(circle at 40% 50%, rgba(255, 102, 0, 0.15) 0%, transparent 50%),
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" opacity="0.05"><circle cx="50" cy="50" r="1" fill="white"/><circle cx="150" cy="80" r="1" fill="white"/><circle cx="250" cy="30" r="2" fill="white"/><circle cx="350" cy="150" r="1" fill="white"/><circle cx="100" cy="250" r="1" fill="white"/><circle cx="300" cy="300" r="2" fill="white"/></svg>');
+    radial-gradient(ellipse at 15% 5%, rgba(255, 191, 0, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 95%, rgba(255, 107, 53, 0.1) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 50%, rgba(147, 112, 219, 0.05) 0%, transparent 60%);
   pointer-events: none;
+  animation: ambientGlow 15s ease-in-out infinite alternate;
 }
 
-@keyframes spaceShift {
-  0%, 100% { background-position: 0% 50%; }
+@keyframes ambientGlow {
+  0% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+@keyframes modernSpaceShift {
+  0%, 100% { background-position: 0% 0%; }
+  25% { background-position: 50% 100%; }
   50% { background-position: 100% 50%; }
+  75% { background-position: 50% 0%; }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(0.5deg); }
 }
 
 @keyframes pulse {
-  0% { opacity: 0.3; }
-  50% { opacity: 0.7; }
-  100% { opacity: 0.3; }
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.02); }
 }
 
 @keyframes twinkle {
-  0% { transform: scale(1); opacity: 0.3; }
-  50% { transform: scale(1.1); opacity: 1; }
-  100% { transform: scale(1); opacity: 0.3; }
+  0%, 100% { transform: scale(1); opacity: 0.2; }
+  50% { transform: scale(1.3); opacity: 1; }
 }
 
 @keyframes sunGlow {
-  0%, 100% { filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.7)); }
-  50% { filter: drop-shadow(0 0 40px rgba(255, 102, 0, 0.9)); }
+  0%, 100% { 
+    filter: drop-shadow(0 0 15px rgba(255, 191, 0, 0.6));
+  }
+  50% { 
+    filter: drop-shadow(0 0 25px rgba(255, 140, 0, 0.8));
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
 }
 
 .star {
   position: absolute;
   background: white;
   border-radius: 50%;
-  animation: twinkle 3s infinite;
+  animation: twinkle 4s infinite;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
 }
 
 .sun-glow {
-  animation: sunGlow 2s ease-in-out infinite;
+  animation: sunGlow 3s ease-in-out infinite;
 }
 
-/* Space-themed UI Elements */
+/* Modern Space-themed UI Elements */
 .space-panel {
-  background: rgba(10, 26, 47, 0.85);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(74, 138, 207, 0.3);
-  border-radius: 20px;
+  background: rgba(15, 20, 40, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
   box-shadow: 
-    0 10px 30px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 1px 0 rgba(255, 255, 255, 0.1) inset;
 }
 
 .summer-highlight {
   background: linear-gradient(135deg, 
-    rgba(255, 204, 0, 0.1), 
-    rgba(255, 153, 0, 0.05));
-  border: 2px solid rgba(255, 153, 0, 0.3);
+    rgba(255, 191, 0, 0.08), 
+    rgba(255, 140, 0, 0.04));
+  border: 1px solid rgba(255, 191, 0, 0.2);
 }
 
 .solar-energy-card {
   background: linear-gradient(135deg, 
-    rgba(255, 204, 0, 0.15), 
-    rgba(255, 102, 0, 0.1));
-  border: 2px solid rgba(255, 153, 0, 0.4);
+    rgba(255, 191, 0, 0.12), 
+    rgba(255, 107, 53, 0.08));
+  border: 1px solid rgba(255, 191, 0, 0.25);
+  border-radius: 20px;
 }
 
-/* Game1.css - ADDITIONAL HEADER STYLES */
+/* Game1.css - MODERN HEADER STYLES */
 .game1-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: var(--space-lg) var(--space-xl);
-  background: linear-gradient(135deg, 
-    rgba(10, 26, 47, 0.9), 
-    rgba(26, 58, 95, 0.7)
-  );
-  border-bottom: 2px solid rgba(255, 204, 0, 0.3);
-  backdrop-filter: blur(10px);
+  padding-top: 50px;
+  background: rgba(10, 15, 30, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 191, 0, 0.15);
   flex-shrink: 0;
-  min-height: 80px;
+  min-height: 90px;
   position: relative;
   z-index: 2;
   gap: var(--space-lg);
@@ -119,7 +137,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
+  min-width: 0;
 }
 
 .mission-title {
@@ -129,145 +149,196 @@
   gap: var(--space-xs);
 }
 
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
 .sun-icon-large {
-  font-size: 48px;
-  animation: sunGlow 2s ease-in-out infinite;
-  filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.8));
+  font-size: 28px;
+  line-height: 1;
 }
 
 .mission-title h1 {
-  font-size: var(--font-size-3xl);
-  background: linear-gradient(45deg, 
-    #FFC107, 
-    #FF9800,
-    #4a8acf
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  background: linear-gradient(135deg, 
+    #FFD93D 0%, 
+    #FF9F1C 50%,
+    #E8B86D 100%
   );
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0;
-  text-shadow: 0 0 20px rgba(255, 193, 7, 0.3);
+  letter-spacing: 0.5px;
   line-height: 1.2;
 }
 
 .mission-subtitle {
-  color: #B0D0FF;
-  font-size: var(--font-size-sm);
+  color: rgba(176, 208, 255, 0.8);
+  font-size: var(--font-size-xs);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   font-weight: 500;
+  opacity: 0.9;
 }
 
-/* Back Button */
-.back-button.space-button {
-  background: linear-gradient(135deg, 
-    rgba(74, 138, 207, 0.2), 
-    rgba(26, 58, 95, 0.2)
-  );
-  border: 2px solid rgba(74, 138, 207, 0.4);
-  color: #B0D0FF;
+/* Floating Back Button */
+.back-button-floating {
+  position: absolute;
+  top: var(--space-md);
+  left: var(--space-lg);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(176, 208, 255, 0.9);
   padding: var(--space-sm) var(--space-lg);
-  border-radius: var(--radius-lg);
+  border-radius: 50px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: var(--font-size-base);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  min-width: 160px;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+.back-button-floating:hover {
+  background: rgba(255, 191, 0, 0.1);
+  border-color: rgba(255, 191, 0, 0.3);
+  color: #FFD93D;
+  transform: translateX(-3px);
+}
+
+/* Modern Back Button (legacy) */
+.back-button.space-button {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(176, 208, 255, 0.9);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-width: 140px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .back-button.space-button:hover {
-  background: linear-gradient(135deg, 
-    rgba(255, 204, 0, 0.2), 
-    rgba(255, 153, 0, 0.1)
-  );
-  border-color: rgba(255, 204, 0, 0.5);
-  color: #FFC107;
-  transform: translateX(-3px);
+  background: rgba(255, 191, 0, 0.1);
+  border-color: rgba(255, 191, 0, 0.3);
+  color: #FFD93D;
+  transform: translateX(-4px);
   box-shadow: 
-    0 5px 15px rgba(255, 193, 7, 0.2),
-    0 0 10px rgba(255, 193, 7, 0.1);
+    0 4px 20px rgba(255, 191, 0, 0.15),
+    0 0 0 1px rgba(255, 191, 0, 0.1) inset;
 }
 
 .button-icon {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-base);
+  transition: transform 0.3s ease;
 }
 
-/* Character Badge */
+.back-button.space-button:hover .button-icon {
+  transform: translateX(-2px);
+}
+
+/* Modern Character Badge */
 .character-badge.solar-badge {
-  background: linear-gradient(135deg, 
-    rgba(255, 204, 0, 0.1), 
-    rgba(255, 153, 0, 0.05)
-  );
-  border: 2px solid rgba(255, 204, 0, 0.3);
-  border-radius: var(--radius-xl);
-  padding: var(--space-sm) var(--space-md);
-  font-size: var(--font-size-base);
+  position: absolute;
+  right: var(--space-lg);
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 191, 0, 0.06);
+  border: 1px solid rgba(255, 191, 0, 0.2);
+  border-radius: 50px;
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--font-size-sm);
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  min-width: 200px;
-  backdrop-filter: blur(5px);
+  min-width: 180px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.character-badge.solar-badge:hover {
+  background: rgba(255, 191, 0, 0.1);
+  border-color: rgba(255, 191, 0, 0.3);
 }
 
 .badge-avatar {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(255, 204, 0, 0.5);
+  border: 2px solid rgba(255, 191, 0, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .badge-text {
-  color: #FFC107;
-  font-weight: bold;
+  color: #FFD93D;
+  font-weight: 600;
   flex: 1;
+  font-size: var(--font-size-sm);
 }
 
 .badge-role {
-  color: #4a8acf;
-  font-size: var(--font-size-xs);
+  color: rgba(176, 208, 255, 0.7);
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-weight: 500;
 }
 
-/* Solar Progress Bar */
+/* Modern Solar Progress Bar */
 .solar-progress {
   width: 100%;
-  max-width: 800px;
+  max-width: 700px;
   margin: 0 auto;
 }
 
 .progress-label {
-  color: #B0D0FF;
-  font-size: var(--font-size-sm);
+  color: rgba(176, 208, 255, 0.8);
+  font-size: var(--font-size-xs);
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: var(--space-sm);
+  letter-spacing: 2px;
+  margin-bottom: var(--space-md);
   text-align: center;
+  font-weight: 500;
 }
 
 .progress-track {
-  height: 8px;
-  background: rgba(10, 26, 47, 0.5);
-  border-radius: var(--radius-full);
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 100px;
   position: relative;
-  overflow: hidden;
-  border: 1px solid rgba(74, 138, 207, 0.3);
+  overflow: visible;
+  border: none;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .progress-beam {
   height: 100%;
   background: linear-gradient(90deg, 
-    #4a8acf, 
-    #FF9800,
-    #FFC107
+    #FFD93D 0%, 
+    #FF9F1C 50%,
+    #FF6B35 100%
   );
-  border-radius: var(--radius-full);
+  border-radius: 100px;
   position: relative;
-  transition: width 0.5s ease;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 20px rgba(255, 191, 0, 0.4);
 }
 
 .beam-core {
@@ -275,110 +346,116 @@
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, 
-    rgba(255, 255, 255, 0.1), 
-    transparent 30%
+  height: 50%;
+  background: linear-gradient(180deg, 
+    rgba(255, 255, 255, 0.4), 
+    transparent
   );
-  border-radius: var(--radius-full);
+  border-radius: 100px 100px 0 0;
 }
 
 .beam-glow {
   position: absolute;
-  top: -2px;
-  bottom: -2px;
+  top: -4px;
+  bottom: -4px;
   left: 0;
   right: 0;
   background: linear-gradient(90deg, 
-    transparent, 
-    rgba(255, 204, 0, 0.3), 
-    transparent
+    transparent 70%, 
+    rgba(255, 191, 0, 0.6)
   );
-  border-radius: var(--radius-full);
-  filter: blur(3px);
+  border-radius: 100px;
+  filter: blur(6px);
+  opacity: 0.8;
 }
 
 .progress-markers {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 50%;
+  left: -12px;
+  right: -12px;
+  transform: translateY(-50%);
   display: flex;
   justify-content: space-between;
-  padding: 0 2px;
+  padding: 0;
 }
 
 .progress-marker {
-  width: 20px;
-  height: 20px;
-  background: rgba(10, 26, 47, 0.7);
-  border: 2px solid rgba(74, 138, 207, 0.3);
+  width: 24px;
+  height: 24px;
+  background: rgba(20, 25, 45, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
-  margin-top: -6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #B0D0FF;
+  color: rgba(176, 208, 255, 0.5);
   font-size: 10px;
-  font-weight: bold;
-  transition: all 0.3s ease;
+  font-weight: 600;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .progress-marker.active {
-  background: linear-gradient(135deg, 
-    rgba(255, 204, 0, 0.8), 
-    rgba(255, 153, 0, 0.8)
-  );
-  border-color: #FFC107;
-  color: white;
-  box-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+  background: linear-gradient(135deg, #FFD93D, #FF9F1C);
+  border-color: #FFD93D;
+  color: #1a1a2e;
+  box-shadow: 
+    0 0 15px rgba(255, 191, 0, 0.5),
+    0 2px 8px rgba(0, 0, 0, 0.3);
+  transform: scale(1.1);
 }
 
 .game1-header h1 {
-  font-size: var(--font-size-5xl);
-  background: linear-gradient(45deg, #FF9800, #FFC107, #FF5722);
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  background: linear-gradient(135deg, #FFD93D, #FF9F1C, #E8B86D);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0;
-  text-shadow: 0 0 20px rgba(255, 152, 0, 0.3);
-  text-align: center; /* Add this to ensure text alignment */
+  text-align: center;
 }
 
 .character-badge {
-  background: rgba(255, 152, 0, 0.2);
-  border: 1px solid #FF9800;
-  border-radius: var(--radius-lg);
+  background: rgba(255, 191, 0, 0.08);
+  border: 1px solid rgba(255, 191, 0, 0.2);
+  border-radius: 50px;
   padding: var(--space-sm) var(--space-md);
-  font-size: var(--font-size-base);
-  color: #FFC107;
+  font-size: var(--font-size-sm);
+  color: #FFD93D;
 }
 
-/* Position the back button absolutely so it doesn't affect centering */
+/* Modern Back Button (standalone) */
 .back-button {
-  background: transparent;
-  border: 2px solid #FFC107;
-  color: #FFC107;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(176, 208, 255, 0.9);
   padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-lg);
+  border-radius: 50px;
   cursor: pointer;
-  transition: var(--transition-normal);
-  font-size: var(--font-size-base);
-  position: absolute; /* Change from flex-shrink: 0 to absolute positioning */
-  left: var(--space-xl); /* Position from left */
-  top: 10%; /* Vertically center */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+  z-index: 1;
 }
 
 .back-button:hover {
-  background: rgba(255, 193, 7, 0.1);
-  transform: translateX(-3px);
-  box-shadow: 0 0 15px rgba(255, 193, 7, 0.3);
+  background: rgba(255, 191, 0, 0.1);
+  border-color: rgba(255, 191, 0, 0.4);
+  color: #FFD93D;
+  transform: translateX(-4px);
+  box-shadow: 0 4px 20px rgba(255, 191, 0, 0.2);
+}
+
+.header-spacer {
+  min-width: 180px;
+  flex-shrink: 0;
 }
 
 .game1-content {
   flex: 1;
-  padding: var(--space-lg);
+  padding: var(--space-lg) var(--space-xl);
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
@@ -392,108 +469,144 @@
 }
 
 .game1-progress {
-  padding: var(--space-md);
+  padding: var(--space-lg) var(--space-xl);
   text-align: center;
-  background: rgba(0, 0, 0, 0.4);
-  border-top: 1px solid rgba(255, 152, 0, 0.3);
+  background: rgba(10, 15, 30, 0.5);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-top: 1px solid rgba(255, 191, 0, 0.1);
   flex-shrink: 0;
-  min-height: 60px;
+  min-height: 70px;
   position: relative;
   z-index: 2;
 }
 
 .progress-bar {
-  width: 250px;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-full);
+  width: 280px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
   overflow: hidden;
   margin: 0 auto var(--space-sm);
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(45deg, #FF9800, #FFC107);
-  border-radius: var(--radius-full);
-  transition: width var(--transition-slow);
-  box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+  background: linear-gradient(90deg, #FFD93D, #FF9F1C);
+  border-radius: 100px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 15px rgba(255, 191, 0, 0.4);
 }
 
 .progress-text {
-  font-size: var(--font-size-sm);
-  color: #FFC107;
+  font-size: var(--font-size-xs);
+  color: rgba(255, 215, 0, 0.9);
   font-weight: 500;
+  letter-spacing: 1px;
 }
 
-/* Stellar animations */
-@keyframes pulse {
-  0% { opacity: 0.3; }
-  50% { opacity: 0.7; }
-  100% { opacity: 0.3; }
-}
-
-@keyframes twinkle {
-  0% { transform: scale(1); opacity: 0.3; }
-  50% { transform: scale(1.1); opacity: 1; }
-  100% { transform: scale(1); opacity: 0.3; }
-}
+/* Star animations handled above */
 
 .star {
   position: absolute;
   background: white;
   border-radius: 50%;
-  animation: twinkle 3s infinite;
+  animation: twinkle 4s infinite;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
 }
 
-/* Responsive Design */
+/* Modern Responsive Design */
 @media (max-width: 768px) {
+  .back-button-floating {
+    position: relative;
+    top: auto;
+    left: auto;
+    margin: var(--space-sm) var(--space-md);
+    align-self: flex-start;
+  }
+
   .game1-header {
     padding: var(--space-md);
     flex-direction: column;
     gap: var(--space-sm);
     text-align: center;
-    min-height: 70px;
+    min-height: auto;
   }
 
   .game1-header h1 {
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-lg);
     order: 2;
+  }
+
+  .sun-icon-large {
+    font-size: 32px;
+  }
+
+  .mission-subtitle {
+    font-size: 10px;
+    letter-spacing: 2px;
   }
 
   .game1-content {
     padding: var(--space-md);
   }
 
-  .back-button {
+  .back-button,
+  .back-button.space-button {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
     order: 1;
     align-self: flex-start;
     margin-bottom: var(--space-sm);
+    min-width: auto;
+    padding: var(--space-xs) var(--space-md);
   }
 
-  .character-badge {
-    order: 3;
+  .back-button:hover,
+  .back-button.space-button:hover {
+    transform: translateX(-2px);
+  }
+
+  .character-badge,
+  .character-badge.solar-badge {
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none;
     margin-top: var(--space-sm);
+    min-width: auto;
   }
 
   .progress-bar {
-    width: 200px;
+    width: 220px;
   }
 
   .game1-progress {
-    min-height: 50px;
-    padding: var(--space-sm);
+    min-height: auto;
+    padding: var(--space-md);
+  }
+
+  .progress-marker {
+    width: 20px;
+    height: 20px;
+    font-size: 9px;
   }
 }
 
 @media (max-width: 480px) {
   .game1-header {
     padding: var(--space-sm);
-    min-height: 60px;
+    min-height: auto;
   }
 
   .game1-header h1 {
-    font-size: var(--font-size-lg);
-    
+    font-size: var(--font-size-base);
+  }
+
+  .sun-icon-large {
+    font-size: 28px;
   }
 
   .game1-content {
@@ -501,11 +614,21 @@
   }
 
   .progress-bar {
-    width: 150px;
+    width: 160px;
   }
 
   .game1-progress {
-    min-height: 45px;
-    padding: var(--space-xs) var(--space-sm);
+    padding: var(--space-sm);
+  }
+
+  .progress-marker {
+    width: 18px;
+    height: 18px;
+    font-size: 8px;
+  }
+
+  .badge-avatar {
+    width: 28px;
+    height: 28px;
   }
 }

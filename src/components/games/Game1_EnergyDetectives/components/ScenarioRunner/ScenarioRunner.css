@@ -1,4 +1,4 @@
-/* ScenarioRunner.css - UPDATED with responsive image support */
+/* ScenarioRunner.css - MODERN DESIGN */
 .scenario-runner {
   display: flex;
   flex-direction: column;
@@ -6,21 +6,22 @@
   max-width: 800px;
   margin: 0 auto;
   width: 100%;
-  background: rgba(10, 26, 47, 0.7);
-  border-radius: 20px;
+  background: rgba(15, 20, 40, 0.7);
+  border-radius: 24px;
   padding: var(--space-xl);
-  border: 2px solid rgba(74, 138, 207, 0.3);
-  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    0 25px 50px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
 }
 
 .scenario-header {
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
   text-align: center;
   padding-bottom: var(--space-lg);
-  border-bottom: 2px solid rgba(255, 204, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 191, 0, 0.15);
 }
 
 .scenario-meta {
@@ -28,53 +29,46 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--space-sm);
-  color: #FFC107;
-  font-size: var(--font-size-sm);
+  color: #FFD93D;
+  font-size: var(--font-size-xs);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
 .scenario-counter {
-  background: rgba(255, 204, 0, 0.1);
+  background: rgba(255, 191, 0, 0.08);
   padding: var(--space-xs) var(--space-md);
-  border-radius: var(--radius-full);
-  border: 1px solid rgba(255, 204, 0, 0.3);
+  border-radius: 50px;
+  border: 1px solid rgba(255, 191, 0, 0.2);
 }
 
 .character-tag {
-  background: linear-gradient(135deg, 
-    rgba(74, 138, 207, 0.2), 
-    rgba(255, 204, 0, 0.1)
-  );
+  background: rgba(255, 255, 255, 0.03);
   padding: var(--space-xs) var(--space-md);
-  border-radius: var(--radius-full);
+  border-radius: 50px;
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  border: 1px solid rgba(74, 138, 207, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .character-avatar-mini {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(255, 204, 0, 0.5);
+  border: 2px solid rgba(255, 191, 0, 0.4);
   background: rgba(255, 255, 255, 0.1);
 }
 
 .scenario-title h1 {
-  font-size: var(--font-size-3xl);
-  background: linear-gradient(45deg, 
-    #FFC107, 
-    #FF9800,
-    #4a8acf
-  );
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  background: linear-gradient(135deg, #FFD93D, #FF9F1C, #E8B86D);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: var(--space-md) 0;
-  text-shadow: 0 0 20px rgba(255, 193, 7, 0.3);
 }
 
 .scenario-content {
@@ -84,15 +78,15 @@
   gap: var(--space-xl);
 }
 
-/* Actual Image Container Styles - UPDATED */
+/* Actual Image Container Styles - MODERN */
 .scenario-image-container {
   width: 100%;
-  height: 450px; /* This is your desired height */
-  border-radius: 15px;
+  height: 420px;
+  border-radius: 20px;
   overflow: hidden;
   position: relative;
-  /* Removed flex centering as it can shrink the image */
-  border: 2px solid rgba(255, 204, 0, 0.3);
+  border: 1px solid rgba(255, 191, 0, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .scenario-image {
@@ -101,12 +95,12 @@
   object-fit: cover; 
   object-position: center;
   display: block;
-  transition: transform 0.3s ease;
-  border-radius: 12px;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 18px;
 }
 
 .scenario-image:hover {
-  transform: scale(1.02);
+  transform: scale(1.03);
 }
 
 /* Add overlay for better text readability on images */
@@ -116,29 +110,30 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 40%;
+  height: 50%;
   background: linear-gradient(to top, 
-    rgba(10, 26, 47, 0.9), 
+    rgba(15, 20, 40, 0.95), 
     transparent
   );
   pointer-events: none;
-  border-radius: 15px;
+  border-radius: 20px;
 }
 
 .image-label {
   position: absolute;
   top: 15px;
   right: 15px;
-  color: #FFC107;
-  font-size: var(--font-size-sm);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  background: rgba(10, 26, 47, 0.8);
+  color: #FFD93D;
+  font-size: var(--font-size-xs);
+  background: rgba(15, 20, 40, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   padding: var(--space-xs) var(--space-md);
-  border-radius: var(--radius-full);
-  border: 1px solid rgba(255, 204, 0, 0.3);
+  border-radius: 50px;
+  border: 1px solid rgba(255, 191, 0, 0.2);
   z-index: 2;
-  font-weight: bold;
-  letter-spacing: 0.5px;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
 /* Sun animation for fallback state */
@@ -179,59 +174,54 @@
 
 /* Scenario Text */
 .scenario-text {
-  background: linear-gradient(135deg, 
-    rgba(10, 26, 47, 0.9), 
-    rgba(26, 58, 95, 0.7)
-  );
-  border-radius: 15px;
-  padding: var(--space-xl);
-  border-left: 4px solid #FFC107;
-  backdrop-filter: blur(5px);
+  background: rgba(255, 191, 0, 0.04);
+  border-radius: 20px;
+  padding: var(--space-lg);
+  border-left: 3px solid rgba(255, 191, 0, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .scenario-text h2 {
-  color: #FFC107;
-  font-size: var(--font-size-2xl);
-  margin-bottom: var(--space-lg);
-  line-height: 1.4;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  color: #FFD93D;
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+  line-height: 1.5;
 }
 
 .character-quote {
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, 
-    rgba(255, 204, 0, 0.1), 
-    rgba(255, 153, 0, 0.05)
-  );
+  background: rgba(255, 255, 255, 0.03);
   padding: var(--space-md);
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 204, 0, 0.3);
-  margin-top: var(--space-lg);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: var(--space-md);
   gap: var(--space-md);
 }
 
 .character-avatar-small {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(255, 204, 0, 0.5);
+  border: 2px solid rgba(255, 191, 0, 0.4);
   background: rgba(255, 255, 255, 0.1);
 }
 
 .character-name-small {
-  color: #FFC107;
-  font-weight: bold;
-  font-size: var(--font-size-base);
+  color: #FFD93D;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
 }
 
 .quote-text {
-  color: #B0D0FF;
+  color: rgba(176, 208, 255, 0.85);
   font-style: italic;
   flex: 1;
-  font-size: var(--font-size-base);
-  line-height: 1.4;
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
 }
 
 /* Choice Grid */
@@ -243,17 +233,15 @@
 }
 
 .choice-button {
-  background: linear-gradient(135deg, 
-    rgba(10, 26, 47, 0.8), 
-    rgba(26, 58, 95, 0.8)
-  );
-  border: 2px solid rgba(74, 138, 207, 0.3);
-  border-radius: 15px;
-  padding: var(--space-lg);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: var(--space-md) var(--space-lg);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: left;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   position: relative;
   overflow: hidden;
 }
@@ -267,10 +255,10 @@
   height: 100%;
   background: linear-gradient(90deg, 
     transparent, 
-    rgba(255, 204, 0, 0.1), 
+    rgba(255, 191, 0, 0.08), 
     transparent
   );
-  transition: left 0.5s ease;
+  transition: left 0.6s ease;
 }
 
 .choice-button:hover::before {
@@ -279,10 +267,11 @@
 
 .choice-button:hover {
   transform: translateY(-3px);
-  border-color: rgba(255, 204, 0, 0.6);
+  border-color: rgba(255, 191, 0, 0.3);
+  background: rgba(255, 191, 0, 0.06);
   box-shadow: 
-    0 10px 20px rgba(255, 204, 0, 0.2),
-    0 0 15px rgba(255, 204, 0, 0.1);
+    0 10px 25px rgba(255, 191, 0, 0.12),
+    0 0 0 1px rgba(255, 191, 0, 0.1) inset;
 }
 
 .choice-content {

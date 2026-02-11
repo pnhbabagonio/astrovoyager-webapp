@@ -74,7 +74,7 @@
   font-size: var(--font-size-xl);
   color: #FFC107;
   line-height: 1.4;
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-xxl);
   padding: var(--space-lg);
   background: linear-gradient(135deg, 
     rgba(255, 204, 0, 0.1), 
@@ -94,6 +94,7 @@
   padding: var(--space-lg);
   border-radius: 10px;
   border: 1px solid rgba(74, 138, 207, 0.3);
+  margin-top: 32px;
 }
 
 .discussion-prompt h3 {
@@ -146,22 +147,21 @@
 }
 
 .next-reflection-btn {
-  background: linear-gradient(45deg, 
-    #4a8acf, 
-    #FF9800,
-    #FFC107
-  );
-  color: white;
-  border: none;
-  padding: var(--space-lg) var(--space-xxl);
-  font-size: var(--font-size-lg);
-  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, #FFD93D 0%, #FF9F1C 100%) !important;
+  color: #1a1a2e !important;
+  border: none !important;
+  padding: 16px 48px !important;
+  min-height: 50px;
+  font-size: var(--font-size-base);
+  border-radius: 50px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: bold;
-  min-width: 300px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+  min-width: 220px;
   position: relative;
   overflow: hidden;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 20px rgba(255, 159, 28, 0.3);
 }
 
 .next-reflection-btn::before {
@@ -173,10 +173,10 @@
   height: 100%;
   background: linear-gradient(90deg, 
     transparent, 
-    rgba(255, 255, 255, 0.2), 
+    rgba(255, 255, 255, 0.3), 
     transparent
   );
-  transition: left 0.5s ease;
+  transition: left 0.6s ease;
 }
 
 .next-reflection-btn:hover::before {
@@ -184,8 +184,8 @@
 }
 
 .next-reflection-btn:hover {
-  transform: scale(1.05);
+  transform: translateY(-3px) scale(1.02);
   box-shadow: 
-    0 0 40px rgba(74, 138, 207, 0.6),
-    0 0 20px rgba(255, 193, 7, 0.4);
+    0 12px 35px rgba(255, 159, 28, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
 }

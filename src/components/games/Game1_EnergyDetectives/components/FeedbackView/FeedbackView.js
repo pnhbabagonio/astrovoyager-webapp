@@ -4,10 +4,10 @@ const FeedbackView = ({ feedback, scenario, onNext, isLastScenario }) => {
   return (
     <div className="feedback-view">
       <div className="feedback-header">
+        <h2>Energy Analysis</h2>
         <div className={`result-badge ${feedback.isCorrect ? 'correct' : 'incorrect'}`}>
           {feedback.isCorrect ? '✅ Correct!' : '❌ Try Again'}
         </div>
-        <h2>Energy Analysis</h2>
       </div>
       
       <div className="feedback-content">

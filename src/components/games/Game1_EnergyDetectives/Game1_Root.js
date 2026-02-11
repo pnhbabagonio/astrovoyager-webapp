@@ -134,14 +134,17 @@ const Game1_Root = ({ onComplete }) => {
 
   return (
     <div className="game1-root solar-voyager-theme">
+      <button onClick={handleBackToMap} className="back-button-floating space-button">
+        <span className="button-text">Back to Mission Map</span>
+      </button>
+      
       <div className="game1-header space-panel">
-        <button onClick={handleBackToMap} className="back-button space-button">
-          <span className="button-text">Back to Mission Map</span>
-        </button>
         <div className="header-center">
           <div className="mission-title">
-            <div className="sun-icon-large">☀️</div>
-            <h1>Solar Voyager Adventures</h1>
+            <div className="title-row">
+              <div className="sun-icon-large">☀️</div>
+              <h1>Solar Voyager Adventures</h1>
+            </div>
             <div className="mission-subtitle">Investigating Sun Energy Mysteries</div>
           </div>
         </div>
@@ -222,7 +225,7 @@ const Game1_Root = ({ onComplete }) => {
             <div 
               className="progress-beam sun-glow"
               style={{ 
-                width: `${((currentScenarioIndex + (currentStage === 'feedback' ? 1 : 0)) / game1Data.scenarios.length) * 100}%` 
+                width: `${(currentScenarioIndex / (game1Data.scenarios.length - 1)) * 100}%` 
               }}
             >
               <div className="beam-core"></div>

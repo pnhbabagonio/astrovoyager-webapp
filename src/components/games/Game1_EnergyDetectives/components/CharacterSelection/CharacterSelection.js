@@ -3,18 +3,29 @@ import './CharacterSelection.css';
 
 const CharacterSelection = ({ characters, onCharacterSelect }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPulsing, setIsPulsing] = useState(false);
   const currentCharacter = characters[currentIndex];
 
   const handlePrevious = () => {
+    if (isPulsing) return;
+    setIsPulsing(true);
     setCurrentIndex((prevIndex) => 
       prevIndex === 0 ? characters.length - 1 : prevIndex - 1
     );
+    setTimeout(() => {
+      setIsPulsing(false);
+    }, 300);
   };
 
   const handleNext = () => {
+    if (isPulsing) return;
+    setIsPulsing(true);
     setCurrentIndex((prevIndex) => 
       prevIndex === characters.length - 1 ? 0 : prevIndex + 1
     );
+    setTimeout(() => {
+      setIsPulsing(false);
+    }, 300);
   };
 
   const handleSelectCharacter = () => {
@@ -28,10 +39,18 @@ const CharacterSelection = ({ characters, onCharacterSelect }) => {
         <p className="subtitle">Select a character to investigate sun energy mysteries</p>
       </div>
 
-      <div className="character-content">
-        {/* Left: Character Image */}
-        <div className="character-image-section">
-          <div className="character-image-wrapper sun-glow">
+      {/* Character Carousel */}
+      <div className="character-carousel">
+        <div className="carousel-image-row">
+          <button 
+            className="carousel-arrow prev-arrow"
+            onClick={handlePrevious}
+            aria-label="Previous character"
+          >
+            ‹
+          </button>
+
+          <div className={`character-image-wrapper ${isPulsing ? 'heartbeat' : ''}`}>
             <img 
               src={currentCharacter.avatar} 
               alt={currentCharacter.name}
@@ -41,71 +60,41 @@ const CharacterSelection = ({ characters, onCharacterSelect }) => {
                 e.target.src = `${process.env.PUBLIC_URL}/assets/images/characters/default.png`;
               }}
             />
-            <div className="character-image-overlay">
-              <div className="space-badge">Space Explorer</div>
-            </div>
           </div>
-        </div>
 
-        {/* Right: Character Information */}
-        <div className="character-info-section">
-          <div className="character-info-content space-panel">
-            <h3 className="character-name-display">{currentCharacter.name}</h3>
-            <p className="character-description-display">{currentCharacter.description}</p>
-            
-            <div className="character-attributes">
-              <div className="attribute">
-                <span className="attribute-icon sun-glow">☀️</span>
-                <span className="attribute-text">Solar Expert</span>
-              </div>
-              <div className="attribute">
-                <span className="attribute-icon">🔍</span>
-                <span className="attribute-text">Investigator</span>
-              </div>
-              <div className="attribute">
-                <span className="attribute-icon">🚀</span>
-                <span className="attribute-text">Space Traveler</span>
-              </div>
-            </div>
-
-            <button
-              className="select-character-button"
-              onClick={handleSelectCharacter}
-            >
-              Select {currentCharacter.name} as Explorer
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom: Navigation */}
-      <div className="navigation-section">
-        <div className="navigation-controls">
           <button 
-            className="nav-button prev-button"
-            onClick={handlePrevious}
+            className="carousel-arrow next-arrow"
+            onClick={handleNext}
+            aria-label="Next character"
           >
-            ← Previous Explorer
+            ›
           </button>
+        </div>
+
+        <div className="character-info">
+          <h3 className="character-name">{currentCharacter.name}</h3>
           
           <div className="character-indicators">
             {characters.map((char, index) => (
               <div 
                 key={char.id}
-                className={`character-indicator ${index === currentIndex ? 'active' : ''}`}
+                className={`indicator-dot ${index === currentIndex ? 'active' : ''}`}
                 onClick={() => setCurrentIndex(index)}
               />
             ))}
           </div>
-          
-          <button 
-            className="nav-button next-button"
-            onClick={handleNext}
-          >
-            Next Explorer →
-          </button>
+
+          <p className="character-description">{currentCharacter.description}</p>
         </div>
       </div>
+
+      {/* Select Button */}
+      <button
+        className="select-character-button"
+        onClick={handleSelectCharacter}
+      >
+        Select {currentCharacter.name} as Explorer
+      </button>
     </div>
   );
 };

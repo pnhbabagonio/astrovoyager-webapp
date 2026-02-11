@@ -6,7 +6,7 @@ const Scoreboard = ({ score, totalQuestions, character, onContinue }) => {
   return (
     <div className="scoreboard">
       <div className="scoreboard-header">
-        <h2>Mission Complete! 🚀</h2>
+        <h2>Mission Complete</h2>
         <p className="subtitle">Your Energy Investigation Results</p>
       </div>
       
