@@ -188,8 +188,9 @@
 /* Floating Back Button */
 .back-button-floating {
   position: absolute;
-  top: var(--space-md);
+  top: 50%;
   left: var(--space-lg);
+  transform: translateY(-50%);
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: rgba(176, 208, 255, 0.9);
@@ -211,7 +212,7 @@
   background: rgba(255, 191, 0, 0.1);
   border-color: rgba(255, 191, 0, 0.3);
   color: #FFD93D;
-  transform: translateX(-3px);
+  transform: translateY(-50%) translateX(-3px);
 }
 
 /* Modern Back Button (legacy) */
@@ -521,6 +522,7 @@
     position: relative;
     top: auto;
     left: auto;
+    transform: none;
     margin: var(--space-sm) var(--space-md);
     align-self: flex-start;
   }

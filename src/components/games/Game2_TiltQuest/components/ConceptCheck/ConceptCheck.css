@@ -20,6 +20,11 @@
   -webkit-text-fill-color: transparent;
 }
 
+.concept-header h2 .header-emoji {
+  -webkit-text-fill-color: initial;
+  background: none;
+}
+
 .concept-instruction {
   color: #a0b9ff;
   font-size: 1.1rem;
@@ -179,31 +184,42 @@
 
 .navigation-controls {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-bottom: 2rem;
   padding: 1rem;
   background: rgba(20, 25, 60, 0.5);
   border-radius: 12px;
+  gap: 1.5rem;
 }
 
 .nav-button {
-  background: rgba(74, 125, 255, 0.2);
-  color: #a0b9ff;
-  border: 2px solid #4a7dff;
-  padding: 0.7rem 1.5rem;
-  border-radius: 10px;
-  font-size: 0.9rem;
+  background: linear-gradient(45deg, #4a7dff, #8a4fff);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-width: 120px;
+  width: 220px;
+  min-width: 220px;
+  max-width: 220px;
+  height: 44px;
+  flex: 0 0 180px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 .nav-button:hover:not(:disabled) {
-  background: rgba(74, 125, 255, 0.4);
+  background: linear-gradient(45deg, #5a8dff, #7a6fff);
   color: white;
   transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(74, 125, 255, 0.4);
 }
 
 .nav-button:disabled {
@@ -214,12 +230,16 @@
 
 .next-button {
   background: linear-gradient(45deg, #4a7dff, #8a4fff);
-  color: white;
-  border: none;
+}
+
+.prev-button {
+  background: linear-gradient(45deg, #4a7dff, #8a4fff);
 }
 
 .question-status {
   text-align: center;
+  flex: 0 0 auto;
+  padding: 0 0.5rem;
 }
 
 .status-answered {

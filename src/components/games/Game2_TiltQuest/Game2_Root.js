@@ -207,7 +207,7 @@ const Game2_Root = ({ onComplete }) => {
           Back to Mission Map
         </button>
         <div className="astro-title">
-          <h1>🌌 ASTROVOYAGER – TILTQUEST</h1>
+          <h1>ASTROVOYAGER – TILTQUEST</h1>
           <p className="subtitle">Discover how Earth's tilt affects daylight!</p>
         </div>
         <div className="astro-score">

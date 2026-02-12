@@ -20,6 +20,11 @@
   -webkit-text-fill-color: transparent;
 }
 
+.score-header h2 .header-emoji {
+  -webkit-text-fill-color: initial;
+  background: none;
+}
+
 .mission-summary {
   color: #a0b9ff;
   font-size: 1.1rem;
@@ -125,15 +130,19 @@
 .score-breakdown {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .breakdown-item {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  padding: 0.5rem 1rem;
 }
 
 .breakdown-item:last-child {
@@ -142,59 +151,68 @@
 
 .breakdown-label {
   color: #a0b9ff;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
 }
 
 .breakdown-value {
   color: #ffffff;
-  font-weight: 500;
-  font-size: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
 }
 
 /* Celebration Animation */
 .celebration {
   position: relative;
-  height: 100px;
-  margin: 2rem 0;
+  height: 30px;
+  margin: 0.5rem 0;
+  overflow: hidden;
 }
 
 .confetti {
   position: absolute;
   width: 10px;
   height: 20px;
-  background: linear-gradient(45deg, #ff6666, #ff9966, #ffcc00, #66ff66, #6699ff, #9966ff);
-  opacity: 0;
-  animation: confetti-fall 2s ease-in-out infinite;
+  top: -20px;
+  animation: confetti-fall 2.5s ease-out infinite;
 }
 
 .confetti:nth-child(1) {
   left: 10%;
   animation-delay: 0s;
+  background: #ff6666;
 }
 .confetti:nth-child(2) {
   left: 30%;
-  animation-delay: 0.4s;
+  animation-delay: 0.5s;
+  background: #ffcc00;
 }
 .confetti:nth-child(3) {
   left: 50%;
-  animation-delay: 0.8s;
+  animation-delay: 0.2s;
+  background: #66ff66;
 }
 .confetti:nth-child(4) {
   left: 70%;
-  animation-delay: 1.2s;
+  animation-delay: 0.7s;
+  background: #6699ff;
 }
 .confetti:nth-child(5) {
   left: 90%;
-  animation-delay: 1.6s;
+  animation-delay: 0.4s;
+  background: #9966ff;
 }
 
 @keyframes confetti-fall {
   0% {
-    transform: translateY(-100px) rotate(0deg);
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  80% {
     opacity: 1;
   }
   100% {
-    transform: translateY(100px) rotate(360deg);
+    transform: translateY(50px) rotate(720deg);
     opacity: 0;
   }
 }

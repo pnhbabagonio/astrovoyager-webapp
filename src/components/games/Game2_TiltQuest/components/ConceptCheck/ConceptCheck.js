@@ -10,10 +10,17 @@ const ConceptCheck = ({ questions, onComplete }) => {
 
   const handleAnswerSelect = (questionId, answerId) => {
     if (!isSubmitted) {
-      setAnswers({
-        ...answers,
-        [questionId]: answerId
-      });
+      // Toggle selection - if already selected, unselect it
+      if (answers[questionId] === answerId) {
+        const newAnswers = { ...answers };
+        delete newAnswers[questionId];
+        setAnswers(newAnswers);
+      } else {
+        setAnswers({
+          ...answers,
+          [questionId]: answerId
+        });
+      }
     }
   };
 
@@ -54,7 +61,7 @@ const ConceptCheck = ({ questions, onComplete }) => {
   return (
     <div className="concept-check">
       <div className="concept-header">
-        <h2>🧠 Concept Check</h2>
+        <h2><span className="header-emoji">🧠</span> Concept Check</h2>
         <p className="concept-instruction">
           Test your understanding of Earth's tilt and daylight changes
         </p>
@@ -66,9 +73,6 @@ const ConceptCheck = ({ questions, onComplete }) => {
             className="progress-fill"
             style={{ width: `${getProgressPercentage()}%` }}
           ></div>
-        </div>
-        <div className="progress-text">
-          Question {currentQuestionIndex + 1} of {questions.length}
         </div>
       </div>
 
@@ -111,7 +115,7 @@ const ConceptCheck = ({ questions, onComplete }) => {
           onClick={handlePreviousQuestion}
           disabled={currentQuestionIndex === 0 || isSubmitted}
         >
-          ← Previous
+          Previous
         </button>
         
         <div className="question-status">
@@ -127,7 +131,7 @@ const ConceptCheck = ({ questions, onComplete }) => {
           onClick={handleNextQuestion}
           disabled={!isQuestionAnswered(currentQuestion.id) || isSubmitted}
         >
-          {currentQuestionIndex < questions.length - 1 ? 'Next →' : 'Submit Answers'}
+          {currentQuestionIndex < questions.length - 1 ? 'Next' : 'Submit'}
         </button>
       </div>
 

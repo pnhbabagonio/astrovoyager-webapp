@@ -6,14 +6,19 @@ const ObservationCheck = ({ location, earthState, onComplete }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const observationOptions = [
-    { id: 'longer', label: '🌞 Day is longer', value: 'longer' },
-    { id: 'shorter', label: '🌙 Day is shorter', value: 'shorter' },
-    { id: 'same', label: '⚖️ Day stays almost the same', value: 'same' }
+    { id: 'longer', label: 'Day is longer', icon: '🌞', value: 'longer' },
+    { id: 'shorter', label: 'Day is shorter', icon: '🌙', value: 'shorter' },
+    { id: 'same', label: 'Day stays almost the same', icon: '⚖️', value: 'same' }
   ];
 
   const handleAnswerSelect = (answerId) => {
     if (!isSubmitted) {
-      setSelectedAnswer(answerId);
+      // Toggle selection - if already selected, unselect it
+      if (selectedAnswer === answerId) {
+        setSelectedAnswer(null);
+      } else {
+        setSelectedAnswer(answerId);
+      }
     }
   };
 
@@ -27,7 +32,7 @@ const ObservationCheck = ({ location, earthState, onComplete }) => {
   return (
     <div className="observation-check">
       <div className="check-header">
-        <h2>👁️ Observation Check</h2>
+        <h2><span className="header-emoji">👁️</span> Observation Check</h2>
         <p className="check-instruction">
           Based on your observation of <strong>{location.name}</strong>, 
           what happens to the day length when Earth's tilt is ON?
@@ -69,7 +74,7 @@ const ObservationCheck = ({ location, earthState, onComplete }) => {
               onClick={() => handleAnswerSelect(option.id)}
             >
               <div className="option-icon">
-                {option.label.charAt(0)}
+                {option.icon}
               </div>
               <div className="option-content">
                 <h4>{option.label}</h4>

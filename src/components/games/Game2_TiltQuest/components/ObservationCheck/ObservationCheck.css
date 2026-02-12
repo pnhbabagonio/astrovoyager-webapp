@@ -20,6 +20,11 @@
   -webkit-text-fill-color: transparent;
 }
 
+.check-header h2 .header-emoji {
+  -webkit-text-fill-color: initial;
+  background: none;
+}
+
 .check-instruction {
   color: #a0b9ff;
   font-size: 1.1rem;

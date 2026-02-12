@@ -113,7 +113,7 @@ const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProcee
   return (
     <div className="earth-visualization">
       <div className="visualization-header">
-        <h2>🌎 Observing: {location.name}</h2>
+        <h2><span className="header-emoji">🌎</span> Observing: {location.name}</h2>
         <p className="coordinates">Latitude: {location.latitude}</p>
       </div>
       
@@ -196,22 +196,29 @@ const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProcee
       
       {/* Controls */}
       <div className="earth-controls">
-        <div className="control-group">
+        <div className="control-group tilt-control">
           <label className="control-label">
             <span className="label-text">Earth's Tilt:</span>
-            <div className="toggle-switch">
-              <button
-                className={`toggle-option ${!earthState.tilt ? 'active' : ''}`}
-                onClick={() => onUpdateEarthState({...earthState, tilt: false})}
-              >
-                OFF
-              </button>
-              <button
-                className={`toggle-option ${earthState.tilt ? 'active' : ''}`}
-                onClick={() => onUpdateEarthState({...earthState, tilt: true})}
-              >
-                ON
-              </button>
+            <div 
+              className={`tilt-toggle-switch ${earthState.tilt ? 'active' : ''}`}
+              onClick={() => onUpdateEarthState({...earthState, tilt: !earthState.tilt})}
+              role="switch"
+              aria-checked={earthState.tilt}
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  onUpdateEarthState({...earthState, tilt: !earthState.tilt});
+                }
+              }}
+            >
+              <div className="tilt-track">
+                <span className="tilt-label off">OFF</span>
+                <span className="tilt-label on">ON</span>
+              </div>
+              <div className="tilt-thumb">
+                <span className="tilt-icon">{earthState.tilt ? '🌎' : '🌍'}</span>
+                <span className="tilt-angle">{earthState.tilt ? '23.5°' : '0°'}</span>
+              </div>
             </div>
           </label>
           <p className="control-hint">
@@ -275,7 +282,7 @@ const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProcee
           onClick={onProceed}
           disabled={!imagesLoaded}
         >
-          {imagesLoaded ? "Continue to Observation Check →" : "Loading images..."}
+          {imagesLoaded ? "Continue to Observation Check" : "Loading images..."}
         </button>
         <p className="observation-tip">
           👁️ Earth and Sun are displayed at optimal size (Earth: 300px, Sun: 120px) for better visibility!

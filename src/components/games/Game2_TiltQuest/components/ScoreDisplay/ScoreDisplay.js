@@ -196,7 +196,7 @@ const ScoreDisplay = ({
         // Individual Location Score Display
         <>
           <div className="score-header">
-            <h2>🎯 Location Complete!</h2>
+            <h2><span className="header-emoji">🎯</span> Location Complete!</h2>
             <p className="mission-summary">
               You explored how Earth's tilt affects daylight in {location?.name}
             </p>
