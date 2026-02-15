@@ -129,14 +129,7 @@
   -webkit-text-fill-color: transparent;
   margin: 0 0 0.15rem 0;
   text-shadow: 0 0 20px rgba(74, 125, 255, 0.5);
-}
-
-/* Remove color from telescope emoji */
-.header-content h1 .telescope-icon {
-  -webkit-text-fill-color: initial;
-  background: none;
-  filter: grayscale(1) brightness(1.8);
-  display: inline-block;
+  letter-spacing: 1px;
 }
 
 /* Subtitle */

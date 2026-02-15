@@ -26,9 +26,9 @@
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(ellipse at 15% 5%, rgba(255, 191, 0, 0.15) 0%, transparent 50%),
-    radial-gradient(ellipse at 85% 95%, rgba(255, 107, 53, 0.1) 0%, transparent 45%),
-    radial-gradient(ellipse at 50% 50%, rgba(147, 112, 219, 0.05) 0%, transparent 60%);
+    radial-gradient(ellipse at 50% 20%, rgba(255, 191, 0, 0.12) 0%, transparent 45%),
+    radial-gradient(ellipse at 20% 80%, rgba(255, 140, 0, 0.08) 0%, transparent 40%),
+    radial-gradient(ellipse at 80% 60%, rgba(255, 107, 53, 0.06) 0%, transparent 35%);
   pointer-events: none;
   animation: ambientGlow 15s ease-in-out infinite alternate;
 }
@@ -114,143 +114,174 @@
   border-radius: 20px;
 }
 
-/* Game1.css - MODERN HEADER STYLES */
+/* ==================== MODERN HEADER - Seasonal Navigator Style ==================== */
 .game1-header {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 200px 1fr 200px;
   align-items: center;
-  padding: var(--space-lg) var(--space-xl);
-  padding-top: 50px;
-  background: rgba(10, 15, 30, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 191, 0, 0.15);
-  flex-shrink: 0;
-  min-height: 90px;
+  height: 150px;
+  padding: 0 2rem;
+  box-sizing: border-box;
+  background: rgba(10, 14, 42, 0.8);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   position: relative;
-  z-index: 2;
-  gap: var(--space-lg);
+  z-index: 10;
+  border-bottom: none;
 }
 
+/* Bottom border accent */
+.game1-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #FFD93D, #FF9F1C, #FFD93D);
+}
+
+/* Back Button */
+.game1-header .back-button.space-button {
+  background: rgba(255, 191, 0, 0.2);
+  border: 2px solid #FFD93D;
+  color: #FFD93D;
+  padding: 0.5rem 1.2rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  margin: 0;
+  justify-self: start;
+  align-self: center;
+}
+
+.game1-header .back-button.space-button:hover {
+  background: rgba(255, 191, 0, 0.4);
+  border-color: #FF9F1C;
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(255, 191, 0, 0.4);
+}
+
+/* Spacer to balance the back button and center the title */
+.header-spacer {
+  justify-self: end;
+  align-self: center;
+}
+
+/* Header Center Content */
 .header-center {
-  flex: 1;
+  text-align: center;
+  justify-self: center;
+  align-self: center;
+}
+
+.header-center .mission-title {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  min-width: 0;
+  gap: 0.25rem;
+  margin: 0;
 }
 
-.mission-title {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-xs);
-}
-
-.title-row {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-}
-
-.sun-icon-large {
-  font-size: 28px;
-  line-height: 1;
-}
-
-.mission-title h1 {
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
-  background: linear-gradient(135deg, 
-    #FFD93D 0%, 
-    #FF9F1C 50%,
-    #E8B86D 100%
-  );
+.header-center .mission-title h1 {
+  font-size: 2rem;
+  background: linear-gradient(45deg, #FFD93D, #FF9F1C);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0;
-  letter-spacing: 0.5px;
+  text-shadow: 0 0 20px rgba(255, 191, 0, 0.5);
+  letter-spacing: 2px;
   line-height: 1.2;
+  font-weight: 700;
 }
 
+/* Remove color from sun emoji to keep it yellow */
+.header-center .mission-title h1 .sun-icon-large {
+  -webkit-text-fill-color: initial;
+  background: none;
+  filter: grayscale(0) brightness(1.2);
+  display: inline-block;
+}
+
+/* Subtitle */
 .mission-subtitle {
-  color: rgba(176, 208, 255, 0.8);
-  font-size: var(--font-size-xs);
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  font-weight: 500;
-  opacity: 0.9;
-}
-
-/* Floating Back Button */
-.back-button-floating {
-  position: absolute;
-  top: 50%;
-  left: var(--space-lg);
-  transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(176, 208, 255, 0.9);
-  padding: var(--space-sm) var(--space-lg);
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  z-index: 10;
-}
-
-.back-button-floating:hover {
-  background: rgba(255, 191, 0, 0.1);
-  border-color: rgba(255, 191, 0, 0.3);
   color: #FFD93D;
-  transform: translateY(-50%) translateX(-3px);
-}
-
-/* Modern Back Button (legacy) */
-.back-button.space-button {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(176, 208, 255, 0.9);
-  padding: var(--space-sm) var(--space-lg);
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: var(--font-size-sm);
-  font-weight: 500;
+  margin: 0;
+  font-weight: 300;
   display: flex;
+  gap: 0.5rem;
   align-items: center;
-  gap: var(--space-sm);
-  min-width: 140px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  justify-content: center;
 }
 
-.back-button.space-button:hover {
-  background: rgba(255, 191, 0, 0.1);
-  border-color: rgba(255, 191, 0, 0.3);
+.mission-subtitle span {
+  margin: 0 0.25rem;
+  font-size: 1.0rem;
   color: #FFD93D;
-  transform: translateX(-4px);
-  box-shadow: 
-    0 4px 20px rgba(255, 191, 0, 0.15),
-    0 0 0 1px rgba(255, 191, 0, 0.1) inset;
+  letter-spacing: 0.5px;  /* Add this as well */
 }
 
-.button-icon {
-  font-size: var(--font-size-base);
-  transition: transform 0.3s ease;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .game1-header {
+    height: auto;
+    min-height: auto;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .game1-header .back-button.space-button {
+    align-self: flex-start;
+    font-size: 0.85rem;
+    padding: 0.4rem 1rem;
+    flex-basis: auto;
+  }
+
+  .header-center {
+    width: 100%;
+  }
+
+  .header-center .mission-title h1 {
+    font-size: 1.5rem;
+  }
+
+  .mission-subtitle {
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+  }
+
+  .mission-subtitle span {
+    font-size: 0.85rem;
+  }
+
+  .header-spacer {
+    display: none;
+  }
 }
 
-.back-button.space-button:hover .button-icon {
-  transform: translateX(-2px);
+@media (max-width: 480px) {
+  .game1-header {
+    padding: 0.75rem;
+  }
+
+  .header-center .mission-title h1 {
+    font-size: 1.25rem;
+  }
+
+  .mission-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .mission-subtitle span {
+    font-size: 0.75rem;
+  }
 }
 
 /* Modern Character Badge */
@@ -450,9 +481,14 @@
 }
 
 .header-spacer {
-  min-width: 180px;
+  width: 0;
+  flex: 0 0 auto;
+  visibility: hidden;
+  flex-basis: 160px;
   flex-shrink: 0;
+  align-self: center;
 }
+
 
 .game1-content {
   flex: 1;

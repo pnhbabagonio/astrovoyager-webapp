@@ -134,33 +134,25 @@ const Game1_Root = ({ onComplete }) => {
 
   return (
     <div className="game1-root solar-voyager-theme">
-      <div className="game1-header space-panel">
-        <button onClick={handleBackToMap} className="back-button-floating space-button">
+      <div className="game1-header">
+        <button onClick={handleBackToMap} className="back-button space-button">
           <span className="button-text">Back to Mission Map</span>
         </button>
+
         <div className="header-center">
           <div className="mission-title">
             <div className="title-row">
-              <h1>Solar Voyager Adventures</h1>
+              <h1>SOLAR VOYAGER</h1>
             </div>
-            <div className="mission-subtitle">Investigating Sun Energy Mysteries</div>
+            <div className="mission-subtitle">
+              <span>⏱️ {/* Add timer if you want */}Mission {Math.min(currentScenarioIndex + 1, game1Data.scenarios.length)}/{game1Data.scenarios.length}</span>
+              <span>⭐ Score: {score}/{game1Data.scenarios.length}</span>
+              {selectedCharacter && <span>🚀 {selectedCharacter.name}</span>}
+            </div>
           </div>
         </div>
-        {selectedCharacter && (
-          <div className="character-badge solar-badge">
-            <img 
-              src={selectedCharacter.avatar} 
-              alt={selectedCharacter.name}
-              className="badge-avatar"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = `${process.env.PUBLIC_URL}/assets/images/characters/default.png`;
-              }}
-            />
-            <span className="badge-text">{selectedCharacter.name}</span>
-            <span className="badge-role">Solar Explorer</span>
-          </div>
-        )}
+
+        <div className="header-spacer"></div>
       </div>
 
       <div className="game1-content">
