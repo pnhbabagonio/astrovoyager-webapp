@@ -53,134 +53,103 @@
 /* ==================== MODERN HEADER ==================== */
 .game3-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, rgba(10, 14, 42, 0.92), rgba(22, 28, 56, 0.88));
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  height: 150px;  
+  padding: 0 2rem;
+  min-height: 150px;  
+  box-sizing: border-box;
+  background: rgba(10, 14, 42, 0.8);
+  backdrop-filter: blur(15px);
   position: relative;
   z-index: 10;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* Animated gradient accent line at bottom */
+/* Bottom border accent */
 .game3-header::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--secondary-color, #4a7dff) 20%,
-    #8a4fff 50%,
-    var(--secondary-color, #4a7dff) 80%,
-    transparent
-  );
-  opacity: 0.7;
-  animation: header-glow-slide 4s ease-in-out infinite;
-}
-
-@keyframes header-glow-slide {
-  0%, 100% { opacity: 0.5; filter: brightness(1); }
-  50% { opacity: 1; filter: brightness(1.3); }
+  height: 3px;
+  background: linear-gradient(90deg, #4a7dff, #8a4fff, #4a7dff);
 }
 
 /* Back Button */
-.back-button {
-  display: inline-flex;
-  align-items: center;
-  align-self: center;
-  gap: 0.25rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
-  padding: 0.3rem 0.65rem;
-  border-radius: 8px;
+.game3-header .back-button {
+  background: rgba(74, 125, 255, 0.2);
+  border: 2px solid #4a7dff;
+  color: #a0b9ff;
+  padding: 0.5rem 1.2rem;
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 0.7rem;
-  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
   white-space: nowrap;
-  backdrop-filter: blur(8px);
-  flex-shrink: 0;
-  line-height: 1.2;
+  backdrop-filter: blur(5px);
+  margin: 0; 
+  align-self: center; 
 }
 
-.back-button:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+.game3-header .back-button:hover {
+  background: rgba(74, 125, 255, 0.4);
+  border-color: #8a4fff;
   color: #ffffff;
-  transform: translateX(-3px);
-  box-shadow: 0 2px 12px rgba(74, 125, 255, 0.15);
+  box-shadow: 0 0 15px rgba(74, 125, 255, 0.4);
 }
 
-.back-button:active {
-  transform: translateX(-1px) scale(0.97);
+/* Spacer to balance the back button and center the title */
+.header-spacer {
+  width: 0;
+  flex: 0 0 auto;
+  visibility: hidden;
+  align-self: center;
+}
+
+/* Match spacer width to back button */
+.game3-header .back-button,
+.header-spacer {
+  flex-basis: 160px;
+  flex-shrink: 0;
 }
 
 /* Header Title Area */
 .header-content {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.4rem;
+  text-align: center;
+  flex-grow: 1;
+  align-self: center;
 }
 
 .header-content h1 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  background: linear-gradient(135deg, #e0e6ff 0%, #a0b9ff 40%, #c4b5fd 70%, #e0e6ff 100%);
-  background-size: 200% auto;
+  font-size: 2rem;
+  background: linear-gradient(45deg, #4a7dff, #8a4fff);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin: 0;
-  animation: title-shimmer 6s linear infinite;
-  line-height: 1.2;
+  margin: 0 0 0.15rem 0;
+  text-shadow: 0 0 20px rgba(74, 125, 255, 0.5);
 }
 
-@keyframes title-shimmer {
-  0% { background-position: 0% center; }
-  100% { background-position: 200% center; }
+/* Remove color from telescope emoji */
+.header-content h1 .telescope-icon {
+  -webkit-text-fill-color: initial;
+  background: none;
+  filter: grayscale(1) brightness(1.8);
+  display: inline-block;
 }
 
-/* Stats Pills Row */
+/* Subtitle */
 .header-subtitle {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  color: #a0b9ff;
   margin: 0;
-  flex-wrap: wrap;
-  justify-content: center;
+  font-weight: 300;
 }
 
 .header-subtitle span {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.75);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 0.25rem 0.65rem;
-  border-radius: 20px;
-  transition: all 0.2s ease;
-  letter-spacing: 0.3px;
-}
-
-.header-subtitle span:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
+  margin: 0 0.25rem;
+  font-size: 1.1rem;
+  color: #a0b9ff;
 }
 
 /* Compact Control Panel */

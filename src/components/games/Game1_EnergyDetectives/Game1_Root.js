@@ -141,7 +141,6 @@ const Game1_Root = ({ onComplete }) => {
         <div className="header-center">
           <div className="mission-title">
             <div className="title-row">
-              <div className="sun-icon-large">☀️</div>
               <h1>Solar Voyager Adventures</h1>
             </div>
             <div className="mission-subtitle">Investigating Sun Energy Mysteries</div>

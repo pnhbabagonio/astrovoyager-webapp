@@ -313,13 +313,14 @@ const Game3_Root = ({ onComplete }) => {
 
         
         <div className="header-content">
-          <h1>🔭 SEASONAL NAVIGATOR</h1>
+          <h1>SEASONAL NAVIGATOR</h1>
           <div className="header-subtitle">
             <span>⏱️ {formatTime(timeElapsed)}</span>
             <span>📍 {gameState.selectedRegion?.name || 'No Target'}</span>
             <span>★ {gameState.completedRegions.length}/{game3Data.regions.length}</span>
           </div>
-        </div>   
+        </div>
+        <div className="header-spacer"></div>
       </div>
 
       {/* Compact Status Bar */}

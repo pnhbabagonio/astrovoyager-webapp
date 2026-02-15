@@ -77,11 +77,8 @@
   background: rgba(74, 125, 255, 0.4);
   border-color: #8a4fff;
   color: #ffffff;
-  transform: translateX(-5px);
   box-shadow: 0 0 15px rgba(74, 125, 255, 0.4);
 }
-
-/* Add these to the existing Game2.css file */
 
 /* Location Progress Summary in Header */
 .astro-score {
