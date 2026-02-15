@@ -52,14 +52,22 @@ const SeasonalTeleportationQuiz = ({ scenarios, selectedRegion, onComplete }) =>
     };
     
     setAnswers(prev => [...prev, answerEntry]);
-    
-    setTimeout(() => {
-      if (currentScenarioIndex < scenarios.length - 1) {
-        setCurrentScenarioIndex(prev => prev + 1);
-      } else {
-        onComplete(answers.concat(answerEntry));
-      }
-    }, 2000);
+  };
+
+  const handleProceed = () => {
+    if (currentScenarioIndex < scenarios.length - 1) {
+      setCurrentScenarioIndex(prev => prev + 1);
+    } else {
+      // Get the complete answers array including the current answer
+      const currentAnswer = {
+        scenarioId: currentScenario.id,
+        selectedOptionId: selectedOption,
+        isCorrect: isCorrect,
+        points: isCorrect ? currentScenario.points : 0,
+        correctOptionId: currentScenario.options.find(opt => opt.correct).id
+      };
+      onComplete([...answers.slice(0, -1), currentAnswer]);
+    }
   };
 
   const getRegionIcon = (optionText) => {
@@ -147,6 +155,12 @@ const SeasonalTeleportationQuiz = ({ scenarios, selectedRegion, onComplete }) =>
                 Correct destination: {currentScenario.options.find(opt => opt.correct).text}
               </div>
             )}
+            <button 
+              className="proceed-button"
+              onClick={handleProceed}
+            >
+              {currentScenarioIndex < scenarios.length - 1 ? 'Next Waypoint →' : 'Complete Mission 🎯'}
+            </button>
           </div>
         )}
 

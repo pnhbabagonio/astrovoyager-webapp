@@ -1,6 +1,6 @@
 .scoreboard {
   max-width: 700px;
-  margin: 0 auto;
+  margin: 0 auto 2.5rem auto;
   animation: reportGenerate 0.8s ease;
   position: relative;
   z-index: 2;
@@ -22,6 +22,15 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+.scoreboard-icon {
+  color: initial;
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  font-size: 2.5rem;
+  vertical-align: middle;
   margin-bottom: 0.5rem;
   font-family: 'Orbitron', sans-serif;
 }

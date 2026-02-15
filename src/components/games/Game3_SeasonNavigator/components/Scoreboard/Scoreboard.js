@@ -9,7 +9,7 @@ const Scoreboard = ({ totalScore, maxScore, fillBlankAnswers, quizAnswers, hasIn
   return (
     <div className="scoreboard">
       <div className="analysis-report-header">
-        <h2>📊 Observatory Analysis Report</h2>
+        <h2><span className="scoreboard-icon">📊</span> Observatory Analysis Report</h2>
         <p className="report-subtitle">Mission performance assessment</p>
       </div>
 
