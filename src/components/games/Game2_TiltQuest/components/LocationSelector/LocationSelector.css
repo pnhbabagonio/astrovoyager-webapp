@@ -120,6 +120,7 @@
   font-weight: bold;
   font-size: 0.9rem;
   transition: color 0.3s ease;
+  text-align: center;
 }
 
 .location-card:hover .select-indicator {

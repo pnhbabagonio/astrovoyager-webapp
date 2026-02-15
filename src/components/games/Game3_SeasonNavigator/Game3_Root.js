@@ -313,7 +313,7 @@ const Game3_Root = ({ onComplete }) => {
 
         
         <div className="header-content">
-          <h1>🔭 Seasonal Navigator</h1>
+          <h1>🔭 SEASONAL NAVIGATOR</h1>
           <div className="header-subtitle">
             <span>⏱️ {formatTime(timeElapsed)}</span>
             <span>📍 {gameState.selectedRegion?.name || 'No Target'}</span>

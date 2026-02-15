@@ -1,5 +1,5 @@
 import React from 'react';
-// Updated import path to go up two directories
+
 const CompactGameProgress = ({ 
   currentStep, 
   selectedRegion, 
@@ -16,52 +16,37 @@ const CompactGameProgress = ({
 
   return (
     <div className="compact-status-bar">
-      {/* Left: Mission Progress */}
-      <div className="progress-indicator">
-        <div className="progress-label">
-          <span>Mission Phase:</span>
-          <span className="mission-status-tag">
-            {steps[currentStep - 1]?.icon || '🔭'}
-            {steps[currentStep - 1]?.label || 'Setup'}
-          </span>
-        </div>
-        <div className="phase-dots">
-          {steps.map((step, index) => (
-            <div 
-              key={step.number}
-              className={`phase-dot 
-                ${step.number === currentStep ? 'active' : ''} 
-                ${step.number < currentStep ? 'completed' : ''}`}
-              title={`Phase ${step.number}: ${step.label}`}
-            />
-          ))}
-        </div>
+      {/* Phase Steps */}
+      <div className="phase-steps">
+        {steps.map((step, index) => (
+          <div 
+            key={step.number}
+            className={`phase-step 
+              ${step.number === currentStep ? 'active' : ''} 
+              ${step.number < currentStep ? 'completed' : ''}`}
+          >
+            <span className="step-icon">{step.icon}</span>
+            <span className="step-label">{step.label}</span>
+            {index < steps.length - 1 && <div className="step-connector" />}
+          </div>
+        ))}
       </div>
 
-      {/* Right: Quick Stats */}
-      <div className="quick-stats">
-        <div className="stat-item">
-          <span className="stat-label">Target</span>
-          <span className="stat-value">
-            {selectedRegion?.name || 'None'}
-          </span>
+      {/* Stats Row */}
+      <div className="stats-row">
+        <div className="stat-chip">
+          <span className="chip-icon">📍</span>
+          <span className="chip-value">{selectedRegion?.name || 'Select Target'}</span>
         </div>
         
-        <div className="stat-item">
-          <span className="stat-label">Energy</span>
-          <span className="stat-value">{score}</span>
+        <div className="stat-chip energy">
+          <span className="chip-icon">⚡</span>
+          <span className="chip-value">{score}</span>
         </div>
         
-        <div className="stat-item">
-          <span className="stat-label">Mapped</span>
-          <span className="stat-value">
-            {completedRegions.length}/{totalRegions}
-          </span>
-        </div>
-        
-        <div className="stat-item">
-          <span className="stat-label">Phase</span>
-          <span className="stat-value">{currentStep}/4</span>
+        <div className="stat-chip">
+          <span className="chip-icon">🗺️</span>
+          <span className="chip-value">{completedRegions.length}/{totalRegions}</span>
         </div>
       </div>
     </div>

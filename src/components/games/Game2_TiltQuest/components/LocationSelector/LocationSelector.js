@@ -74,12 +74,9 @@ const LocationSelector = ({ locations, onSelectLocation, locationProgress }) => 
                 {isCompleted ? (
                   <span className="completed-indicator">✓ Completed</span>
                 ) : (
-                  <>
-                    Click to Select →
-                    <span className="status-text" style={{ color: status.color }}>
-                      {status.text}
-                    </span>
-                  </>
+                  <span className="status-text" style={{ color: status.color }}>
+                    {status.text}
+                  </span>
                 )}
               </div>
             </button>
