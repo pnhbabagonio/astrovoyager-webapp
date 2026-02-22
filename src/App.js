@@ -22,7 +22,7 @@ import './App.css';
 function AppContent() {
   const { state: gameState, dispatch: gameDispatch } = useGameState();
   const { actions: audioActions } = useAudio();
-  const { actions: playerActions } = usePlayer();
+  const { state: playerState, actions: playerActions } = usePlayer();
   const [showLaunchVideo, setShowLaunchVideo] = useState(false);
   const [showJourneyLoading, setShowJourneyLoading] = useState(false);
   const [playerData, setPlayerData] = useState(null);
@@ -32,6 +32,25 @@ function AppContent() {
   const isMountedRef = useRef(true);
   const previousViewRef = useRef(gameState.currentView);
 
+  // Helper function to safely format ID for display
+  const formatId = (id) => {
+    if (!id) return 'None';
+    try {
+      const idStr = String(id);
+      return idStr.length > 8 ? idStr.substring(0, 8) + '...' : idStr;
+    } catch (e) {
+      return 'Invalid';
+    }
+  };
+
+  // Helper function to get ID type
+  const getIdType = (id) => {
+    if (!id) return 'No';
+    if (typeof id === 'string') return 'Str';
+    if (typeof id === 'number') return 'Num';
+    return 'Other';
+  };
+
   // Debug: Log state changes
   useEffect(() => {
     console.log('Current view:', gameState.currentView);
@@ -40,7 +59,10 @@ function AppContent() {
     if (playerData) {
       console.log('Current player:', playerData.name);
     }
-  }, [gameState.currentView, gameState.isInitialLoad, gameState.isDataLoaded, playerData]);
+    if (playerState.currentPlayer) {
+      console.log('Player from context:', playerState.currentPlayer.name);
+    }
+  }, [gameState.currentView, gameState.isInitialLoad, gameState.isDataLoaded, playerData, playerState.currentPlayer]);
 
   // Monitor loading states
   useEffect(() => {
@@ -149,6 +171,18 @@ function AppContent() {
         gameDispatch({ type: 'SET_VIEW', payload: 'launch' });
         gameDispatch({ type: 'SET_INITIAL_LOAD_COMPLETE', payload: false });
       }
+      
+      // Ctrl+Shift+D to show debug stats in console
+      if (event.ctrlKey && event.shiftKey && event.key === 'D') {
+        event.preventDefault();
+        console.log('📊 DEBUG STATS:', {
+          gameState: gameState,
+          playerState: playerState,
+          playerData: playerData,
+          showJourneyLoading,
+          showLaunchVideo
+        });
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -156,7 +190,7 @@ function AppContent() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [gameDispatch, playerActions, audioActions]);
+  }, [gameDispatch, playerActions, audioActions, gameState, playerState, playerData, showJourneyLoading, showLaunchVideo]);
 
   // Background music management - IMPROVED VERSION
   useEffect(() => {
@@ -206,7 +240,7 @@ function AppContent() {
     audioActions
   ]);
 
-  // FIXED: Handle loading complete with proper state transition
+  // Handle loading complete with proper state transition
   const handleLoadingComplete = () => {
     console.log('🚀 Loading complete, transitioning to launch screen');
     
@@ -233,7 +267,7 @@ function AppContent() {
       const playerDataObj = {
         name: trimmedName,
         encodedName: `Astronaut ${trimmedName}`,
-        sessionId: `session_${Date.now()}`,
+        sessionId: `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         createdAt: new Date().toISOString(),
         lastPlayed: new Date().toISOString()
       };
@@ -330,7 +364,7 @@ function AppContent() {
     audioActions.playVoiceover('welcome');
   };
 
-  // FIXED: Use useCallback to memoize the function
+  // Use useCallback to memoize the function
   const handleGameComplete = useCallback((gameName, scoreData) => {
     console.log(`Game ${gameName} completed with score:`, scoreData);
     
@@ -372,7 +406,7 @@ function AppContent() {
     }
   }, [gameDispatch, playerActions, gameState.gameProgress, audioActions]);
 
-  // FIXED: Auto-navigation to end-credits only if NOT initial page load
+  // Auto-navigation to end-credits only if NOT initial page load
   useEffect(() => {
     // DON'T auto-navigate on initial page load/refresh
     if (gameState.isInitialLoad) {
@@ -400,7 +434,8 @@ function AppContent() {
       showLaunchVideo,
       currentView: gameState.currentView,
       isDataLoaded: gameState.isDataLoaded,
-      playerName: playerData?.name
+      playerName: playerData?.name,
+      playerFromContext: playerState.currentPlayer?.name
     });
 
     if (showJourneyLoading) {
@@ -450,7 +485,7 @@ function AppContent() {
 
   return (
     <div className="astrovoyager-app">
-      {/* Debug info - remove in production */}
+      {/* Simple Debug Panel */}
       {process.env.NODE_ENV === 'development' && (
         <div style={{
           position: 'fixed',
@@ -469,10 +504,145 @@ function AppContent() {
           <div>View: <strong style={{color: '#fff'}}>{gameState.currentView}</strong></div>
           <div>Initial: <strong style={{color: gameState.isInitialLoad ? '#ff0' : '#0f0'}}>{gameState.isInitialLoad ? 'Yes' : 'No'}</strong></div>
           <div>Data Loaded: <strong style={{color: gameState.isDataLoaded ? '#0f0' : '#f00'}}>{gameState.isDataLoaded ? 'Yes' : 'No'}</strong></div>
-          <div>Loading: <strong style={{color: showJourneyLoading ? '#ff0' : '#888'}}>{showJourneyLoading ? 'Yes' : 'No'}</strong></div>
+          <div>Journey Loading: <strong style={{color: showJourneyLoading ? '#ff0' : '#888'}}>{showJourneyLoading ? 'Yes' : 'No'}</strong></div>
           <div>Video: <strong style={{color: showLaunchVideo ? '#0f0' : '#888'}}>{showLaunchVideo ? 'Yes' : 'No'}</strong></div>
-          <div>isLoading: <strong style={{color: gameState.isLoading ? '#f00' : '#0f0'}}>{gameState.isLoading ? 'Yes' : 'No'}</strong></div>
-          <div>Player: <strong style={{color: playerData ? '#0f0' : '#888'}}>{playerData?.name || 'None'}</strong></div>
+          <div>Global Loading: <strong style={{color: gameState.isLoading ? '#f00' : '#0f0'}}>{gameState.isLoading ? 'Yes' : 'No'}</strong></div>
+          <div>Local Player: <strong style={{color: playerData ? '#0f0' : '#888'}}>{playerData?.name || 'None'}</strong></div>
+          <div>Context Player: <strong style={{color: playerState.currentPlayer ? '#0f0' : '#888'}}>{playerState.currentPlayer?.name || 'None'}</strong></div>
+          <div>Player ID: <strong style={{color: playerData?.id ? '#0f0' : '#888'}}>
+            {formatId(playerData?.id)}
+          </strong></div>
+          <div>ID Type: <strong style={{color: '#0ff'}}>
+            {getIdType(playerData?.id)}
+          </strong></div>
+          <div>DB Status: <strong style={{color: gameState.isDataLoaded ? '#0f0' : '#f00'}}>
+            {gameState.isDataLoaded ? 'Ready' : 'Loading'}
+          </strong></div>
+          <div style={{marginTop: '5px', fontSize: '12px', color: '#888'}}>
+            Ctrl+Shift+E/M/L/D
+          </div>
+        </div>
+      )}
+      
+      {/* Enhanced Debug Panel (commented out - can enable if needed) */}
+      {false && process.env.NODE_ENV === 'development' && (
+        <div style={{
+          position: 'fixed',
+          top: '10px',
+          left: '10px',
+          background: 'rgba(0,0,0,0.9)',
+          color: '#0ff',
+          padding: '12px 16px',
+          borderRadius: '8px',
+          fontSize: '13px',
+          zIndex: 9999,
+          fontFamily: 'monospace',
+          border: '2px solid #00ffff',
+          boxShadow: '0 0 20px rgba(0,255,255,0.5)',
+          maxWidth: '300px',
+          pointerEvents: 'none'
+        }}>
+          <div style={{borderBottom: '1px solid #00ffff', marginBottom: '8px', paddingBottom: '4px', fontWeight: 'bold', color: '#fff'}}>
+            🚀 ASTROVOYAGER DEBUG
+          </div>
+          
+          <div style={{display: 'grid', gridTemplateColumns: '100px 1fr', gap: '4px 8px'}}>
+            <span style={{color: '#0ff'}}>View:</span>
+            <strong style={{color: '#fff'}}>{gameState.currentView}</strong>
+            
+            <span style={{color: '#0ff'}}>Initial Load:</span>
+            <strong style={{color: gameState.isInitialLoad ? '#ff0' : '#0f0'}}>
+              {gameState.isInitialLoad ? 'Yes' : 'No'}
+            </strong>
+            
+            <span style={{color: '#0ff'}}>Data Loaded:</span>
+            <strong style={{color: gameState.isDataLoaded ? '#0f0' : '#f00'}}>
+              {gameState.isDataLoaded ? 'Yes' : 'No'}
+            </strong>
+            
+            <span style={{color: '#0ff'}}>Journey Loading:</span>
+            <strong style={{color: showJourneyLoading ? '#ff0' : '#888'}}>
+              {showJourneyLoading ? 'Yes' : 'No'}
+            </strong>
+            
+            <span style={{color: '#0ff'}}>Video:</span>
+            <strong style={{color: showLaunchVideo ? '#0f0' : '#888'}}>
+              {showLaunchVideo ? 'Yes' : 'No'}
+            </strong>
+            
+            <span style={{color: '#0ff'}}>Global Loading:</span>
+            <strong style={{color: gameState.isLoading ? '#f00' : '#0f0'}}>
+              {gameState.isLoading ? 'Yes' : 'No'}
+            </strong>
+            
+            <span style={{color: '#0ff'}}>Audio:</span>
+            <strong style={{color: gameState.audioEnabled ? '#0f0' : '#f00'}}>
+              {gameState.audioEnabled ? 'On' : 'Off'}
+            </strong>
+          </div>
+          
+          <div style={{borderTop: '1px solid #00ffff', marginTop: '8px', paddingTop: '8px'}}>
+            <div style={{color: '#ff0', marginBottom: '4px'}}>👤 PLAYER INFO</div>
+            <div style={{display: 'grid', gridTemplateColumns: '100px 1fr', gap: '4px 8px'}}>
+              <span style={{color: '#0ff'}}>Local Player:</span>
+              <strong style={{color: playerData ? '#0f0' : '#888'}}>
+                {playerData?.name || 'None'}
+              </strong>
+              
+              <span style={{color: '#0ff'}}>Context Player:</span>
+              <strong style={{color: playerState.currentPlayer ? '#0f0' : '#888'}}>
+                {playerState.currentPlayer?.name || 'None'}
+              </strong>
+              
+              <span style={{color: '#0ff'}}>Player ID:</span>
+              <strong style={{color: playerData?.id ? '#0f0' : '#888'}}>
+                {formatId(playerData?.id)}
+              </strong>
+              
+              <span style={{color: '#0ff'}}>ID Type:</span>
+              <strong style={{color: '#0ff'}}>
+                {getIdType(playerData?.id)}
+              </strong>
+              
+              <span style={{color: '#0ff'}}>DB Player ID:</span>
+              <strong style={{color: playerState.currentPlayer?.id ? '#0f0' : '#888'}}>
+                {playerState.currentPlayer?.id ? `Yes (${getIdType(playerState.currentPlayer.id)})` : 'No'}
+              </strong>
+              
+              <span style={{color: '#0ff'}}>Total Players:</span>
+              <strong style={{color: playerState.players?.length ? '#0f0' : '#888'}}>
+                {playerState.players?.length || 0}
+              </strong>
+            </div>
+          </div>
+          
+          <div style={{borderTop: '1px solid #00ffff', marginTop: '8px', paddingTop: '8px'}}>
+            <div style={{color: '#ff0', marginBottom: '4px'}}>🎮 GAME PROGRESS</div>
+            <div style={{display: 'grid', gridTemplateColumns: '60px 1fr', gap: '4px 8px'}}>
+              <span style={{color: '#0ff'}}>Game 1:</span>
+              <strong style={{color: gameState.gameProgress?.game1?.completed ? '#0f0' : '#888'}}>
+                {gameState.gameProgress?.game1?.completed ? '✓' : '○'} Score: {gameState.gameProgress?.game1?.score || 0}
+              </strong>
+              
+              <span style={{color: '#0ff'}}>Game 2:</span>
+              <strong style={{color: gameState.gameProgress?.game2?.completed ? '#0f0' : '#888'}}>
+                {gameState.gameProgress?.game2?.completed ? '✓' : '○'} Score: {gameState.gameProgress?.game2?.score || 0}
+              </strong>
+              
+              <span style={{color: '#0ff'}}>Game 3:</span>
+              <strong style={{color: gameState.gameProgress?.game3?.completed ? '#0f0' : '#888'}}>
+                {gameState.gameProgress?.game3?.completed ? '✓' : '○'} Score: {gameState.gameProgress?.game3?.score || 0}
+              </strong>
+            </div>
+          </div>
+          
+          <div style={{borderTop: '1px solid #00ffff', marginTop: '8px', paddingTop: '8px', fontSize: '11px', color: '#888'}}>
+            <span>Press Ctrl+Shift+</span>
+            <span style={{color: '#ff0'}}>E</span><span style={{color: '#888'}}> (End) | </span>
+            <span style={{color: '#ff0'}}>M</span><span style={{color: '#888'}}> (Map) | </span>
+            <span style={{color: '#ff0'}}>L</span><span style={{color: '#888'}}> (Launch) | </span>
+            <span style={{color: '#ff0'}}>D</span><span style={{color: '#888'}}> (Debug)</span>
+          </div>
         </div>
       )}
       

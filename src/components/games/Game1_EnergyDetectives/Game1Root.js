@@ -66,7 +66,7 @@ const Game1Root = ({ onComplete }) => {
   const handleChoiceSelect = (choice, scenarioId) => {
     if (!isMounted.current) return;
     
-    audioActions.playSoundEffect?.(choice.isCorrect ? 'success' : 'error');
+    // audioActions.playSoundEffect?.(choice.isCorrect ? 'success' : 'error');
     
     // Update score if correct
     if (choice.isCorrect) {

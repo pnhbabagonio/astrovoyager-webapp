@@ -190,7 +190,7 @@ const Game2Root = ({ onComplete }) => {
     }
     
     // Play appropriate sound effect
-    audioActions.playSoundEffect?.(calculatedScore > 0 ? 'success' : 'error');
+    // audioActions.playSoundEffect?.(calculatedScore > 0 ? 'success' : 'error');
   };
 
   const handleTryAnotherLocation = () => {
@@ -235,7 +235,7 @@ const Game2Root = ({ onComplete }) => {
     }
 
     // Play success sound
-    audioActions.playSoundEffect?.('success');
+    // audioActions.playSoundEffect?.('success');
     
     // Small delay before calling onComplete to allow sound to play
     const completeTimeout = setTimeout(() => {

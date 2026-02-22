@@ -4,26 +4,62 @@ import { openDB } from 'idb';
 class IndexedDBService {
   constructor() {
     this.dbName = 'astrovoyager_db';
-    this.version = 1;
+    this.version = 3; // Increment version to trigger upgrade
     this.db = null;
   }
 
   async init() {
     this.db = await openDB(this.dbName, this.version, {
-      upgrade(db) {
+      upgrade(db, oldVersion, newVersion, transaction) {
+        console.log(`Upgrading DB from version ${oldVersion} to ${newVersion}`);
+        
+        // Players store
         if (!db.objectStoreNames.contains('players')) {
-          const playerStore = db.createObjectStore('players', { keyPath: 'id', autoIncrement: true });
+          const playerStore = db.createObjectStore('players', { 
+            keyPath: 'id', 
+            autoIncrement: true
+          });
           playerStore.createIndex('sessionId', 'sessionId', { unique: true });
           playerStore.createIndex('name', 'name');
+          playerStore.createIndex('createdAt', 'createdAt');
+        } else {
+          // Ensure indexes exist in existing store
+          const playerStore = transaction.objectStore('players');
+          if (!playerStore.indexNames.contains('sessionId')) {
+            playerStore.createIndex('sessionId', 'sessionId', { unique: true });
+          }
+          if (!playerStore.indexNames.contains('name')) {
+            playerStore.createIndex('name', 'name');
+          }
+          if (!playerStore.indexNames.contains('createdAt')) {
+            playerStore.createIndex('createdAt', 'createdAt');
+          }
         }
         
+        // Game progress store
         if (!db.objectStoreNames.contains('gameProgress')) {
-          const progressStore = db.createObjectStore('gameProgress', { keyPath: 'id' });
+          const progressStore = db.createObjectStore('gameProgress', { 
+            keyPath: 'id', 
+            autoIncrement: true
+          });
           progressStore.createIndex('playerId', 'playerId');
           progressStore.createIndex('gameName', 'gameName');
           progressStore.createIndex('completionDate', 'completionDate');
+          progressStore.createIndex('player_game', ['playerId', 'gameName'], { unique: false });
+        } else {
+          const progressStore = transaction.objectStore('gameProgress');
+          if (!progressStore.indexNames.contains('playerId')) {
+            progressStore.createIndex('playerId', 'playerId');
+          }
+          if (!progressStore.indexNames.contains('gameName')) {
+            progressStore.createIndex('gameName', 'gameName');
+          }
+          if (!progressStore.indexNames.contains('player_game')) {
+            progressStore.createIndex('player_game', ['playerId', 'gameName'], { unique: false });
+          }
         }
         
+        // Settings store
         if (!db.objectStoreNames.contains('settings')) {
           db.createObjectStore('settings', { keyPath: 'id' });
         }
@@ -42,12 +78,39 @@ class IndexedDBService {
   // Player operations
   async savePlayer(playerData) {
     const db = await this.getDB();
-    return db.put('players', playerData);
+    try {
+      // Remove id if it's undefined/null to let autoIncrement work
+      const dataToSave = { ...playerData };
+      if (dataToSave.id === undefined || dataToSave.id === null) {
+        delete dataToSave.id;
+      }
+      
+      const id = await db.put('players', dataToSave);
+      console.log('Player saved with ID:', id);
+      
+      // Return the complete saved player
+      const savedPlayer = await db.get('players', id);
+      return savedPlayer;
+    } catch (error) {
+      console.error('Error saving player:', error);
+      throw error;
+    }
   }
 
   async getPlayer(sessionId) {
     const db = await this.getDB();
-    return db.getFromIndex('players', 'sessionId', sessionId);
+    try {
+      const index = db.transaction('players').store.index('sessionId');
+      return await index.get(sessionId);
+    } catch (error) {
+      console.log('Player not found by sessionId:', sessionId);
+      return null;
+    }
+  }
+
+  async getPlayerById(id) {
+    const db = await this.getDB();
+    return db.get('players', id);
   }
 
   async getAllPlayers() {
@@ -55,18 +118,52 @@ class IndexedDBService {
     return db.getAll('players');
   }
 
+  async getLatestPlayer() {
+    const db = await this.getDB();
+    const players = await db.getAll('players');
+    return players.sort((a, b) => 
+      new Date(b.createdAt) - new Date(a.createdAt)
+    )[0] || null;
+  }
+
   // Game progress operations
   async saveGameProgress(progressData) {
     const db = await this.getDB();
-    return db.put('gameProgress', progressData);
+    try {
+      // Remove id if it's undefined/null to let autoIncrement work
+      const dataToSave = { ...progressData };
+      if (dataToSave.id === undefined || dataToSave.id === null) {
+        delete dataToSave.id;
+      }
+      
+      const id = await db.put('gameProgress', dataToSave);
+      console.log('Game progress saved with ID:', id);
+      
+      // Return the complete saved progress
+      const savedProgress = await db.get('gameProgress', id);
+      return savedProgress;
+    } catch (error) {
+      console.error('Error saving game progress:', error);
+      throw error;
+    }
   }
 
   async getGameProgress(playerId, gameName = null) {
     const db = await this.getDB();
-    if (gameName) {
-      return db.getAllFromIndex('gameProgress', 'gameName', gameName);
+    try {
+      if (gameName) {
+        // Use composite index for more efficient query
+        const index = db.transaction('gameProgress').store.index('player_game');
+        const range = IDBKeyRange.only([playerId, gameName]);
+        return await index.getAll(range);
+      } else {
+        const index = db.transaction('gameProgress').store.index('playerId');
+        return await index.getAll(playerId);
+      }
+    } catch (error) {
+      console.error('Error getting game progress:', error);
+      return [];
     }
-    return db.getAllFromIndex('gameProgress', 'playerId', playerId);
   }
 
   async getAllGameProgress() {
@@ -85,7 +182,7 @@ class IndexedDBService {
     return db.get('settings', 'app-settings');
   }
 
-  // NEW: Enhanced Export/Import with file download
+  // Export/Import operations
   async exportData() {
     const db = await this.getDB();
     const players = await db.getAll('players');
@@ -106,7 +203,6 @@ class IndexedDBService {
   async exportToFile() {
     const data = await this.exportData();
     
-    // Create and download JSON file
     const dataStr = JSON.stringify(data, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
     
@@ -125,7 +221,6 @@ class IndexedDBService {
   async exportToCSV() {
     const data = await this.exportData();
     
-    // Convert players to CSV
     let csvContent = "PLAYER DATA\n";
     csvContent += "ID,Name,Encoded Name,Created At,Last Played,Session ID\n";
     
@@ -137,10 +232,9 @@ class IndexedDBService {
     csvContent += "ID,Player ID,Game Name,Completed,Score,Max Score,Completion Date\n";
     
     data.progress.forEach(progress => {
-      csvContent += `${progress.id},${progress.playerId},${progress.gameName},${progress.completed},${progress.score},${progress.maxScore},${progress.completionDate}\n`;
+      csvContent += `${progress.id},${progress.playerId},${progress.gameName},${progress.completed},${progress.score},${progress.maxScore},${progress.completionDate || ''}\n`;
     });
     
-    // Download CSV
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -156,19 +250,19 @@ class IndexedDBService {
     const db = await this.getDB();
     const tx = db.transaction(['players', 'gameProgress', 'settings'], 'readwrite');
     
-    if (data.players) {
+    if (data.players && Array.isArray(data.players)) {
       for (const player of data.players) {
         await tx.objectStore('players').put(player);
       }
     }
     
-    if (data.progress) {
+    if (data.progress && Array.isArray(data.progress)) {
       for (const progress of data.progress) {
         await tx.objectStore('gameProgress').put(progress);
       }
     }
     
-    if (data.settings) {
+    if (data.settings && Array.isArray(data.settings)) {
       for (const setting of data.settings) {
         await tx.objectStore('settings').put(setting);
       }
@@ -209,11 +303,11 @@ class IndexedDBService {
       totalGamesPlayed: progress.length,
       completedGames: completedGames.length,
       averageScoreGame1: game1Scores.length > 0 ? 
-        game1Scores.reduce((sum, p) => sum + p.score, 0) / game1Scores.length : 0,
+        game1Scores.reduce((sum, p) => sum + (p.score || 0), 0) / game1Scores.length : 0,
       averageScoreGame2: game2Scores.length > 0 ? 
-        game2Scores.reduce((sum, p) => sum + p.score, 0) / game2Scores.length : 0,
+        game2Scores.reduce((sum, p) => sum + (p.score || 0), 0) / game2Scores.length : 0,
       averageScoreGame3: game3Scores.length > 0 ? 
-        game3Scores.reduce((sum, p) => sum + p.score, 0) / game3Scores.length : 0,
+        game3Scores.reduce((sum, p) => sum + (p.score || 0), 0) / game3Scores.length : 0,
       lastPlayer: players.length > 0 ? players[players.length - 1] : null
     };
   }
