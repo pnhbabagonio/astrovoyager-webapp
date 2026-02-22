@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useGameState } from '../../../contexts/GameStateContext';
 import { useAudio } from '../../../contexts/AudioContext';
 import { usePlayer } from '../../../contexts/PlayerContext';
@@ -33,11 +33,41 @@ const Game2Root = ({ onComplete }) => {
   const [currentLocationScore, setCurrentLocationScore] = useState(0);
   const [allLocationsCompleted, setAllLocationsCompleted] = useState(false);
   const [showFinalScore, setShowFinalScore] = useState(false);
+  
+  // Refs for audio and mounted state
+  const isMounted = useRef(true);
+  const audioTimeouts = useRef([]);
+
+  // Clear all audio timeouts helper
+  const clearAllTimeouts = () => {
+    audioTimeouts.current.forEach(timeout => clearTimeout(timeout));
+    audioTimeouts.current = [];
+  };
 
   // Initialize game
   useEffect(() => {
-    audioActions.playVoiceover('astro-welcome');
-    audioActions.playBackgroundMusic('space-theme');
+    isMounted.current = true;
+    
+    // Play background music - use 'adventure' for game music
+    if (audioActions.playBackgroundMusic) {
+      audioActions.playBackgroundMusic('adventure');
+    }
+    
+    // Delay voiceover to avoid overlapping with music
+    const voiceoverTimeout = setTimeout(() => {
+      if (isMounted.current && audioActions.playVoiceover) {
+        audioActions.playVoiceover('astro-welcome');
+      }
+    }, 800);
+    
+    audioTimeouts.current.push(voiceoverTimeout);
+
+    // Cleanup function
+    return () => {
+      isMounted.current = false;
+      clearAllTimeouts();
+      // Don't stop background music - let App.js handle it
+    };
   }, [audioActions]);
 
   // Check if all locations are completed
@@ -45,36 +75,49 @@ const Game2Root = ({ onComplete }) => {
     const completed = Object.values(locationProgress).every(loc => loc.completed);
     setAllLocationsCompleted(completed);
     
-    // Calculate total score
-    // const totalScore = Object.values(locationProgress).reduce((sum, loc) => sum + loc.score, 0);
-    
     // If all completed and we're in final stage, show final score
-    if (completed && currentStage === 'score-display' && !showFinalScore) {
-      setTimeout(() => {
-        setShowFinalScore(true);
+    if (completed && currentStage === 'score-display' && !showFinalScore && isMounted.current) {
+      const scoreTimeout = setTimeout(() => {
+        if (isMounted.current) {
+          setShowFinalScore(true);
+          // Play success sound for completing all locations
+          audioActions.playSoundEffect?.('success');
+        }
       }, 2000);
+      
+      audioTimeouts.current.push(scoreTimeout);
     }
-  }, [locationProgress, currentStage, showFinalScore]);
+  }, [locationProgress, currentStage, showFinalScore, audioActions]);
 
   const handleLocationSelect = (location) => {
+    if (!isMounted.current) return;
+    
     // Don't allow selecting already completed locations
     if (locationProgress[location.id].completed) {
-      audioActions.playSoundEffect('error');
+      audioActions.playSoundEffect?.('error');
       return;
     }
     
     setSelectedLocation(location);
-    audioActions.playSoundEffect('select');
-    setTimeout(() => {
-      setCurrentStage('earth-visualization');
+    audioActions.playSoundEffect?.('select');
+    
+    const stageTimeout = setTimeout(() => {
+      if (isMounted.current) {
+        setCurrentStage('earth-visualization');
+      }
     }, 500);
+    
+    audioTimeouts.current.push(stageTimeout);
   };
 
   const handleEarthStateUpdate = (newState) => {
+    if (!isMounted.current) return;
     setEarthState(newState);
   };
 
   const handleObservationComplete = (observationAnswer) => {
+    if (!isMounted.current) return;
+    
     // Update progress for current location
     setLocationProgress(prev => ({
       ...prev,
@@ -84,13 +127,20 @@ const Game2Root = ({ onComplete }) => {
       }
     }));
     
-    audioActions.playSoundEffect('buttonClick');
-    setTimeout(() => {
-      setCurrentStage('concept-check');
+    audioActions.playSoundEffect?.('buttonClick');
+    
+    const stageTimeout = setTimeout(() => {
+      if (isMounted.current) {
+        setCurrentStage('concept-check');
+      }
     }, 500);
+    
+    audioTimeouts.current.push(stageTimeout);
   };
 
   const handleConceptComplete = (conceptAnswers) => {
+    if (!isMounted.current) return;
+    
     // Calculate score for this location
     let calculatedScore = 0;
     
@@ -135,21 +185,28 @@ const Game2Root = ({ onComplete }) => {
       completionDate: new Date().toISOString()
     };
     
-    playerActions.updatePlayerProgress('game2', locationResult);
+    if (playerActions.updatePlayerProgress) {
+      playerActions.updatePlayerProgress('game2', locationResult);
+    }
     
-    audioActions.playSoundEffect(calculatedScore > 0 ? 'success' : 'error');
+    // Play appropriate sound effect
+    audioActions.playSoundEffect?.(calculatedScore > 0 ? 'success' : 'error');
   };
 
   const handleTryAnotherLocation = () => {
+    if (!isMounted.current) return;
+    
     setSelectedLocation(null);
     setEarthState({ tilt: false, position: 50, season: 'equinox' });
     setCurrentLocationScore(0);
     setShowFinalScore(false);
     setCurrentStage('location-selector');
-    audioActions.playSoundEffect('reset');
+    audioActions.playSoundEffect?.('reset');
   };
 
   const handleCompleteAllLocations = () => {
+    if (!isMounted.current) return;
+    
     const totalScore = Object.values(locationProgress).reduce((sum, loc) => sum + loc.score, 0);
     const maxScore = 9; // 3 locations * 3 points each
     const now = new Date().toISOString();
@@ -173,19 +230,36 @@ const Game2Root = ({ onComplete }) => {
     });
 
     // Save to player progress - ensure proper structure
-    playerActions.updatePlayerProgress('game2', gameResult);
-
-    // Call completion callback
-    if (onComplete) {
-      onComplete(gameResult);
+    if (playerActions.updatePlayerProgress) {
+      playerActions.updatePlayerProgress('game2', gameResult);
     }
+
+    // Play success sound
+    audioActions.playSoundEffect?.('success');
     
-    audioActions.playSoundEffect('success');
+    // Small delay before calling onComplete to allow sound to play
+    const completeTimeout = setTimeout(() => {
+      if (isMounted.current && onComplete) {
+        onComplete(gameResult);
+      }
+    }, 300);
+    
+    audioTimeouts.current.push(completeTimeout);
   };
 
   const handleBackToMap = () => {
-    audioActions.playSoundEffect('buttonClick');
-    gameDispatch({ type: 'SET_VIEW', payload: 'mission-map' });
+    if (!isMounted.current) return;
+    
+    audioActions.playSoundEffect?.('buttonClick');
+    
+    // Small delay before navigation to allow sound to play
+    const navTimeout = setTimeout(() => {
+      if (isMounted.current) {
+        gameDispatch({ type: 'SET_VIEW', payload: 'mission-map' });
+      }
+    }, 200);
+    
+    audioTimeouts.current.push(navTimeout);
   };
 
   const getCompletedCount = () => {
@@ -204,6 +278,7 @@ const Game2Root = ({ onComplete }) => {
     <div className="astro-game-root">
       <div className="astro-header">
         <button onClick={handleBackToMap} className="astro-back-button">
+          <span className="back-icon">←</span>
           Back to Mission Map
         </button>
         <div className="astro-title">
@@ -231,7 +306,12 @@ const Game2Root = ({ onComplete }) => {
             location={selectedLocation}
             earthState={earthState}
             onUpdateEarthState={handleEarthStateUpdate}
-            onProceed={() => setCurrentStage('observation-check')}
+            onProceed={() => {
+              if (isMounted.current) {
+                audioActions.playSoundEffect?.('buttonClick');
+                setCurrentStage('observation-check');
+              }
+            }}
           />
         )}
 

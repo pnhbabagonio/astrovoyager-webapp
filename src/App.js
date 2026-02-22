@@ -30,6 +30,7 @@ function AppContent() {
   // Refs for timeout management
   const loadingTimeoutRef = useRef(null);
   const isMountedRef = useRef(true);
+  const previousViewRef = useRef(gameState.currentView);
 
   // Debug: Log state changes
   useEffect(() => {
@@ -157,14 +158,21 @@ function AppContent() {
     };
   }, [gameDispatch, playerActions, audioActions]);
 
-  // Background music management
+  // Background music management - IMPROVED VERSION
   useEffect(() => {
     if (!gameState.audioEnabled) return;
 
+    // Don't change music if we're in a loading state
     if (showLaunchVideo || showJourneyLoading) {
       audioActions.stopBackgroundMusic();
       return;
     }
+
+    // Only change music if the view actually changed
+    const viewChanged = previousViewRef.current !== gameState.currentView;
+    previousViewRef.current = gameState.currentView;
+
+    console.log(`Audio management: View=${gameState.currentView}, Changed=${viewChanged}`);
 
     switch (gameState.currentView) {
       case 'launch':
@@ -176,7 +184,12 @@ function AppContent() {
       case 'game1':
       case 'game2':
       case 'game3':
-        audioActions.playBackgroundMusic('adventure');
+        // For game views, only change music if it's not already playing 'adventure'
+        // This prevents unnecessary restarts when navigating between games
+        if (viewChanged) {
+          console.log(`Starting adventure music for ${gameState.currentView}`);
+          audioActions.playBackgroundMusic('adventure');
+        }
         break;
       case 'end-credits':
         // Don't play background music here - EndCredits component handles its own music
@@ -202,11 +215,6 @@ function AppContent() {
     
     // Set view to launch
     gameDispatch({ type: 'SET_VIEW', payload: 'launch' });
-    
-    // Play welcome sound
-    setTimeout(() => {
-      audioActions.playSoundEffect('success');
-    }, 500);
   };
 
   const handleLaunch = async (playerName) => {

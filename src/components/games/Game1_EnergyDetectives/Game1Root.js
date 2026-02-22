@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useGameState } from '../../../contexts/GameStateContext';
 import { useAudio } from '../../../contexts/AudioContext';
 import { usePlayer } from '../../../contexts/PlayerContext';
@@ -22,22 +22,51 @@ const Game1Root = ({ onComplete }) => {
   const [choicesHistory, setChoicesHistory] = useState([]);
   const [lastChoiceFeedback, setLastChoiceFeedback] = useState(null);
   const [currentReflectionIndex, setCurrentReflectionIndex] = useState(0);
+  
+  // Ref to track if component is mounted
+  const isMounted = useRef(true);
+  // Ref to track audio timeouts for cleanup
+  const audioTimeouts = useRef([]);
+
+  // Clear all audio timeouts helper
+  const clearAllTimeouts = () => {
+    audioTimeouts.current.forEach(timeout => clearTimeout(timeout));
+    audioTimeouts.current = [];
+  };
 
   // Initialize game
   useEffect(() => {
-    audioActions.playBackgroundMusic('space');
-    audioActions.playVoiceover('welcome_astro');
+    isMounted.current = true;
+    
+    // Play background music when game starts
+    if (audioActions.playBackgroundMusic) {
+      audioActions.playBackgroundMusic('adventure');
+    }
+    
+    // NO VOICEOVER HERE - removed welcome_astro
+
+    // Cleanup function
+    return () => {
+      isMounted.current = false;
+      clearAllTimeouts();
+      // Don't stop background music here - let App.js handle it
+    };
   }, [audioActions]);
 
   const handleCharacterSelect = (character) => {
-    audioActions.playSoundEffect('buttonClick');
+    if (!isMounted.current) return;
+    
+    audioActions.playSoundEffect?.('buttonClick');
     setSelectedCharacter(character);
     setCurrentStage('scenario');
-    audioActions.playVoiceover('character_selected');
+    
+    // NO VOICEOVER HERE - removed character_selected
   };
 
   const handleChoiceSelect = (choice, scenarioId) => {
-    audioActions.playSoundEffect(choice.isCorrect ? 'success' : 'error');
+    if (!isMounted.current) return;
+    
+    audioActions.playSoundEffect?.(choice.isCorrect ? 'success' : 'error');
     
     // Update score if correct
     if (choice.isCorrect) {
@@ -65,26 +94,30 @@ const Game1Root = ({ onComplete }) => {
   };
 
   const handleNextAfterFeedback = () => {
+    if (!isMounted.current) return;
+    
     const nextScenarioIndex = currentScenarioIndex + 1;
     
     if (nextScenarioIndex < game1Data.scenarios.length) {
       setCurrentScenarioIndex(nextScenarioIndex);
       setCurrentStage('scenario');
       setLastChoiceFeedback(null);
-      audioActions.playSoundEffect('buttonClick');
+      audioActions.playSoundEffect?.('buttonClick');
     } else {
       // All scenarios completed - show scoreboard
       setCurrentStage('scoreboard');
-      audioActions.playSoundEffect('level_complete');
+      audioActions.playSoundEffect?.('level_complete');
     }
   };
 
   const handleNextReflection = () => {
+    if (!isMounted.current) return;
+    
     const nextReflectionIndex = currentReflectionIndex + 1;
     
     if (nextReflectionIndex < game1Data.reflectionQuestions.length) {
       setCurrentReflectionIndex(nextReflectionIndex);
-      audioActions.playSoundEffect('buttonClick');
+      audioActions.playSoundEffect?.('buttonClick');
     } else {
       // All reflections shown - complete game
       completeGame();
@@ -92,16 +125,20 @@ const Game1Root = ({ onComplete }) => {
   };
 
   const handleStartReflection = () => {
+    if (!isMounted.current) return;
+    
     setCurrentStage('reflection');
-    audioActions.playSoundEffect('buttonClick');
+    audioActions.playSoundEffect?.('buttonClick');
   };
 
   const completeGame = () => {
+    if (!isMounted.current) return;
+    
     const finalScore = {
       completed: true,
       score: score,
       maxScore: game1Data.scenarios.length,
-      character: selectedCharacter.name,
+      character: selectedCharacter?.name || 'Unknown',
       choicesHistory: choicesHistory,
       completionDate: new Date().toISOString()
     };
@@ -113,29 +150,55 @@ const Game1Root = ({ onComplete }) => {
     });
 
     // Save to player progress
-    playerActions.updatePlayerProgress('game1', finalScore);
+    if (playerActions.updatePlayerProgress) {
+      playerActions.updatePlayerProgress('game1', finalScore);
+    }
+
+    // Play completion sounds
+    audioActions.playSoundEffect?.('game_complete');
+    
+    // Small delay before changing music to avoid overlap
+    const victoryTimeout = setTimeout(() => {
+      if (isMounted.current && audioActions.playBackgroundMusic) {
+        audioActions.playBackgroundMusic('victory');
+      }
+    }, 300);
+    
+    audioTimeouts.current.push(victoryTimeout);
 
     // Call completion callback
     if (onComplete) {
       onComplete(finalScore);
     }
-
-    audioActions.playSoundEffect('game_complete');
-    audioActions.playBackgroundMusic('victory');
   };
 
   const handleBackToMap = () => {
-    audioActions.playSoundEffect('buttonClick');
-    gameDispatch({ type: 'SET_VIEW', payload: 'mission-map' });
+    if (!isMounted.current) return;
+    
+    audioActions.playSoundEffect?.('buttonClick');
+    
+    const navTimeout = setTimeout(() => {
+      if (isMounted.current) {
+        gameDispatch({ type: 'SET_VIEW', payload: 'mission-map' });
+      }
+    }, 200);
+    
+    audioTimeouts.current.push(navTimeout);
   };
 
   const currentScenario = game1Data.scenarios[currentScenarioIndex];
   const currentReflectionQuestion = game1Data.reflectionQuestions[currentReflectionIndex];
+  
+  // Calculate progress percentage safely
+  const progressPercentage = game1Data.scenarios.length > 1 
+    ? (currentScenarioIndex / (game1Data.scenarios.length - 1)) * 100 
+    : 100;
 
   return (
     <div className="game1-root solar-voyager-theme">
       <div className="game1-header">
         <button onClick={handleBackToMap} className="back-button space-button">
+          <span className="back-icon">←</span>
           <span className="button-text">Back to Mission Map</span>
         </button>
 
@@ -145,7 +208,7 @@ const Game1Root = ({ onComplete }) => {
               <h1>SOLAR VOYAGER</h1>
             </div>
             <div className="mission-subtitle">
-              <span>⏱️ {/* Add timer if you want */}Mission {Math.min(currentScenarioIndex + 1, game1Data.scenarios.length)}/{game1Data.scenarios.length}</span>
+              <span>⏱️ Mission {Math.min(currentScenarioIndex + 1, game1Data.scenarios.length)}/{game1Data.scenarios.length}</span>
               <span>⭐ Score: {score}/{game1Data.scenarios.length}</span>
               {selectedCharacter && <span>🚀 {selectedCharacter.name}</span>}
             </div>
@@ -202,7 +265,7 @@ const Game1Root = ({ onComplete }) => {
         )}
       </div>
 
-      {/* UPDATED PROGRESS BAR */}
+      {/* Progress Bar */}
       <div className="game1-progress space-panel">
         <div className="solar-progress">
           <div className="progress-label">
@@ -215,7 +278,7 @@ const Game1Root = ({ onComplete }) => {
             <div 
               className="progress-beam sun-glow"
               style={{ 
-                width: `${(currentScenarioIndex / (game1Data.scenarios.length - 1)) * 100}%` 
+                width: `${progressPercentage}%` 
               }}
             >
               <div className="beam-core"></div>
@@ -237,4 +300,5 @@ const Game1Root = ({ onComplete }) => {
     </div>
   );
 };
+
 export default Game1Root;

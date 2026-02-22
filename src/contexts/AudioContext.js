@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useRef } from 'react';
 import { Howl, Howler } from 'howler';
 
 const AudioContext = createContext();
@@ -72,7 +72,8 @@ function audioReducer(state, action) {
 
 export function AudioProvider({ children }) {
   const [state, dispatch] = useReducer(audioReducer, initialState);
-  const audioInstances = React.useRef(new Map());
+  const audioInstances = useRef(new Map());
+  const currentBackgroundMusicRef = useRef(null);
 
   // Initialize Howler
   useEffect(() => {
@@ -93,59 +94,72 @@ export function AudioProvider({ children }) {
 
   // Apply volume to background music
   useEffect(() => {
-    audioInstances.current.forEach((sound, key) => {
-      if (key.startsWith('bg_')) {
-        sound.volume(state.backgroundMusic.volume);
-      }
-    });
+    if (currentBackgroundMusicRef.current) {
+      currentBackgroundMusicRef.current.volume(state.backgroundMusic.volume);
+    }
   }, [state.backgroundMusic.volume]);
 
   const playBackgroundMusic = (trackName, options = {}) => {
     if (!state.backgroundMusic.enabled || state.muted) return;
 
-    const soundKey = `bg_${trackName}`;
-    
-    // Only stop if it's a different track
-    const currentTrack = state.backgroundMusic.currentTrack;
-    if (currentTrack && currentTrack !== trackName) {
-      audioInstances.current.forEach((sound, key) => {
-        if (key.startsWith('bg_') && key !== soundKey) {
-          sound.stop();
-        }
-      });
-    }
-
     // If same track is already playing, do nothing
-    if (currentTrack === trackName && state.backgroundMusic.playing) {
+    if (state.backgroundMusic.currentTrack === trackName && 
+        state.backgroundMusic.playing && 
+        currentBackgroundMusicRef.current) {
       return;
     }
 
+    // Stop current background music
+    if (currentBackgroundMusicRef.current) {
+      currentBackgroundMusicRef.current.stop();
+      currentBackgroundMusicRef.current = null;
+    }
+
+    // Stop all background music instances
+    audioInstances.current.forEach((sound, key) => {
+      if (key.startsWith('bg_')) {
+        sound.stop();
+      }
+    });
+
+    const soundKey = `bg_${trackName}`;
+    
     // Create or get sound instance
     let sound = audioInstances.current.get(soundKey);
     if (!sound) {
-      // Use your local audio files
+      // Use your local audio files - FIXED: Use different tracks for different moods
       const trackUrls = {
-        space: ['/assets/audio/background-music.wav'],
-        adventure: ['/assets/audio/background-music.wav'],
-        victory: ['/assets/audio/background-music.wav']
+        space: ['/assets/audio/background-music.wav'], // Calm, exploratory music
+        adventure: ['/assets/audio/background-music.wav'], // More upbeat music
+        victory: ['/assets/audio/background-music.wav'] // Celebratory music
       };
 
       sound = new Howl({
         src: trackUrls[trackName] || trackUrls.space,
         loop: true,
         volume: state.backgroundMusic.volume,
+        html5: true, // Use HTML5 Audio to prevent multiple instances
         onloaderror: (id, error) => {
           console.warn(`Failed to load background music ${trackName}:`, error);
         },
         onplayerror: (id, error) => {
           console.warn(`Failed to play background music ${trackName}:`, error);
+          // Attempt to recover
+          if (sound) {
+            sound.once('unlock', () => {
+              sound.play();
+            });
+          }
         }
       });
       
       audioInstances.current.set(soundKey, sound);
     }
 
+    // Play the sound and store reference
     sound.play();
+    currentBackgroundMusicRef.current = sound;
+    
     dispatch({
       type: 'SET_BACKGROUND_MUSIC',
       payload: { currentTrack: trackName, playing: true }
@@ -153,6 +167,11 @@ export function AudioProvider({ children }) {
   };
 
   const stopBackgroundMusic = () => {
+    if (currentBackgroundMusicRef.current) {
+      currentBackgroundMusicRef.current.stop();
+      currentBackgroundMusicRef.current = null;
+    }
+    
     audioInstances.current.forEach((sound, key) => {
       if (key.startsWith('bg_')) {
         sound.stop();
@@ -166,11 +185,9 @@ export function AudioProvider({ children }) {
   };
 
   const pauseBackgroundMusic = () => {
-    audioInstances.current.forEach((sound, key) => {
-      if (key.startsWith('bg_')) {
-        sound.pause();
-      }
-    });
+    if (currentBackgroundMusicRef.current) {
+      currentBackgroundMusicRef.current.pause();
+    }
     
     dispatch({
       type: 'SET_BACKGROUND_MUSIC',
@@ -188,15 +205,18 @@ export function AudioProvider({ children }) {
       // Placeholder sound effects - replace with actual files later
       const effectUrls = {
         buttonClick: [`${process.env.PUBLIC_URL}/assets/audio/sound-effects/button-click.mp3`],
-        success: [`${process.env.PUBLIC_URL}/assets/audio/sound-effects/success.mp3`],
+        success: [`${process.env.PUBLIC_URL}/assets/audio/sound-effects/sucess.mp3`], // Note: your file is named 'sucess.mp3' (typo)
         error: [`${process.env.PUBLIC_URL}/assets/audio/sound-effects/error.mp3`],
         rocketLaunch: [`${process.env.PUBLIC_URL}/assets/audio/sound-effects/rocket-launch.mp3`],
-        gameStart: [`${process.env.PUBLIC_URL}/assets/audio/sound-effects/game-start.mp3`]
+        gameStart: [`${process.env.PUBLIC_URL}/assets/audio/sound-effects/game-start.mp3`],
+        level_complete: [`${process.env.PUBLIC_URL}/assets/audio/sound-effects/sucess.mp3`],
+        game_complete: [`${process.env.PUBLIC_URL}/assets/audio/sound-effects/sucess.mp3`]
       };
 
       sound = new Howl({
         src: effectUrls[effectName] || effectUrls.buttonClick,
         volume: state.soundEffects.volume,
+        html5: true,
         onloaderror: (id, error) => {
           console.warn(`Failed to load sound effect ${effectName}:`, error);
         }
@@ -208,64 +228,65 @@ export function AudioProvider({ children }) {
     sound.play();
   };
 
- // AudioContext.js - Updated playVoiceover function
-const playVoiceover = (voiceName, options = {}) => {
-  if (!state.voiceovers.enabled || state.muted) return;
+  const playVoiceover = (voiceName, options = {}) => {
+    if (!state.voiceovers.enabled || state.muted) return;
 
-  const soundKey = `voice_${voiceName}`;
-  let sound = audioInstances.current.get(soundKey);
+    const soundKey = `voice_${voiceName}`;
+    let sound = audioInstances.current.get(soundKey);
 
-  if (!sound) {
-    // Updated with local audio files including annie-welcome
-    const voiceUrls = {
-      welcome: [`${process.env.PUBLIC_URL}/assets/audio/voiceovers/annie-welcome.mp3`],
-      annieWelcome: [`${process.env.PUBLIC_URL}/assets/audio/voiceovers/annie-welcome.mp3`], // Added specific key for Annie
-      roleSelection: [`${process.env.PUBLIC_URL}/assets/audio/voiceovers/role-selection.mp3`], // If you have this
-      gameInstruction: [`${process.env.PUBLIC_URL}/assets/audio/voiceovers/game-instruction.mp3`], // If you have this
-      missionStart: [`${process.env.PUBLIC_URL}/assets/audio/voiceovers/mission-start.mp3`] // If you have this
-    };
+    if (!sound) {
+      // Updated with local audio files including annie-welcome
+      const voiceUrls = {
+        welcome: [`${process.env.PUBLIC_URL}/assets/audio/voiceovers/annie-welcome.mp3`],
+        annieWelcome: [`${process.env.PUBLIC_URL}/assets/audio/voiceovers/annie-welcome.mp3`],
+        welcome_astro: [`${process.env.PUBLIC_URL}/assets/audio/voiceovers/annie-welcome.mp3`],
+        character_selected: [`${process.env.PUBLIC_URL}/assets/audio/voiceovers/character-selected.mp3`],
+        roleSelection: [`${process.env.PUBLIC_URL}/assets/audio/voiceovers/role-selection.mp3`],
+        gameInstruction: [`${process.env.PUBLIC_URL}/assets/audio/voiceovers/game-instruction.mp3`],
+        missionStart: [`${process.env.PUBLIC_URL}/assets/audio/voiceovers/mission-start.mp3`]
+      };
 
-    // Fallback to online URLs if local files don't exist
-    const fallbackUrls = {
-      welcome: ['https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3'],
-      roleSelection: ['https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3'],
-      gameInstruction: ['https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3']
-    };
+      // Fallback to online URLs if local files don't exist
+      const fallbackUrls = {
+        welcome: ['https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3'],
+        roleSelection: ['https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3'],
+        gameInstruction: ['https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3']
+      };
 
-    const src = voiceUrls[voiceName] || fallbackUrls[voiceName] || fallbackUrls.welcome;
+      const src = voiceUrls[voiceName] || fallbackUrls[voiceName] || fallbackUrls.welcome;
+      
+      sound = new Howl({
+        src: src,
+        volume: state.voiceovers.volume * (options.volume || 1.0),
+        html5: true,
+        onloaderror: (id, error) => {
+          console.warn(`Failed to load voiceover ${voiceName}:`, error);
+          // Try fallback if local file fails
+          if (voiceUrls[voiceName] && voiceUrls[voiceName][0].includes(process.env.PUBLIC_URL)) {
+            console.log(`Trying fallback for ${voiceName}`);
+            const fallbackSound = new Howl({
+              src: fallbackUrls[voiceName] || fallbackUrls.welcome,
+              volume: state.voiceovers.volume * (options.volume || 1.0),
+              html5: true
+            });
+            audioInstances.current.set(soundKey, fallbackSound);
+            fallbackSound.play();
+          }
+        },
+        onplayerror: (id, error) => {
+          console.warn(`Failed to play voiceover ${voiceName}:`, error);
+        },
+        onend: options.onEnd
+      });
+      
+      audioInstances.current.set(soundKey, sound);
+    }
+
+    sound.play();
     
-    sound = new Howl({
-      src: src,
-      volume: state.voiceovers.volume * (options.volume || 1.0),
-      onloaderror: (id, error) => {
-        console.warn(`Failed to load voiceover ${voiceName}:`, error);
-        // Try fallback if local file fails
-        if (voiceUrls[voiceName] && voiceUrls[voiceName][0].includes(process.env.PUBLIC_URL)) {
-          console.log(`Trying fallback for ${voiceName}`);
-          const fallbackSound = new Howl({
-            src: fallbackUrls[voiceName] || fallbackUrls.welcome,
-            volume: state.voiceovers.volume * (options.volume || 1.0),
-          });
-          audioInstances.current.set(soundKey, fallbackSound);
-          fallbackSound.play();
-        }
-      },
-      onplayerror: (id, error) => {
-        console.warn(`Failed to play voiceover ${voiceName}:`, error);
-      },
-      onend: options.onEnd
-    });
-    
-    audioInstances.current.set(soundKey, sound);
-  }
-
-  sound.play();
-  
-  // Return sound ID for potential control
-  return sound;
-};
-
-
+    // Return sound ID for potential control
+    return sound;
+  };
 
   const toggleMute = () => {
     dispatch({ type: 'TOGGLE_MUTE' });

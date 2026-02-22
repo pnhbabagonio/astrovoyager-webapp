@@ -20,6 +20,9 @@ const Game3Root = ({ onComplete }) => {
   
   const startTimeRef = useRef(Date.now());
   const [timeElapsed, setTimeElapsed] = useState(0);
+  const isMounted = useRef(true);
+  const audioTimeouts = useRef([]);
+  
   const [gameState, setGameState] = useState({
     currentStep: 1,
     selectedRegion: null,
@@ -36,30 +39,61 @@ const Game3Root = ({ onComplete }) => {
     currentSeason: 'spring'
   });
 
+  // Clear all audio timeouts helper
+  const clearAllTimeouts = () => {
+    audioTimeouts.current.forEach(timeout => clearTimeout(timeout));
+    audioTimeouts.current = [];
+  };
+
   // Calculate max scores
   const maxScorePerRegion = 150; // 40 (fill blanks) + 90 (quiz) + 20 (observational)
   const MAX_TOTAL_SCORE = maxScorePerRegion * game3Data.regions.length; // 450 total
 
   // Initialize timer
   useEffect(() => {
+    isMounted.current = true;
+    
     const timer = setInterval(() => {
-      setTimeElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
+      if (isMounted.current) {
+        setTimeElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
+      }
     }, 1000);
-    return () => clearInterval(timer);
+    
+    return () => {
+      clearInterval(timer);
+    };
   }, []);
 
-  // Initialize game
+  // Initialize game - REMOVED background music call
   useEffect(() => {
-    audioActions.playVoiceover('welcome_celestial_observatory');
-    audioActions.playBackgroundMusic('celestial_exploration');
+    isMounted.current = true;
+    
+    // REMOVED: audioActions.playBackgroundMusic('adventure');
+    // App.js will handle background music based on view
+    
+    // Optional: Play a welcome voiceover if needed
+    // const voiceoverTimeout = setTimeout(() => {
+    //   if (isMounted.current && audioActions.playVoiceover) {
+    //     audioActions.playVoiceover('welcome_celestial_observatory');
+    //   }
+    // }, 800);
+    // 
+    // audioTimeouts.current.push(voiceoverTimeout);
+
+    // Cleanup function
+    return () => {
+      isMounted.current = false;
+      clearAllTimeouts();
+      // Don't stop background music - let App.js handle it
+    };
   }, [audioActions]);
 
   // Update season based on selected region
   useEffect(() => {
-    if (gameState.selectedRegion) {
+    if (gameState.selectedRegion && isMounted.current) {
       setGameState(prev => ({
         ...prev,
-        currentSeason: gameState.selectedRegion.currentSeason.toLowerCase()
+        currentSeason: gameState.selectedRegion.currentSeason?.toLowerCase() || 'spring'
       }));
     }
   }, [gameState.selectedRegion]);
@@ -78,6 +112,8 @@ const Game3Root = ({ onComplete }) => {
 
   // Handle region selection
   const handleRegionSelect = (region) => {
+    if (!isMounted.current) return;
+    
     const isReplaying = gameState.completedRegions.includes(region.id);
     
     setGameState(prev => ({
@@ -87,21 +123,27 @@ const Game3Root = ({ onComplete }) => {
       showRegionComplete: isReplaying
     }));
     
-    audioActions.playSoundEffect('telescope_focus');
+    audioActions.playSoundEffect?.('telescope_focus');
     
     if (isReplaying) {
-      setTimeout(() => {
-        setGameState(prev => ({
-          ...prev,
-          currentStep: 2,
-          showRegionComplete: false
-        }));
+      const replayTimeout = setTimeout(() => {
+        if (isMounted.current) {
+          setGameState(prev => ({
+            ...prev,
+            currentStep: 2,
+            showRegionComplete: false
+          }));
+        }
       }, 1000);
+      
+      audioTimeouts.current.push(replayTimeout);
     }
   };
 
   // Handle fill-in-blanks completion
   const handleFillBlanksComplete = (answers) => {
+    if (!isMounted.current) return;
+    
     const points = answers.reduce((sum, answer) => sum + (answer.isCorrect ? answer.points : 0), 0);
     
     setGameState(prev => ({
@@ -111,11 +153,13 @@ const Game3Root = ({ onComplete }) => {
       currentStep: 3
     }));
     
-    audioActions.playSoundEffect('data_analysis_complete');
+    audioActions.playSoundEffect?.('data_analysis_complete');
   };
 
   // Handle quiz completion
   const handleQuizComplete = (answers) => {
+    if (!isMounted.current) return;
+    
     const points = answers.reduce((sum, answer) => sum + (answer.isCorrect ? answer.points : 0), 0);
     const incorrectAnswers = answers.filter(answer => !answer.isCorrect);
     
@@ -127,41 +171,49 @@ const Game3Root = ({ onComplete }) => {
       showReview: incorrectAnswers.length > 0
     }));
     
-    audioActions.playSoundEffect('warp_complete');
+    audioActions.playSoundEffect?.('warp_complete');
   };
 
   // Handle proceed after scoreboard
   const handleProceedToObservational = () => {
+    if (!isMounted.current) return;
+    
     setGameState(prev => ({
       ...prev,
       showScoreboard: false,
       currentStep: 4
     }));
-    audioActions.playSoundEffect('control_click');
+    audioActions.playSoundEffect?.('control_click');
   };
 
   // Handle review incorrect answers
   const handleReviewIncorrect = () => {
+    if (!isMounted.current) return;
+    
     setGameState(prev => ({
       ...prev,
       showScoreboard: false,
       showReview: true
     }));
-    audioActions.playSoundEffect('control_click');
+    audioActions.playSoundEffect?.('control_click');
   };
 
   // Handle return from review
   const handleReturnFromReview = () => {
+    if (!isMounted.current) return;
+    
     setGameState(prev => ({
       ...prev,
       showReview: false,
       currentStep: 4
     }));
-    audioActions.playSoundEffect('control_click');
+    audioActions.playSoundEffect?.('control_click');
   };
 
   // Handle observational check completion
   const handleObservationalComplete = (answers) => {
+    if (!isMounted.current) return;
+    
     const points = answers.reduce((sum, answer) => sum + answer.points, 0);
     const regionId = gameState.selectedRegion.id;
     
@@ -187,7 +239,10 @@ const Game3Root = ({ onComplete }) => {
     };
     
     // Save progress after each region completion
-    playerActions.updatePlayerProgress('game3', currentProgress);
+    if (playerActions.updatePlayerProgress) {
+      playerActions.updatePlayerProgress('game3', currentProgress);
+    }
+    
     gameDispatch({
       type: 'UPDATE_PROGRESS',
       payload: { game: 'game3', progress: currentProgress }
@@ -206,12 +261,28 @@ const Game3Root = ({ onComplete }) => {
       allRegionsCompleted: allRegionsCompleted,
       currentStep: 5
     }));
+    
+    // Play appropriate sound based on completion
+    if (allRegionsCompleted) {
+      audioActions.playSoundEffect?.('mission_complete');
       
-    audioActions.playSoundEffect('discovery_complete');
+      // Play victory music after a short delay - KEEP THIS
+      const victoryTimeout = setTimeout(() => {
+        if (isMounted.current && audioActions.playBackgroundMusic) {
+          audioActions.playBackgroundMusic('victory');
+        }
+      }, 500);
+      
+      audioTimeouts.current.push(victoryTimeout);
+    } else {
+      audioActions.playSoundEffect?.('discovery_complete');
+    }
   };
 
   // Handle continue to next region
   const handleContinueToNextRegion = () => {
+    if (!isMounted.current) return;
+    
     const remainingRegions = game3Data.regions.filter(
       region => !gameState.completedRegions.includes(region.id)
     );
@@ -224,7 +295,7 @@ const Game3Root = ({ onComplete }) => {
         currentStep: 1,
         showRegionComplete: false
       }));
-      audioActions.playSoundEffect('telescope_scan');
+      audioActions.playSoundEffect?.('telescope_scan');
     } else {
       completeGame();
     }
@@ -232,32 +303,35 @@ const Game3Root = ({ onComplete }) => {
 
   // Handle replay same region
   const handleReplayRegion = () => {
+    if (!isMounted.current) return;
+    
     resetRegionData();
     setGameState(prev => ({
       ...prev,
       currentStep: 2,
       showRegionComplete: false
     }));
-    audioActions.playSoundEffect('reset_scan');
+    audioActions.playSoundEffect?.('reset_scan');
   };
 
   // Complete and save game
   const completeGame = () => {
-    // Optional: Add a confirmation effect
-    audioActions.playSoundEffect('mission_complete');
+    if (!isMounted.current) return;
+    
+    // Play mission complete sound
+    audioActions.playSoundEffect?.('mission_complete');
     
     const finalProgress = {
       completed: true,
       score: gameState.totalScore,
       maxScore: MAX_TOTAL_SCORE,
       completionDate: new Date().toISOString(),
-      // Store additional game3-specific data
       completedRegions: gameState.completedRegions,
       regionScores: gameState.regionScores,
       timeElapsed: timeElapsed
     };
 
-    console.log('Saving Game 3 progress:', finalProgress); // Debug log
+    console.log('Saving Game 3 progress:', finalProgress);
 
     // Update game state context
     gameDispatch({
@@ -266,17 +340,33 @@ const Game3Root = ({ onComplete }) => {
     });
 
     // Save to player context (which saves to IndexedDB)
-    playerActions.updatePlayerProgress('game3', finalProgress);
-
-    if (onComplete) {
-      onComplete(finalProgress);
+    if (playerActions.updatePlayerProgress) {
+      playerActions.updatePlayerProgress('game3', finalProgress);
     }
+
+    // Delay onComplete callback to allow sound to play
+    const completeTimeout = setTimeout(() => {
+      if (isMounted.current && onComplete) {
+        onComplete(finalProgress);
+      }
+    }, 500);
+    
+    audioTimeouts.current.push(completeTimeout);
   };
 
   // Handle back to map
   const handleBackToMap = () => {
-    audioActions.playSoundEffect('control_click');
-    gameDispatch({ type: 'SET_VIEW', payload: 'mission-map' });
+    if (!isMounted.current) return;
+    
+    audioActions.playSoundEffect?.('control_click');
+    
+    const navTimeout = setTimeout(() => {
+      if (isMounted.current) {
+        gameDispatch({ type: 'SET_VIEW', payload: 'mission-map' });
+      }
+    }, 200);
+    
+    audioTimeouts.current.push(navTimeout);
   };
 
   // Get current region's score
@@ -307,6 +397,7 @@ const Game3Root = ({ onComplete }) => {
           className="back-button"
           aria-label="Return to mission map"
         >
+          <span className="back-icon">←</span>
           <span className="back-text">Back to Mission Map</span>
         </button>
 
@@ -398,63 +489,63 @@ const Game3Root = ({ onComplete }) => {
           />
         )}
 
-          {gameState.allRegionsCompleted && (
-            <div className="all-regions-completed">
-              <div className="completion-content">
-                <h2>🌌 Mission Complete!</h2>
-                <div className="completion-badge">
-                  <span className="badge-icon">🏆</span>
-                  <span className="badge-text">All Constellations Charted</span>
+        {gameState.allRegionsCompleted && (
+          <div className="all-regions-completed">
+            <div className="completion-content">
+              <h2>🌌 Mission Complete!</h2>
+              <div className="completion-badge">
+                <span className="badge-icon">🏆</span>
+                <span className="badge-text">All Constellations Charted</span>
+              </div>
+              
+              <div className="final-stats">
+                <div className="stat-item large">
+                  <span className="stat-label large">Total Energy</span>
+                  <span className="stat-value large">{gameState.totalScore}/{MAX_TOTAL_SCORE}</span>
                 </div>
-                
-                <div className="final-stats">
-                  <div className="stat-item large">
-                    <span className="stat-label large">Total Energy</span>
-                    <span className="stat-value large">{gameState.totalScore}/{MAX_TOTAL_SCORE}</span>
-                  </div>
-                  <div className="stat-item large">
-                    <span className="stat-label large">Mission Time</span>
-                    <span className="stat-value large">{formatTime(timeElapsed)}</span>
-                  </div>
-                  <div className="stat-item large">
-                    <span className="stat-label large">Constellations</span>
-                    <span className="stat-value large">
-                      {gameState.completedRegions.length}/{game3Data.regions.length}
-                    </span>
-                  </div>
+                <div className="stat-item large">
+                  <span className="stat-label large">Mission Time</span>
+                  <span className="stat-value large">{formatTime(timeElapsed)}</span>
                 </div>
-                
-                <div className="region-scores-summary">
-                  <h3>Constellation Energy Readings</h3>
-                  <div className="scores-grid">
-                    {game3Data.regions.map(region => (
-                      <div key={region.id} className="region-score-card">
-                        <span className="region-name">{region.name}</span>
-                        <span className="region-score">
-                          {gameState.regionScores[region.id] || 0}/{maxScorePerRegion} units
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                
-                <div className="completion-buttons">
-                  <button 
-                    onClick={completeGame} 
-                    className="complete-mission-button"
-                  >
-                    Complete Mission & Save Progress
-                  </button>
-                  <button 
-                    onClick={handleBackToMap} 
-                    className="continue-button secondary"
-                  >
-                    Return to Mission Map (Unsaved)
-                  </button>
+                <div className="stat-item large">
+                  <span className="stat-label large">Constellations</span>
+                  <span className="stat-value large">
+                    {gameState.completedRegions.length}/{game3Data.regions.length}
+                  </span>
                 </div>
               </div>
+              
+              <div className="region-scores-summary">
+                <h3>Constellation Energy Readings</h3>
+                <div className="scores-grid">
+                  {game3Data.regions.map(region => (
+                    <div key={region.id} className="region-score-card">
+                      <span className="region-name">{region.name}</span>
+                      <span className="region-score">
+                        {gameState.regionScores[region.id] || 0}/{maxScorePerRegion} units
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="completion-buttons">
+                <button 
+                  onClick={completeGame} 
+                  className="complete-mission-button"
+                >
+                  Complete Mission & Save Progress
+                </button>
+                <button 
+                  onClick={handleBackToMap} 
+                  className="continue-button secondary"
+                >
+                  Return to Mission Map (Unsaved)
+                </button>
+              </div>
             </div>
-          )}
+          </div>
+        )}
       </div>
     </div>
   );
