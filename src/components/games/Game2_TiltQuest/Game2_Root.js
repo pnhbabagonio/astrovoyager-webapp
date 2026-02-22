@@ -46,7 +46,7 @@ const Game2_Root = ({ onComplete }) => {
     setAllLocationsCompleted(completed);
     
     // Calculate total score
-    const totalScore = Object.values(locationProgress).reduce((sum, loc) => sum + loc.score, 0);
+    // const totalScore = Object.values(locationProgress).reduce((sum, loc) => sum + loc.score, 0);
     
     // If all completed and we're in final stage, show final score
     if (completed && currentStage === 'score-display' && !showFinalScore) {

@@ -1,7 +1,6 @@
-import React from 'react';
 import './SeasonalTeleportationQuiz.css';
 
-const ScenarioCard = ({ scenario, selectedOptionId, showResult, onOptionSelect }) => {
+const ScenarioCard = ({ scenario, selectedOptionId, showResult}) => {
   return (
     <div className="scenario-card">
       <div className="scenario-image">

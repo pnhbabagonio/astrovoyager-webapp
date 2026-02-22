@@ -23,10 +23,10 @@ function AppContent() {
   const { state: gameState, dispatch: gameDispatch } = useGameState();
   const { actions: audioActions } = useAudio();
   const { actions: playerActions } = usePlayer();
-  const [isAppReady, setIsAppReady] = useState(false);
+  const [setIsAppReady] = useState(false);
   const [showLaunchVideo, setShowLaunchVideo] = useState(false);
   const [showJourneyLoading, setShowJourneyLoading] = useState(false);
-  const [playerData, setPlayerData] = useState(null);
+  const [setPlayerData] = useState(null);
 
   // Detect page refresh and ensure we start from loading screen
   useEffect(() => {

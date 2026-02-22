@@ -1,5 +1,5 @@
 // LaunchScreen.js
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import './LaunchScreen.css';
 import { useAudio } from '../../../contexts/AudioContext';
 // Generate stars once and memoize
@@ -76,11 +76,11 @@ const LaunchScreen = ({ onLaunch }) => {
     setIsButtonPressed(false);
   }, []);
 
-  const handleKeyUp = useCallback((e) => {
-    if (e.key === 'Enter') {
-      handleButtonPress();
-    }
-  }, [handleButtonPress]);
+  // const handleKeyUp = useCallback((e) => {
+  //   if (e.key === 'Enter') {
+  //     handleButtonPress();
+  //   }
+  // }, [handleButtonPress]);
 
   return (
     <div className={`launch-screen-modern ${isMounted ? 'mounted' : ''} ${isLaunching ? 'launching' : ''}`}>

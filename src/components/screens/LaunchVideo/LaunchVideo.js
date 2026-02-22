@@ -6,7 +6,7 @@ const LaunchVideo = ({ onSkip }) => {
   const [canSkip, setCanSkip] = useState(false);
   const [pressed, setPressed] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [setVideoLoaded] = useState(false);
   const [needsInteraction, setNeedsInteraction] = useState(false);
 
   useEffect(() => {
