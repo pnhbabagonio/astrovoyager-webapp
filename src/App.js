@@ -5,9 +5,9 @@ import { PlayerProvider, usePlayer } from './contexts/PlayerContext';
 import RocketLoader from './components/common/RocketLoader/RocketLoader';
 import LaunchScreen from './components/screens/LaunchScreen/LaunchScreen';
 import MissionMap from './components/screens/MissionMap/MissionMap';
-import Game1_Root from './components/games/Game1_EnergyDetectives/Game1_Root';
-import Game2_Root from './components/games/Game2_TiltQuest/Game2_Root';
-import Game3_Root from './components/games/Game3_SeasonNavigator/Game3_Root';
+import Game1Root from './components/games/Game1_EnergyDetectives/Game1Root';
+import Game2Root from './components/games/Game2_TiltQuest/Game2Root';
+import Game3Root from './components/games/Game3_SeasonNavigator/Game3Root';
 import EndCredits from './components/screens/EndCredits/EndCredits';
 import AudioControls from './components/common/AudioControls/AudioControls';
 import LoadingSpinner from './components/common/LoadingSpinner/LoadingSpinner';
@@ -126,6 +126,7 @@ function AppContent() {
     if (gameState.currentView !== 'loading' && gameState.isDataLoaded) {
       setIsAppReady(true);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameState.currentView, gameState.isDataLoaded]);
 
   // Background music management
@@ -156,7 +157,13 @@ function AppContent() {
       default:
         audioActions.stopBackgroundMusic();
     }
-  }, [gameState.currentView, showLaunchVideo, showJourneyLoading, gameState.audioEnabled]);
+  }, [
+  gameState.currentView,
+  showLaunchVideo,
+  showJourneyLoading,
+  gameState.audioEnabled,
+  audioActions
+]);
 
   const handleLoadingComplete = () => {
     gameDispatch({ type: 'SET_VIEW', payload: 'launch' });
@@ -288,13 +295,13 @@ function AppContent() {
         return <DataExport />;
       
       case 'game1':
-        return <Game1_Root onComplete={(score) => handleGameComplete('game1', score)} />;
+        return <Game1Root onComplete={(score) => handleGameComplete('game1', score)} />;
       
       case 'game2':
-        return <Game2_Root onComplete={(score) => handleGameComplete('game2', score)} />;
+        return <Game2Root onComplete={(score) => handleGameComplete('game2', score)} />;
       
       case 'game3':
-        return <Game3_Root onComplete={(score) => handleGameComplete('game3', score)} />;
+        return <Game3Root onComplete={(score) => handleGameComplete('game3', score)} />;
       
       case 'end-credits':
         return <EndCredits />;

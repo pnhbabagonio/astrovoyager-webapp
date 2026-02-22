@@ -10,7 +10,7 @@ import ScoreDisplay from './components/ScoreDisplay/ScoreDisplay';
 import { locationsData, conceptQuestions } from './data/astroVoyagerData';
 import './Game2.css';
 
-const Game2_Root = ({ onComplete }) => {
+const Game2Root = ({ onComplete }) => {
   const { dispatch: gameDispatch } = useGameState();
   const { actions: audioActions } = useAudio();
   const { actions: playerActions } = usePlayer();
@@ -311,4 +311,4 @@ const Game2_Root = ({ onComplete }) => {
   );
 };
 
-export default Game2_Root;
+export default Game2Root;

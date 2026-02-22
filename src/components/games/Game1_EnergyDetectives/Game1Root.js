@@ -10,7 +10,7 @@ import ReflectionView from './components/ReflectionView/ReflectionView';
 import { game1Data } from '../../../data/game1Data';
 import './Game1.css';
 
-const Game1_Root = ({ onComplete }) => {
+const Game1Root = ({ onComplete }) => {
   const { dispatch: gameDispatch } = useGameState();
   const { actions: audioActions } = useAudio();
   const { actions: playerActions } = usePlayer();
@@ -237,4 +237,4 @@ const Game1_Root = ({ onComplete }) => {
     </div>
   );
 };
-export default Game1_Root;
+export default Game1Root;

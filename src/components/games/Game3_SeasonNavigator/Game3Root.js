@@ -1,4 +1,3 @@
-// Game3_Root.js - Fixed version with proper database saving
 import React, { useState, useEffect, useRef } from 'react';
 import { useGameState } from '../../../contexts/GameStateContext';
 import { useAudio } from '../../../contexts/AudioContext';
@@ -14,7 +13,7 @@ import RegionCompletionScreen from './components/RegionCompletionScreen/RegionCo
 import { game3Data } from './game3Data';
 import './Game3.css';
 
-const Game3_Root = ({ onComplete }) => {
+const Game3Root = ({ onComplete }) => {
   const { dispatch: gameDispatch } = useGameState();
   const { actions: audioActions } = useAudio();
   const { actions: playerActions } = usePlayer();
@@ -461,4 +460,4 @@ const Game3_Root = ({ onComplete }) => {
   );
 };
 
-export default Game3_Root;
+export default Game3Root;
