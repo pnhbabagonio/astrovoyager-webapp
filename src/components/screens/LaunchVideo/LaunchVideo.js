@@ -6,7 +6,7 @@ const LaunchVideo = ({ onSkip }) => {
   const [canSkip, setCanSkip] = useState(false);
   const [pressed, setPressed] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(false);
-  const [setVideoLoaded] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false); // Fixed: now we have both value and setter
   const [needsInteraction, setNeedsInteraction] = useState(false);
 
   useEffect(() => {
@@ -123,7 +123,7 @@ const LaunchVideo = ({ onSkip }) => {
         onError={handleVideoError}
         onLoadedMetadata={() => {
           console.log('Video metadata loaded');
-          setVideoLoaded(true);
+          setVideoLoaded(true); // Now this works correctly
         }}
       />
 

@@ -1,5 +1,7 @@
+// Updated PlayerContext.js - Fix the import and method calls
+
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { IndexedDBService } from '../services/storage';
+import indexedDBService from '../services/storage/IndexedDBService'; // Note: default import, not named import
 
 const PlayerContext = createContext();
 
@@ -13,7 +15,7 @@ const initialState = {
     totalPoints: 0,
     sessions: 0
   },
-  isLoaded: false // Track if players are loaded
+  isLoaded: false
 };
 
 function playerReducer(state, action) {
@@ -75,35 +77,49 @@ function playerReducer(state, action) {
 export function PlayerProvider({ children }) {
   const [state, dispatch] = useReducer(playerReducer, initialState);
 
-  // Load players from IndexedDB on mount - NON-BLOCKING
+  // Initialize IndexedDB on mount
   useEffect(() => {
-    const loadPlayers = async () => {
+    const initDB = async () => {
       try {
-        const players = await IndexedDBService.getAllPlayers();
+        await indexedDBService.init();
+        console.log('IndexedDB initialized successfully');
+        
+        // Load players after DB is initialized
+        const players = await indexedDBService.getAllPlayers();
         dispatch({ type: 'LOAD_PLAYERS', payload: players });
+        
+        // Set the most recent player as current if exists
+        if (players.length > 0) {
+          dispatch({ type: 'SET_CURRENT_PLAYER', payload: players[players.length - 1] });
+        }
       } catch (error) {
-        console.log('Error loading players:', error);
-        // Mark as loaded even if there's an error
+        console.error('Error initializing IndexedDB:', error);
         dispatch({ type: 'LOAD_PLAYERS', payload: [] });
       }
     };
 
-    loadPlayers();
+    initDB();
   }, []);
 
   const createPlayer = async (playerData) => {
     try {
+      console.log('Creating player with data:', playerData);
+      
       const playerWithId = {
         ...playerData,
-        id: Date.now(),
+        id: `player_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         createdAt: new Date().toISOString(),
         lastPlayed: new Date().toISOString()
       };
 
-      await IndexedDBService.savePlayer(playerWithId);
-      dispatch({ type: 'ADD_PLAYER', payload: playerWithId });
+      console.log('Saving player to IndexedDB:', playerWithId);
       
-      return playerWithId;
+      // Use savePlayer method (exists in your IndexedDBService)
+      const savedPlayer = await indexedDBService.savePlayer(playerWithId);
+      
+      dispatch({ type: 'ADD_PLAYER', payload: savedPlayer });
+      
+      return savedPlayer;
     } catch (error) {
       console.error('Error creating player:', error);
       throw error;
@@ -111,45 +127,55 @@ export function PlayerProvider({ children }) {
   };
 
   const updatePlayerProgress = async (gameName, progressData) => {
-  if (!state.currentPlayer) {
-    console.error('No current player found when saving progress');
-    return;
-  }
+    if (!state.currentPlayer) {
+      console.error('No current player found when saving progress');
+      return;
+    }
 
-  const now = new Date().toISOString();
-  const progressRecord = {
-    id: `${state.currentPlayer.id}_${gameName}`,
-    playerId: state.currentPlayer.id,
-    gameName,
-    ...progressData,
-    updatedAt: now,
-    // Ensure completionDate is set if not provided
-    completionDate: progressData.completionDate || now
-  };
-
-  try {
-    console.log('Saving game progress:', progressRecord);
-    await IndexedDBService.saveGameProgress(progressRecord);
+    const now = new Date().toISOString();
     
-    // Update local state
-    dispatch({
-      type: 'UPDATE_PLAYER_PROGRESS',
-      payload: { game: gameName, data: progressData }
-    });
+    // Generate a consistent ID for the progress record
+    const progressId = `${state.currentPlayer.id}_${gameName}`;
     
-    // Update player's lastPlayed timestamp
-    const updatedPlayer = {
-      ...state.currentPlayer,
-      lastPlayed: now
+    const progressRecord = {
+      id: progressId,
+      playerId: state.currentPlayer.id,
+      gameName,
+      ...progressData,
+      updatedAt: now,
+      completionDate: progressData.completionDate || now
     };
-    await IndexedDBService.savePlayer(updatedPlayer);
-    
-    console.log('Game progress saved successfully for', gameName);
-  } catch (error) {
-    console.error('Error saving progress to IndexedDB:', error);
-    // You might want to retry or show an error message to the user
-  }
-};
+
+    try {
+      console.log('Saving game progress:', progressRecord);
+      
+      // Use saveGameProgress method
+      await indexedDBService.saveGameProgress(progressRecord);
+      
+      // Update local state
+      dispatch({
+        type: 'UPDATE_PLAYER_PROGRESS',
+        payload: { game: gameName, data: progressData }
+      });
+      
+      // Update player's lastPlayed timestamp
+      const updatedPlayer = {
+        ...state.currentPlayer,
+        lastPlayed: now
+      };
+      
+      // Use savePlayer to update the player
+      await indexedDBService.savePlayer(updatedPlayer);
+      
+      // Update current player in state
+      dispatch({ type: 'SET_CURRENT_PLAYER', payload: updatedPlayer });
+      
+      console.log('Game progress saved successfully for', gameName);
+    } catch (error) {
+      console.error('Error saving progress to IndexedDB:', error);
+      throw error; // Re-throw to handle in the calling component
+    }
+  };
 
   const switchPlayer = (playerId) => {
     const player = state.players.find(p => p.id === playerId);
@@ -158,14 +184,20 @@ export function PlayerProvider({ children }) {
     }
   };
 
-  const getPlayerProgress = (gameName = null) => {
+  const getPlayerProgress = async (gameName = null) => {
     if (!state.currentPlayer) return null;
     
-    if (gameName) {
-      return state.progress[gameName];
+    try {
+      if (gameName) {
+        const progress = await indexedDBService.getGameProgress(state.currentPlayer.id, gameName);
+        return progress[0] || null;
+      }
+      
+      return await indexedDBService.getGameProgress(state.currentPlayer.id);
+    } catch (error) {
+      console.error('Error getting player progress:', error);
+      return null;
     }
-    
-    return state.progress;
   };
 
   const value = {

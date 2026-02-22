@@ -29,16 +29,25 @@ const LoadingSpinner = ({ message = "Loading..." }) => {
   const stars = useMemo(() => generateStars(60), []);
   const shootingStars = useMemo(() => generateShootingStars(3), []);
 
+  // Calculate total steps based on message length or use a default
+  // This makes the progress animation complete in a reasonable time
   useEffect(() => {
+    // Reset progress when message changes
+    setProgress(0);
+    
+    // Progress will complete in about 5 seconds (50 steps * 100ms = 5 seconds)
     const interval = setInterval(() => {
       setProgress(prev => {
-        if (prev >= 100) return 100;
-        return prev + 2;
+        if (prev >= 100) {
+          clearInterval(interval);
+          return 100;
+        }
+        return prev + 2; // 2% every 100ms = 5 seconds to reach 100%
       });
     }, 100);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [message]); // Re-run when message changes
 
   return (
     <div className="loading-spinner-overlay-modern">
@@ -86,9 +95,23 @@ const LoadingSpinner = ({ message = "Loading..." }) => {
         <div className="rocket-container-modern">
           <div className="rocket-orbit"></div>
           <img 
-            src="/assets/images/ui/rocket.png" 
+            src={`${process.env.PUBLIC_URL}/assets/images/ui/rocket.png`}
             alt="Rocket Loading" 
             className="rocket-spinner-modern"
+            onError={(e) => {
+              console.error('Rocket image failed to load in LoadingSpinner');
+              e.target.style.display = 'none';
+              // Add fallback
+              const parent = e.target.parentElement;
+              if (parent) {
+                const fallback = document.createElement('div');
+                fallback.className = 'rocket-fallback';
+                fallback.innerHTML = '🚀';
+                fallback.style.fontSize = '80px';
+                fallback.style.animation = 'float 3s ease-in-out infinite';
+                parent.appendChild(fallback);
+              }
+            }}
           />
           <div className="rocket-glow-effect"></div>
         </div>
@@ -111,7 +134,7 @@ const LoadingSpinner = ({ message = "Loading..." }) => {
               <div className="spinner-progress-glow"></div>
             </div>
           </div>
-          <div className="spinner-progress-text">{progress}%</div>
+          <div className="spinner-progress-text">{Math.round(progress)}%</div>
         </div>
 
         {/* Subtext */}

@@ -1,11 +1,11 @@
-// GameStateContext.js
+// GameStateContext.js - Updated version
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { IndexedDBService } from '../services/storage';
 
 const GameStateContext = createContext();
 
 const initialState = {
-  currentView: 'loading',
+  currentView: 'loading', // Start with loading
   playerData: null,
   gameProgress: {
     game1: { 
@@ -34,7 +34,8 @@ const initialState = {
   isLoading: false,
   error: null,
   isOnline: navigator.onLine,
-  isDataLoaded: false
+  isDataLoaded: false,
+  isInitialLoad: true // Add this flag to track initial page load
 };
 
 function gameReducer(state, action) {
@@ -75,12 +76,16 @@ function gameReducer(state, action) {
     case 'SET_DATA_LOADED':
       return { ...state, isDataLoaded: true };
     
+    case 'SET_INITIAL_LOAD_COMPLETE': // Add this new action
+      return { ...state, isInitialLoad: action.payload };
+    
     case 'RESET_GAME':
       return {
         ...initialState,
-        currentView: 'launch',
+        currentView: 'loading', // Changed from 'launch' to 'loading'
         audioEnabled: state.audioEnabled,
-        isDataLoaded: true
+        isDataLoaded: true,
+        isInitialLoad: true
       };
     
     default:
@@ -94,29 +99,28 @@ export function GameStateProvider({ children }) {
   useEffect(() => {
     const loadSavedData = async () => {
       try {
+        console.log('Loading saved data...');
         const players = await IndexedDBService.getAllPlayers();
         const lastPlayer = players[players.length - 1];
         
         if (lastPlayer) {
+          console.log('Found saved player:', lastPlayer);
           dispatch({ type: 'SET_PLAYER_DATA', payload: lastPlayer });
           
-          IndexedDBService.getGameProgress(lastPlayer.id)
-            .then(progress => {
-              progress.forEach(item => {
-                dispatch({
-                  type: 'UPDATE_PROGRESS',
-                  payload: { game: item.gameName, progress: item }
-                });
-              });
-            })
-            .catch(error => {
-              console.log('Error loading progress:', error);
+          const progress = await IndexedDBService.getGameProgress(lastPlayer.id);
+          progress.forEach(item => {
+            dispatch({
+              type: 'UPDATE_PROGRESS',
+              payload: { game: item.gameName, progress: item }
             });
+          });
         }
       } catch (error) {
-        console.log('No saved data found:', error);
+        console.log('No saved data found or error loading:', error);
       } finally {
+        console.log('Data loading complete');
         dispatch({ type: 'SET_DATA_LOADED' });
+        // Don't change the view here - let the RocketLoader handle it
       }
     };
 

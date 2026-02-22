@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useMemo } from 'react';
+// src/components/common/RocketLoader/RocketLoader.js
+import { useEffect, useState, useMemo, useRef } from 'react';
 import './RocketLoader.css';
 
 // Generate stars for background
@@ -25,45 +26,102 @@ const loadingTips = [
   "Preparing educational modules...",
 ];
 
-const RocketLoader = ({ onComplete, duration = 7000 }) => {
+const RocketLoader = ({ onComplete, duration = 2000 }) => {
   const [progress, setProgress] = useState(0);
   const [currentTip, setCurrentTip] = useState(0);
   const [isLaunching, setIsLaunching] = useState(false);
+  const mountedRef = useRef(true);
+  const completionTimeoutRef = useRef(null);
+  const onCompleteCalledRef = useRef(false);
 
   const stars = useMemo(() => generateStars(80), []);
 
+  // Log when component mounts
   useEffect(() => {
-    let mounted = true;
+    console.log('🚀 RocketLoader mounted with duration:', duration);
+    mountedRef.current = true;
+    onCompleteCalledRef.current = false;
     
-    const interval = setInterval(() => {
-      if (!mounted) return;
+    return () => {
+      console.log('🚀 RocketLoader unmounting');
+      mountedRef.current = false;
+      if (completionTimeoutRef.current) {
+        clearTimeout(completionTimeoutRef.current);
+      }
+    };
+  }, [duration]);
+
+  // Progress interval
+  useEffect(() => {
+    console.log('Starting progress interval');
+    
+    const progressInterval = setInterval(() => {
+      if (!mountedRef.current) return;
       
       setProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setIsLaunching(true);
-          setTimeout(() => {
-            if (mounted) onComplete();
-          }, 800);
+        const newProgress = prev + 2;
+        console.log('Progress:', newProgress);
+        
+        if (newProgress >= 100) {
+          console.log('Progress reached 100%, clearing interval');
+          clearInterval(progressInterval);
           return 100;
         }
-        return prev + 2;
+        return newProgress;
       });
     }, duration / 50);
 
     // Rotate tips
     const tipInterval = setInterval(() => {
-      if (mounted) {
+      if (mountedRef.current) {
         setCurrentTip(prev => (prev + 1) % loadingTips.length);
       }
     }, 2500);
 
     return () => {
-      mounted = false;
-      clearInterval(interval);
+      console.log('Cleaning up intervals');
+      clearInterval(progressInterval);
       clearInterval(tipInterval);
     };
-  }, [duration, onComplete]);
+  }, [duration]);
+
+  // Handle completion when progress reaches 100
+  useEffect(() => {
+    if (progress >= 100 && mountedRef.current && !onCompleteCalledRef.current) {
+      console.log('🎯 Progress reached 100%, triggering launch sequence');
+      setIsLaunching(true);
+      onCompleteCalledRef.current = true;
+      
+      // Clear any existing timeout
+      if (completionTimeoutRef.current) {
+        clearTimeout(completionTimeoutRef.current);
+      }
+      
+      // Set new timeout for completion
+      completionTimeoutRef.current = setTimeout(() => {
+        if (mountedRef.current) {
+          console.log('✅ Calling onComplete callback');
+          if (onComplete) {
+            onComplete();
+          } else {
+            console.warn('⚠️ onComplete prop is not provided');
+          }
+        }
+      }, 800);
+    }
+  }, [progress, onComplete]);
+
+  // Force completion after maximum time (safety net)
+  useEffect(() => {
+    const safetyTimeout = setTimeout(() => {
+      if (mountedRef.current && progress < 100 && !onCompleteCalledRef.current) {
+        console.log('⚠️ Safety timeout triggered - forcing completion');
+        setProgress(100);
+      }
+    }, duration + 2000); // Add 2 seconds buffer
+
+    return () => clearTimeout(safetyTimeout);
+  }, [duration, progress]);
 
   return (
     <div className={`rocket-loader-modern ${isLaunching ? 'launch-complete' : ''}`}>
@@ -78,8 +136,7 @@ const RocketLoader = ({ onComplete, duration = 7000 }) => {
               top: star.top,
               width: `${star.size}px`,
               height: `${star.size}px`,
-              animationDuration: `${star.duration}s`,
-              animationDelay: `${star.delay}s`,
+              animation: `twinkle ${star.duration}s infinite ${star.delay}s`,
             }}
           />
         ))}
@@ -99,9 +156,21 @@ const RocketLoader = ({ onComplete, duration = 7000 }) => {
           {/* Rocket Container */}
           <div className="rocket-wrapper">
             <img 
-              src="/assets/images/ui/rocket.png" 
+              src={`${process.env.PUBLIC_URL}/assets/images/ui/rocket.png`}
               alt="Rocket" 
-              className="rocket-ship" 
+              className="rocket-ship"
+              onError={(e) => {
+                console.error('Rocket image failed to load');
+                e.target.style.display = 'none';
+                // Add a fallback div rocket
+                const parent = e.target.parentElement;
+                if (parent) {
+                  const fallback = document.createElement('div');
+                  fallback.className = 'rocket-fallback';
+                  fallback.innerHTML = '🚀';
+                  parent.appendChild(fallback);
+                }
+              }}
             />
             
             {/* Rocket Glow */}
@@ -141,7 +210,7 @@ const RocketLoader = ({ onComplete, duration = 7000 }) => {
           <div className="progress-stats">
             <div className="stat-item">
               <span className="stat-label">Progress</span>
-              <span className="stat-value">{progress}%</span>
+              <span className="stat-value">{Math.round(progress)}%</span>
             </div>
             <div className="stat-divider"></div>
             <div className="stat-item">
