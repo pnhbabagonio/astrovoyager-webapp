@@ -6,8 +6,8 @@ const LaunchVideo = ({ onSkip }) => {
   const [canSkip, setCanSkip] = useState(false);
   const [pressed, setPressed] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false); // Fixed: now we have both value and setter
   const [needsInteraction, setNeedsInteraction] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false); // Now we use this state
 
   useEffect(() => {
     const video = videoRef.current;
@@ -107,11 +107,22 @@ const LaunchVideo = ({ onSkip }) => {
     }
   };
 
+  // Show loading indicator while video is loading
+  const showLoadingIndicator = !videoLoaded && !needsInteraction;
+
   return (
     <div
       className="launch-video-screen"
       onClick={handleUserInteraction}
     >
+      {/* Loading indicator */}
+      {showLoadingIndicator && (
+        <div className="video-loading-indicator">
+          <div className="loading-spinner-small"></div>
+          <div className="loading-text">Loading video...</div>
+        </div>
+      )}
+
       <video
         ref={videoRef}
         className="launch-video"
@@ -123,8 +134,13 @@ const LaunchVideo = ({ onSkip }) => {
         onError={handleVideoError}
         onLoadedMetadata={() => {
           console.log('Video metadata loaded');
-          setVideoLoaded(true); // Now this works correctly
+          setVideoLoaded(true);
         }}
+        onLoadedData={() => {
+          console.log('Video data loaded');
+          setVideoLoaded(true);
+        }}
+        style={{ opacity: videoLoaded ? 1 : 0.5 }}
       />
 
       {/* Manual play prompt if autoplay was blocked */}
@@ -160,7 +176,7 @@ const LaunchVideo = ({ onSkip }) => {
       )}
 
       {/* Sound instruction (only show if video is playing and sound is off) */}
-      {!soundEnabled && !needsInteraction && (
+      {!soundEnabled && !needsInteraction && videoLoaded && (
         <div className="tap-for-sound">
           🔊 Tap anywhere to enable sound
         </div>

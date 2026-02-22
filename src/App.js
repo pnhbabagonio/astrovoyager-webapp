@@ -36,7 +36,10 @@ function AppContent() {
     console.log('Current view:', gameState.currentView);
     console.log('isInitialLoad:', gameState.isInitialLoad);
     console.log('isDataLoaded:', gameState.isDataLoaded);
-  }, [gameState.currentView, gameState.isInitialLoad, gameState.isDataLoaded]);
+    if (playerData) {
+      console.log('Current player:', playerData.name);
+    }
+  }, [gameState.currentView, gameState.isInitialLoad, gameState.isDataLoaded, playerData]);
 
   // Monitor loading states
   useEffect(() => {
@@ -219,7 +222,7 @@ function AppContent() {
 
       const trimmedName = playerName.trim();
       
-      const playerData = {
+      const playerDataObj = {
         name: trimmedName,
         encodedName: `Astronaut ${trimmedName}`,
         sessionId: `session_${Date.now()}`,
@@ -227,12 +230,12 @@ function AppContent() {
         lastPlayed: new Date().toISOString()
       };
 
-      console.log('Attempting to create player with data:', playerData);
+      console.log('Attempting to create player with data:', playerDataObj);
       
       // Try to create player in IndexedDB
       let createdPlayer;
       try {
-        createdPlayer = await playerActions.createPlayer(playerData);
+        createdPlayer = await playerActions.createPlayer(playerDataObj);
         console.log('Player created successfully:', createdPlayer);
       } catch (dbError) {
         console.error('IndexedDB error details:', dbError);
@@ -251,12 +254,12 @@ function AppContent() {
       }
       
       // Store player data in both contexts
-      setPlayerData(createdPlayer || playerData);
+      setPlayerData(createdPlayer || playerDataObj);
       
       // Also update game state with player data if needed
       gameDispatch({ 
         type: 'SET_PLAYER_DATA', 
-        payload: createdPlayer || playerData 
+        payload: createdPlayer || playerDataObj 
       });
       
       // CRITICAL FIX: Clear the loading state before showing journey loading
@@ -388,7 +391,8 @@ function AppContent() {
       showJourneyLoading,
       showLaunchVideo,
       currentView: gameState.currentView,
-      isDataLoaded: gameState.isDataLoaded
+      isDataLoaded: gameState.isDataLoaded,
+      playerName: playerData?.name
     });
 
     if (showJourneyLoading) {
@@ -439,7 +443,7 @@ function AppContent() {
   return (
     <div className="astrovoyager-app">
       {/* Debug info - remove in production */}
-      {/* {process.env.NODE_ENV === 'development' && (
+      {process.env.NODE_ENV === 'development' && (
         <div style={{
           position: 'fixed',
           top: '10px',
@@ -460,8 +464,9 @@ function AppContent() {
           <div>Loading: <strong style={{color: showJourneyLoading ? '#ff0' : '#888'}}>{showJourneyLoading ? 'Yes' : 'No'}</strong></div>
           <div>Video: <strong style={{color: showLaunchVideo ? '#0f0' : '#888'}}>{showLaunchVideo ? 'Yes' : 'No'}</strong></div>
           <div>isLoading: <strong style={{color: gameState.isLoading ? '#f00' : '#0f0'}}>{gameState.isLoading ? 'Yes' : 'No'}</strong></div>
+          <div>Player: <strong style={{color: playerData ? '#0f0' : '#888'}}>{playerData?.name || 'None'}</strong></div>
         </div>
-      )} */}
+      )}
       
       {gameState.currentView !== 'loading' && !showLaunchVideo && !showJourneyLoading && <AudioControls />}
       
