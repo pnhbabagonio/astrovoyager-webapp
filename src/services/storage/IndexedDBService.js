@@ -231,4 +231,5 @@ class IndexedDBService {
   }
 }
 
-export default new IndexedDBService();
+const indexedDBService = new IndexedDBService();
+export default indexedDBService;

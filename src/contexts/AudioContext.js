@@ -78,10 +78,11 @@ export function AudioProvider({ children }) {
   useEffect(() => {
     Howler.autoUnlock = true;
     Howler.autoSuspend = false;
-    
+
+    const instances = audioInstances.current;
+
     return () => {
-      // Cleanup all audio instances
-      audioInstances.current.forEach(sound => sound.unload());
+      instances.forEach((sound) => sound.unload());
     };
   }, []);
 

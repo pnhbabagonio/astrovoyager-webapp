@@ -1,6 +1,11 @@
 import './SeasonalTeleportationQuiz.css';
 
-const ScenarioCard = ({ scenario, selectedOptionId, showResult}) => {
+const ScenarioCard = ({ 
+  scenario, 
+  selectedOptionId, 
+  showResult,
+  onOptionSelect
+}) => {
   return (
     <div className="scenario-card">
       <div className="scenario-image">
@@ -12,32 +17,41 @@ const ScenarioCard = ({ scenario, selectedOptionId, showResult}) => {
       </div>
 
       <div className="options">
-        {scenario.options.map(option => {
+        {scenario.options.map((option) => {
           let optionClass = 'option';
+
           if (selectedOptionId === option.id) {
             optionClass += ' selected';
           }
+
           if (showResult) {
             if (option.correct) {
               optionClass += ' correct';
-            } else if (selectedOptionId === option.id && !option.correct) {
+            } else if (
+              selectedOptionId === option.id &&
+              !option.correct
+            ) {
               optionClass += ' incorrect';
             }
           }
 
-          // return (
-          //   <div
-          //     key={option.id}
-          //     className={optionClass}
-          //     onClick={() => onOptionSelect(option.id)}
-          //   >
-          //     <span className="option-letter">{option.id.toUpperCase()}</span>
-          //     <span className="option-text">{option.text}</span>
-          //     {showResult && option.correct && (
-          //       <span className="checkmark">✓</span>
-          //     )}
-          //   </div>
-          // );
+          return (
+            <div
+              key={option.id}
+              className={optionClass}
+              onClick={() => onOptionSelect(option.id)}
+            >
+              <span className="option-letter">
+                {option.id.toUpperCase()}
+              </span>
+              <span className="option-text">
+                {option.text}
+              </span>
+              {showResult && option.correct && (
+                <span className="checkmark">✓</span>
+              )}
+            </div>
+          );
         })}
       </div>
     </div>
