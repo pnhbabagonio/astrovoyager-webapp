@@ -723,7 +723,7 @@ function AppContent() {
       )}
 
       {/* Simple Debug Toggle Button - Positioned at Top Left */}
-      {process.env.NODE_ENV === 'development' && !showDebug && (
+      {/* {process.env.NODE_ENV === 'development' && !showDebug && (
         <button 
           className="debug-toggle"
           onClick={() => setShowDebug(true)}
@@ -731,7 +731,7 @@ function AppContent() {
         >
           🐞
         </button>
-      )}
+      )} */}
       
       {gameState.currentView !== 'loading' && !showLaunchVideo && !showJourneyLoading && <AudioControls />}
       

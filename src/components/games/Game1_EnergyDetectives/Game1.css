@@ -1,23 +1,49 @@
-.game1-root.astro-theme {
+/* Game1.css - Fixed Header Gap */
+
+/* ==================== BASE STYLES ==================== */
+.game1-root.solar-voyager-theme {
   min-height: 100vh;
   background: linear-gradient(160deg, 
-    #0d0d1a 0%,      /* Deep dark */
-    #1a1a2e 25%,     /* Rich midnight */
-    #16213e 50%,     /* Deep navy */
-    #1a3a5f 75%,     /* Space blue */
-    #0f3460 100%     /* Dark ocean */
+    #0d0d1a 0%,
+    #1a1a2e 25%,
+    #16213e 50%,
+    #1a3a5f 75%,
+    #0f3460 100%
   );
   background-size: 200% 200%;
   animation: modernSpaceShift 30s ease-in-out infinite;
   color: #fff;
   display: flex;
   flex-direction: column;
-  flex: 1;
-  height: 100%;
+  height: 100vh;
   overflow: hidden;
   position: relative;
 }
 
+/* ==================== ANIMATIONS ==================== */
+@keyframes modernSpaceShift {
+  0%, 100% { background-position: 0% 0%; }
+  25% { background-position: 50% 100%; }
+  50% { background-position: 100% 50%; }
+  75% { background-position: 50% 0%; }
+}
+
+@keyframes ambientGlow {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+@keyframes sunGlow {
+  0%, 100% { filter: drop-shadow(0 0 15px rgba(255, 191, 0, 0.6)); }
+  50% { filter: drop-shadow(0 0 25px rgba(255, 140, 0, 0.8)); }
+}
+
+@keyframes twinkle {
+  0%, 100% { transform: scale(1); opacity: 0.2; }
+  50% { transform: scale(1.3); opacity: 1; }
+}
+
+/* ==================== BACKGROUND EFFECTS ==================== */
 .solar-voyager-theme::before {
   content: '';
   position: absolute;
@@ -33,47 +59,6 @@
   animation: ambientGlow 15s ease-in-out infinite alternate;
 }
 
-@keyframes ambientGlow {
-  0% { opacity: 0.8; }
-  100% { opacity: 1; }
-}
-
-@keyframes modernSpaceShift {
-  0%, 100% { background-position: 0% 0%; }
-  25% { background-position: 50% 100%; }
-  50% { background-position: 100% 50%; }
-  75% { background-position: 50% 0%; }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-8px) rotate(0.5deg); }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.02); }
-}
-
-@keyframes twinkle {
-  0%, 100% { transform: scale(1); opacity: 0.2; }
-  50% { transform: scale(1.3); opacity: 1; }
-}
-
-@keyframes sunGlow {
-  0%, 100% { 
-    filter: drop-shadow(0 0 15px rgba(255, 191, 0, 0.6));
-  }
-  50% { 
-    filter: drop-shadow(0 0 25px rgba(255, 140, 0, 0.8));
-  }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
 .star {
   position: absolute;
   background: white;
@@ -82,52 +67,19 @@
   box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
 }
 
-.sun-glow {
-  animation: sunGlow 3s ease-in-out infinite;
-}
-
-/* Modern Space-themed UI Elements */
-.space-panel {
-  background: rgba(15, 20, 40, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
-    0 1px 0 rgba(255, 255, 255, 0.1) inset;
-}
-
-.summer-highlight {
-  background: linear-gradient(135deg, 
-    rgba(255, 191, 0, 0.08), 
-    rgba(255, 140, 0, 0.04));
-  border: 1px solid rgba(255, 191, 0, 0.2);
-}
-
-.solar-energy-card {
-  background: linear-gradient(135deg, 
-    rgba(255, 191, 0, 0.12), 
-    rgba(255, 107, 53, 0.08));
-  border: 1px solid rgba(255, 191, 0, 0.25);
-  border-radius: 20px;
-}
-
-/* ==================== MODERN HEADER - Seasonal Navigator Style ==================== */
+/* ==================== HEADER - FIXED RESPONSIVE LAYOUT ==================== */
 .game1-header {
-  display: grid;
-  grid-template-columns: 200px 1fr 200px;
+  display: flex;
   align-items: center;
-  height: 150px;
-  padding: 0 2rem;
-  box-sizing: border-box;
+  justify-content: space-between;
+  padding: 0.75rem 2rem;
   background: rgba(10, 14, 42, 0.8);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   position: relative;
   z-index: 10;
-  border-bottom: none;
+  min-height: 70px;
+  flex-shrink: 0;
 }
 
 /* Bottom border accent */
@@ -146,7 +98,7 @@
   background: rgba(255, 191, 0, 0.2);
   border: 2px solid #FFD93D;
   color: #FFD93D;
-  padding: 0.5rem 1.2rem;
+  padding: 0.4rem 1.2rem;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -154,9 +106,10 @@
   white-space: nowrap;
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
-  margin: 0;
-  justify-self: start;
-  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 .game1-header .back-button.space-button:hover {
@@ -166,17 +119,17 @@
   box-shadow: 0 0 15px rgba(255, 191, 0, 0.4);
 }
 
-/* Spacer to balance the back button and center the title */
-.header-spacer {
-  justify-self: end;
-  align-self: center;
+.back-icon {
+  font-size: 1.2rem;
+  line-height: 1;
 }
 
 /* Header Center Content */
 .header-center {
+  flex: 1;
   text-align: center;
-  justify-self: center;
-  align-self: center;
+  padding: 0 1rem;
+  min-width: 0; /* Allows text truncation */
 }
 
 .header-center .mission-title {
@@ -184,12 +137,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
-  margin: 0;
+  gap: 0.15rem;
 }
 
 .header-center .mission-title h1 {
-  font-size: 2rem;
+  font-size: clamp(1.25rem, 4vw, 2rem);
   background: linear-gradient(45deg, #FFD93D, #FF9F1C);
   background-clip: text;
   -webkit-background-clip: text;
@@ -199,14 +151,10 @@
   letter-spacing: 2px;
   line-height: 1.2;
   font-weight: 700;
-}
-
-/* Remove color from sun emoji to keep it yellow */
-.header-center .mission-title h1 .sun-icon-large {
-  -webkit-text-fill-color: initial;
-  background: none;
-  filter: grayscale(0) brightness(1.2);
-  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 /* Subtitle */
@@ -218,134 +166,64 @@
   gap: 0.5rem;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
+  font-size: clamp(0.75rem, 2vw, 1rem);
 }
 
 .mission-subtitle span {
-  margin: 0 0.25rem;
-  font-size: 1.0rem;
-  color: #FFD93D;
-  letter-spacing: 0.5px;  /* Add this as well */
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .game1-header {
-    height: auto;
-    min-height: auto;
-    flex-direction: column;
-    padding: 1rem;
-    gap: 0.75rem;
-  }
-
-  .game1-header .back-button.space-button {
-    align-self: flex-start;
-    font-size: 0.85rem;
-    padding: 0.4rem 1rem;
-    flex-basis: auto;
-  }
-
-  .header-center {
-    width: 100%;
-  }
-
-  .header-center .mission-title h1 {
-    font-size: 1.5rem;
-  }
-
-  .mission-subtitle {
-    font-size: 0.85rem;
-    flex-wrap: wrap;
-  }
-
-  .mission-subtitle span {
-    font-size: 0.85rem;
-  }
-
-  .header-spacer {
-    display: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .game1-header {
-    padding: 0.75rem;
-  }
-
-  .header-center .mission-title h1 {
-    font-size: 1.25rem;
-  }
-
-  .mission-subtitle {
-    font-size: 0.75rem;
-  }
-
-  .mission-subtitle span {
-    font-size: 0.75rem;
-  }
-}
-
-/* Modern Character Badge */
-.character-badge.solar-badge {
-  position: absolute;
-  right: var(--space-lg);
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255, 191, 0, 0.06);
-  border: 1px solid rgba(255, 191, 0, 0.2);
-  border-radius: 50px;
-  padding: var(--space-xs) var(--space-md);
-  font-size: var(--font-size-sm);
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: var(--space-sm);
-  min-width: 180px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  gap: 0.25rem;
+  white-space: nowrap;
 }
 
-.character-badge.solar-badge:hover {
-  background: rgba(255, 191, 0, 0.1);
-  border-color: rgba(255, 191, 0, 0.3);
+/* Header Spacer (for balance) */
+.header-spacer {
+  width: 100px;
+  flex-shrink: 0;
 }
 
-.badge-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid rgba(255, 191, 0, 0.4);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.badge-text {
-  color: #FFD93D;
-  font-weight: 600;
+/* ==================== MAIN CONTENT AREA ==================== */
+.game1-content {
   flex: 1;
-  font-size: var(--font-size-sm);
+  padding: clamp(1rem, 3vw, 2rem);
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
 }
 
-.badge-role {
-  color: rgba(176, 208, 255, 0.7);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 500;
+/* ==================== PROGRESS BAR - FIXED ==================== */
+.game1-progress {
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+  text-align: center;
+  background: rgba(10, 15, 30, 0.5);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-top: 1px solid rgba(255, 191, 0, 0.1);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
 }
 
-/* Modern Solar Progress Bar */
 .solar-progress {
   width: 100%;
-  max-width: 700px;
+  max-width: min(700px, 90vw);
   margin: 0 auto;
 }
 
 .progress-label {
   color: rgba(176, 208, 255, 0.8);
-  font-size: var(--font-size-xs);
+  font-size: clamp(0.7rem, 1.5vw, 0.85rem);
   text-transform: uppercase;
   letter-spacing: 2px;
-  margin-bottom: var(--space-md);
+  margin-bottom: 0.75rem;
   text-align: center;
   font-weight: 500;
 }
@@ -358,6 +236,7 @@
   overflow: visible;
   border: none;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+  margin: 0 12px; /* Space for markers */
 }
 
 .progress-beam {
@@ -409,12 +288,12 @@
   transform: translateY(-50%);
   display: flex;
   justify-content: space-between;
-  padding: 0;
+  pointer-events: none;
 }
 
 .progress-marker {
-  width: 24px;
-  height: 24px;
+  width: clamp(20px, 4vw, 24px);
+  height: clamp(20px, 4vw, 24px);
   background: rgba(20, 25, 45, 0.9);
   border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
@@ -422,10 +301,12 @@
   align-items: center;
   justify-content: center;
   color: rgba(176, 208, 255, 0.5);
-  font-size: 10px;
+  font-size: clamp(0.6rem, 1.5vw, 0.7rem);
   font-weight: 600;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
+  cursor: default;
 }
 
 .progress-marker.active {
@@ -438,235 +319,311 @@
   transform: scale(1.1);
 }
 
-.game1-header h1 {
-  font-size: var(--font-size-3xl);
-  font-weight: 700;
-  background: linear-gradient(135deg, #FFD93D, #FF9F1C, #E8B86D);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin: 0;
-  text-align: center;
+/* ==================== UTILITY CLASSES ==================== */
+.sun-glow {
+  animation: sunGlow 3s ease-in-out infinite;
 }
 
-.character-badge {
-  background: rgba(255, 191, 0, 0.08);
-  border: 1px solid rgba(255, 191, 0, 0.2);
-  border-radius: 50px;
-  padding: var(--space-sm) var(--space-md);
-  font-size: var(--font-size-sm);
-  color: #FFD93D;
+.space-panel {
+  background: rgba(15, 20, 40, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 1px 0 rgba(255, 255, 255, 0.1) inset;
 }
 
-/* Modern Back Button (standalone) */
-.back-button {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(176, 208, 255, 0.9);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: var(--font-size-sm);
-  flex-shrink: 0;
-  z-index: 1;
-}
+/* ==================== RESPONSIVE BREAKPOINTS ==================== */
 
-.back-button:hover {
-  background: rgba(255, 191, 0, 0.1);
-  border-color: rgba(255, 191, 0, 0.4);
-  color: #FFD93D;
-  transform: translateX(-4px);
-  box-shadow: 0 4px 20px rgba(255, 191, 0, 0.2);
-}
-
-.header-spacer {
-  width: 0;
-  flex: 0 0 auto;
-  visibility: hidden;
-  flex-basis: 160px;
-  flex-shrink: 0;
-  align-self: center;
-}
-
-
-.game1-content {
-  flex: 1;
-  padding: var(--space-lg) var(--space-xl);
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  position: relative;
-  z-index: 2;
-}
-
-.game1-progress {
-  padding: var(--space-lg) var(--space-xl);
-  text-align: center;
-  background: rgba(10, 15, 30, 0.5);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border-top: 1px solid rgba(255, 191, 0, 0.1);
-  flex-shrink: 0;
-  min-height: 70px;
-  position: relative;
-  z-index: 2;
-}
-
-.progress-bar {
-  width: 280px;
-  height: 5px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 100px;
-  overflow: hidden;
-  margin: 0 auto var(--space-sm);
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #FFD93D, #FF9F1C);
-  border-radius: 100px;
-  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 15px rgba(255, 191, 0, 0.4);
-}
-
-.progress-text {
-  font-size: var(--font-size-xs);
-  color: rgba(255, 215, 0, 0.9);
-  font-weight: 500;
-  letter-spacing: 1px;
-}
-
-/* Star animations handled above */
-
-.star {
-  position: absolute;
-  background: white;
-  border-radius: 50%;
-  animation: twinkle 4s infinite;
-  box-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
-}
-
-/* Modern Responsive Design */
-@media (max-width: 768px) {
-  .back-button-floating {
-    position: relative;
-    top: auto;
-    left: auto;
-    transform: none;
-    margin: var(--space-sm) var(--space-md);
-    align-self: flex-start;
-  }
-
+/* Tablet */
+@media (max-width: 1024px) {
   .game1-header {
-    padding: var(--space-md);
-    flex-direction: column;
-    gap: var(--space-sm);
-    text-align: center;
+    padding: 0.6rem 1.5rem;
+    min-height: 65px;
+  }
+  
+  .header-spacer {
+    width: 80px;
+  }
+}
+
+/* Mobile Landscape & Small Tablets */
+@media (max-width: 768px) {
+  .game1-header {
+    flex-wrap: wrap;
     min-height: auto;
+    padding: 0.5rem 1rem;
+    gap: 0.35rem;
   }
 
-  .game1-header h1 {
-    font-size: var(--font-size-lg);
+  .game1-header .back-button.space-button {
+    order: 1;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.85rem;
+  }
+
+  .header-center {
     order: 2;
+    width: 100%;
+    padding: 0 0.25rem;
+    flex: 0 0 100%;
   }
 
-  .sun-icon-large {
-    font-size: 32px;
+  .header-center .mission-title {
+    gap: 0.1rem;
+  }
+
+  .header-center .mission-title h1 {
+    font-size: 1.25rem;
+    white-space: normal;
+    line-height: 1.2;
+    margin: 0.1rem 0;
   }
 
   .mission-subtitle {
-    font-size: 10px;
-    letter-spacing: 2px;
+    gap: 0.5rem;
+    margin: 0.1rem 0;
+  }
+
+  .header-spacer {
+    display: none;
   }
 
   .game1-content {
-    padding: var(--space-md);
-  }
-
-  .back-button,
-  .back-button.space-button {
-    position: relative;
-    left: auto;
-    top: auto;
-    transform: none;
-    order: 1;
-    align-self: flex-start;
-    margin-bottom: var(--space-sm);
-    min-width: auto;
-    padding: var(--space-xs) var(--space-md);
-  }
-
-  .back-button:hover,
-  .back-button.space-button:hover {
-    transform: translateX(-2px);
-  }
-
-  .character-badge,
-  .character-badge.solar-badge {
-    position: relative;
-    right: auto;
-    top: auto;
-    transform: none;
-    margin-top: var(--space-sm);
-    min-width: auto;
-  }
-
-  .progress-bar {
-    width: 220px;
+    padding: 0.75rem;
   }
 
   .game1-progress {
-    min-height: auto;
-    padding: var(--space-md);
+    padding: 0.75rem;
+  }
+
+  .progress-markers {
+    left: -8px;
+    right: -8px;
   }
 
   .progress-marker {
-    width: 20px;
-    height: 20px;
-    font-size: 9px;
+    width: 22px;
+    height: 22px;
+    font-size: 0.65rem;
   }
 }
 
+/* Mobile Portrait */
 @media (max-width: 480px) {
   .game1-header {
-    padding: var(--space-sm);
-    min-height: auto;
+    padding: 0.35rem 0.75rem;
+    gap: 0.10rem;
   }
 
-  .game1-header h1 {
-    font-size: var(--font-size-base);
+  .game1-header .back-button.space-button {
+    padding: 0.25rem 0.7rem;
+    font-size: 0.8rem;
+    border-width: 1.5px;
   }
 
-  .sun-icon-large {
-    font-size: 28px;
+  .back-icon {
+    font-size: 1rem;
+  }
+
+  .button-text {
+    display: none; /* Hide text on very small screens */
+  }
+
+  .game1-header .back-button.space-button {
+    padding: 0.35rem;
+    aspect-ratio: 1;
+    border-radius: 8px;
+  }
+
+  .game1-header .back-button.space-button .back-icon {
+    margin: 0;
+  }
+
+  .header-center .mission-title {
+    gap: 0.05rem;
+  }
+
+  .header-center .mission-title h1 {
+    font-size: 1rem;
+    letter-spacing: 1px;
+    margin: 0;
+  }
+
+  .mission-subtitle {
+    flex-direction: column;
+    gap: 0.15rem;
+    font-size: 0.7rem;
+    margin: 0;
+  }
+
+  .mission-subtitle span {
+    font-size: 0.7rem;
+    gap: 0.15rem;
   }
 
   .game1-content {
-    padding: var(--space-sm);
-  }
-
-  .progress-bar {
-    width: 160px;
+    padding: 0.5rem;
   }
 
   .game1-progress {
-    padding: var(--space-sm);
+    padding: 0.5rem;
+  }
+
+  .progress-label {
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+    margin-bottom: 0.35rem;
+  }
+
+  .progress-track {
+    margin: 0 5px;
+  }
+
+  .progress-markers {
+    left: -5px;
+    right: -5px;
   }
 
   .progress-marker {
     width: 18px;
     height: 18px;
-    font-size: 8px;
+    font-size: 0.55rem;
+    border-width: 1px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 360px) {
+  .game1-header {
+    padding: 0.25rem 0.5rem;
   }
 
+  .game1-header .back-button.space-button {
+    padding: 0.25rem;
+  }
+
+  .header-center .mission-title h1 {
+    font-size: 0.9rem;
+  }
+
+  .mission-subtitle {
+    font-size: 0.65rem;
+  }
+
+  .mission-subtitle span {
+    font-size: 0.65rem;
+  }
+
+  .progress-marker {
+    width: 16px;
+    height: 16px;
+    font-size: 0.5rem;
+  }
+  
+  .progress-track {
+    margin: 0 3px;
+  }
+  
+  .progress-markers {
+    left: -3px;
+    right: -3px;
+  }
+}
+
+/* Height-based adjustments for very short screens */
+@media (max-height: 600px) {
+  .game1-header {
+    min-height: 50px;
+    padding: 0.3rem 1rem;
+  }
+
+  .game1-header .back-button.space-button {
+    padding: 0.25rem 0.8rem;
+  }
+
+  .header-center .mission-title h1 {
+    font-size: clamp(1rem, 3vh, 1.3rem);
+  }
+
+  .mission-subtitle {
+    font-size: clamp(0.65rem, 1.5vh, 0.8rem);
+  }
+
+  .game1-content {
+    padding: 0.5rem;
+  }
+
+  .game1-progress {
+    padding: 0.35rem 0.5rem;
+  }
+
+  .progress-label {
+    margin-bottom: 0.2rem;
+    font-size: 0.6rem;
+  }
+
+  .progress-track {
+    height: 4px;
+  }
+
+  .progress-marker {
+    width: 16px;
+    height: 16px;
+    font-size: 0.5rem;
+  }
+}
+
+/* ==================== CHARACTER BADGE (if needed) ==================== */
+.character-badge.solar-badge {
+  background: rgba(255, 191, 0, 0.06);
+  border: 1px solid rgba(255, 191, 0, 0.2);
+  border-radius: 50px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.badge-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 191, 0, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.badge-text {
+  color: #FFD93D;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.badge-role {
+  color: rgba(176, 208, 255, 0.7);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+@media (max-width: 480px) {
   .badge-avatar {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .character-badge.solar-badge {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
   }
 }

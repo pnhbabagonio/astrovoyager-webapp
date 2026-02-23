@@ -1,4 +1,4 @@
-// MissionMap.js - Updated with responsive island positioning (warning fixed)
+// MissionMap.js - Updated with audio greeting and admin access
 import React, { useEffect, useState, useRef } from 'react';
 import { useGameState } from '../../../contexts/GameStateContext';
 import { useAudio } from '../../../contexts/AudioContext';
@@ -18,85 +18,35 @@ const MissionMap = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [showAdmin, setShowAdmin] = useState(false);
   const [clickCount, setClickCount] = useState(0);
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight
-  });
   const greetingRef = useRef(null);
   const clickTimerRef = useRef(null);
-
-  // Handle window resize
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight
-      });
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Calculate responsive island positions based on screen size
-  const getIslandPositions = () => {
-    const { width } = windowSize; // Only using width for breakpoints
-    const isMobile = width <= 768;
-    const isTablet = width <= 1024 && width > 768;
-    
-    // Base positions as percentages of viewport
-    if (isMobile) {
-      // Mobile layout - stack vertically
-      return {
-        game1: { left: '15%', top: '20%' },
-        game2: { left: '15%', top: '40%' },
-        game3: { left: '15%', top: '60%' }
-      };
-    } else if (isTablet) {
-      // Tablet layout - diagonal
-      return {
-        game1: { left: '5%', top: '40%' },
-        game2: { left: '30%', top: '20%' },
-        game3: { left: '55%', top: '5%' }
-      };
-    } else {
-      // Desktop layout - original
-      return {
-        game1: { left: '5%', top: '45%' },
-        game2: { left: '35%', top: '20%' },
-        game3: { left: '65%', top: '1%' }
-      };
-    }
-  };
-
-  const islandPositions = getIslandPositions();
 
   const games = [
     {
       id: 1,
       name: 'Energy Detectives',
-      description: 'Investigate Sun-related scenarios',
+      description: 'Investigate Sun-related scenarios and explain your reasoning.',
       img: island1Bg,
       route: 'game1',
-      pos: islandPositions.game1,
+      pos: { left: '5%', top: '45%' },
       disabled: false
     },
     {
       id: 2,
       name: 'TiltQuest',
-      description: 'Discover how Earth axial tilt works',
+      description: 'Discover how Earth axial tilt changes day length.',
       img: island2Bg,
       route: 'game2',
-      pos: islandPositions.game2,
+      pos: { left: '35%', top: '20%' },
       disabled: false
     },
     {
       id: 3,
       name: 'Season Navigator',
-      description: 'Explore how seasons are created',
+      description: 'Explore how tilt and orbit create seasons.',
       img: island3Bg,
       route: 'game3',
-      pos: islandPositions.game3,
+      pos: { left: '65%', top: '1%' },
       disabled: false
     },
   ];
@@ -106,19 +56,23 @@ const MissionMap = () => {
     const newCount = clickCount + 1;
     setClickCount(newCount);
     
+    // Clear existing timer
     if (clickTimerRef.current) {
       clearTimeout(clickTimerRef.current);
     }
     
+    // Show admin panel after 5 clicks
     if (newCount >= 5) {
       setShowAdmin(true);
       setClickCount(0);
       audioActions.playSoundEffect?.('success');
       
+      // Hide after 10 seconds
       setTimeout(() => {
         setShowAdmin(false);
       }, 10000);
     } else {
+      // Reset counter after 2 seconds
       clickTimerRef.current = setTimeout(() => {
         setClickCount(0);
       }, 2000);
@@ -130,14 +84,17 @@ const MissionMap = () => {
     let delayTimer;
     let visibilityTimer;
 
+    // First, set component as visible (for fade-in animations if any)
     visibilityTimer = setTimeout(() => {
       setIsVisible(true);
     }, 300);
 
+    // Then play greeting after a delay
     delayTimer = setTimeout(() => {
       if (!greetingPlayed && audioActions.playVoiceover) {
         console.log('Playing Annie welcome audio');
         try {
+          // Try 'annieWelcome' key first, fallback to 'welcome'
           const sound = audioActions.playVoiceover('annieWelcome') || 
                        audioActions.playVoiceover('welcome');
           
@@ -145,19 +102,20 @@ const MissionMap = () => {
             greetingRef.current = sound;
             setGreetingPlayed(true);
             
+            // Optional: Add a visual cue when audio plays
             const characterElement = document.querySelector('.character-image');
             if (characterElement) {
               characterElement.classList.add('talking');
               setTimeout(() => {
                 characterElement.classList.remove('talking');
-              }, 3000);
+              }, 3000); // Remove after audio duration
             }
           }
         } catch (error) {
           console.error('Error playing Annie greeting:', error);
         }
       }
-    }, 1500);
+    }, 1500); // 1.5 second delay before playing
 
     return () => {
       clearTimeout(delayTimer);
@@ -166,23 +124,27 @@ const MissionMap = () => {
         clearTimeout(clickTimerRef.current);
       }
       
+      // Clean up any playing audio if component unmounts
       if (greetingRef.current && greetingRef.current.stop) {
         greetingRef.current.stop();
       }
     };
   }, [audioActions, greetingPlayed]);
 
+  // Replay greeting when user interacts with Annie
   const handleCharacterClick = () => {
     if (audioActions.playVoiceover) {
       console.log('Replaying Annie greeting');
       audioActions.playSoundEffect?.('buttonClick');
       
+      // Play the greeting again
       const sound = audioActions.playVoiceover('annieWelcome') || 
                    audioActions.playVoiceover('welcome');
       
       if (sound) {
         greetingRef.current = sound;
         
+        // Add talking animation
         const characterElement = document.querySelector('.character-image');
         if (characterElement) {
           characterElement.classList.add('talking');
@@ -197,7 +159,7 @@ const MissionMap = () => {
   const handleGameSelect = (game) => {
     if (game.disabled) {
       audioActions.playSoundEffect?.('error');
-      return;
+      return; // Don't proceed if game is disabled
     }
     audioActions.playSoundEffect?.('buttonClick');
     dispatch({ type: 'SET_VIEW', payload: game.route });
@@ -222,11 +184,12 @@ const MissionMap = () => {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
       }}
-      onClick={handleSecretClick}
+      onClick={handleSecretClick} // Secret click detection on the whole map
     >
       <div className="overlay" />
 
       <header className="mission-map-header">
+        {/* Back button moved to header */}
         <button onClick={handleBackToLaunch} className="back-button">
           <svg className="back-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 3L4 9V21H9V14H15V21H20V9L12 3Z" fill="currentColor"/>
@@ -236,6 +199,7 @@ const MissionMap = () => {
           <div className="back-btn-shine"></div>
         </button>
 
+        {/* Hidden Admin Button - Shows after secret clicks */}
         {showAdmin && (
           <button 
             onClick={handleAdminClick} 
@@ -247,12 +211,14 @@ const MissionMap = () => {
         )}
       </header>
 
+      {/* Click counter indicator (hidden but shows when clicking) */}
       {clickCount > 0 && clickCount < 5 && (
         <div className="click-counter">
           {clickCount} / 5 clicks for admin
         </div>
       )}
 
+      {/* Character and Text Bubble at Center - Now clickable */}
       <div className="character-container">
         <div className="text-bubble">
           <p>Welcome, <span className="player-name">{gameState.playerData?.encodedName || 'Explorer'}</span>! Choose your mission.</p>
