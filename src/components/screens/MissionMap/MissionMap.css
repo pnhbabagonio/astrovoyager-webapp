@@ -7,6 +7,11 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  width: 100%;
+  height: 100vh;
+  max-height: -webkit-fill-available; /* Better mobile height handling */
 }
 
 /* Enhanced overlay for better contrast */
@@ -33,7 +38,7 @@
 
 .mission-title {
   font-family: 'Orbitron', 'Poppins', sans-serif;
-  font-size: 2rem;
+  font-size: clamp(1.2rem, 5vw, 2rem);
   color: #ffdd57;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 221, 87, 0.5);
   letter-spacing: 2px;
@@ -47,21 +52,21 @@
 .mission-map-header .back-button {
   position: absolute;
   top: 12px;
-  left: 20px;
+  left: clamp(10px, 3vw, 20px);
   z-index: 5;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: clamp(5px, 1.5vw, 10px);
   background: linear-gradient(135deg, rgba(74, 144, 226, 0.35) 0%, rgba(99, 179, 237, 0.2) 100%);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1.5px solid rgba(147, 197, 253, 0.4);
   color: #fff;
-  padding: 14px 24px;
+  padding: clamp(8px, 2vw, 14px) clamp(12px, 3vw, 24px);
   border-radius: 50px;
   font-family: 'Inter', 'Poppins', sans-serif;
   font-weight: 600;
-  font-size: 15px;
+  font-size: clamp(12px, 3vw, 15px);
   cursor: pointer;
   letter-spacing: 0.4px;
   box-shadow: 
@@ -77,8 +82,8 @@
 }
 
 .back-icon {
-  width: 22px;
-  height: 22px;
+  width: clamp(18px, 4vw, 22px);
+  height: clamp(18px, 4vw, 22px);
   transition: transform 0.3s ease;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
 }
@@ -136,10 +141,10 @@
   position: relative;
   flex: 1;
   width: 100%;
+  height: 100%;
   z-index: 3;
   min-height: 0;
-  transform: scale(0.9);
-  transform-origin: center;
+  /* Removed transform scale - now handled per island */
 }
 
 /* Island Base Styling - No boxes! */
@@ -152,12 +157,14 @@
   padding: 0;
   width: auto;
   height: auto;
+  /* Base positioning will be overridden by inline styles */
 }
 
 /* Enlarged island images */
 .island-image {
-  width: 550px;
-  height: 450px;
+  width: min(550px, 80vw); /* Max 550px, but scales down on mobile */
+  height: auto;
+  max-height: min(450px, 50vh);
   object-fit: contain;
   border: none;
   transition: all 0.3s ease;
@@ -170,8 +177,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 200px;
-  height: 200px;
+  width: min(200px, 40vw);
+  height: min(200px, 40vw);
   background: radial-gradient(circle, rgba(255, 221, 87, 0.3) 0%, transparent 70%);
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -202,16 +209,17 @@
 /* Island Label - EXTREMELY CLOSE VERSION */
 .island-label {
   position: absolute;
-  top: 67%; 
+  top: 67%;
   left: 50%;
   transform: translateX(-50%) translateY(3px);
   opacity: 0;
   pointer-events: none;
   transition: all 0.3s ease;
   z-index: 4;
-  min-width: 140px;
+  min-width: min(140px, 30vw);
   text-align: center;
 }
+
 
 .island:hover .island-label {
   opacity: 1;
@@ -220,80 +228,93 @@
 
 .label-name {
   font-family: 'Inter', sans-serif;
-  font-size: 0.75rem;
+  font-size: clamp(0.6rem, 2vw, 0.75rem);
   color: #ffffff;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.3px;
   margin-bottom: 0.2rem;
   background: rgba(15, 32, 58, 0.98);
-  padding: 0.3rem 0.5rem;
+  padding: clamp(0.2rem, 1vw, 0.3rem) clamp(0.3rem, 1.5vw, 0.5rem);
   border-radius: 4px;
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+
 .label-desc {
-  font-size: 0.65rem;
+  font-size: clamp(0.5rem, 1.8vw, 0.65rem);
   color: #e2e8f0;
   margin-bottom: 0.3rem;
   line-height: 1.2;
   font-weight: 400;
   background: rgba(8, 20, 38, 0.98);
-  padding: 0.25rem 0.4rem;
+  padding: clamp(0.15rem, 0.8vw, 0.25rem) clamp(0.25rem, 1.2vw, 0.4rem);
   border-radius: 3px;
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mission-status {
-  font-size: 0.6rem;
+  font-size: clamp(0.45rem, 1.5vw, 0.6rem);
   font-weight: 600;
   color: #ffeaa7;
   background: rgba(15, 32, 58, 0.98);
-  padding: 0.2rem 0.4rem;
+  padding: clamp(0.1rem, 0.5vw, 0.2rem) clamp(0.2rem, 1vw, 0.4rem);
   border-radius: 3px;
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   letter-spacing: 0.3px;
 }
 
-/* Character Container at Center */
+/* Character Container - Responsive Repositioning */
 .character-container {
   position: absolute;
-  top: 55%;
-  left: 75%;
-  transform: translate(-50%, -0%);
+  /* Dynamic positioning based on screen size */
+  bottom: clamp(5%, 10vh, 15%);
+  right: clamp(2%, 5vw, 10%);
+  transform: none; /* Remove translate for better positioning */
   z-index: 4;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end; /* Align to right */
   pointer-events: none;
+  max-width: min(400px, 80vw);
 }
 
-/* Character Image */
+/* Character Image - Responsive */
 .character-image {
-  width: 300px;
-  height: 350px;
+  width: clamp(80px, 25vw, 300px);
+  height: auto;
+  max-height: clamp(60px, 20vh, 350px);
   object-fit: contain;
   filter: drop-shadow(0 8px 25px rgba(0, 0, 0, 0.4));
-  margin-top: -20px;
+  margin-top: -10px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  pointer-events: auto;
 }
 
-/* Text Bubble */
+/* Text Bubble - Responsive */
 .text-bubble {
   position: relative;
   background: rgba(255, 255, 255, 0.95);
-  padding: 1.2rem 1.5rem;
-  border-radius: 20px;
+  padding: clamp(0.7rem, 3vw, 1.2rem) clamp(0.9rem, 4vw, 1.5rem);
+  border-radius: clamp(15px, 4vw, 20px);
   box-shadow: 
     0 10px 40px rgba(0, 0, 0, 0.3),
     0 0 30px rgba(74, 144, 226, 0.2);
   backdrop-filter: blur(10px);
   border: 2px solid rgba(255, 255, 255, 0.8);
-  max-width: 300px;
-  margin-bottom: 5px;
+  max-width: min(300px, 70vw);
+  margin-bottom: clamp(5px, 2vh, 15px);
   animation: float 3s ease-in-out infinite;
 }
 
@@ -301,10 +322,11 @@
   margin: 0;
   color: #2d3748;
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: clamp(0.8rem, 3vw, 0.95rem);
   font-weight: 600;
   line-height: 1.4;
   text-align: center;
+  word-wrap: break-word;
 }
 
 .player-name {
@@ -338,16 +360,18 @@
 }
 
 
+/* Disabled island styling */
+.island.disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
 .island.disabled:hover {
   transform: scale(1) !important;
   z-index: 1 !important;
 }
 
 .island.disabled .island-image {
-  filter: grayscale(0.6) brightness(0.8) drop-shadow(0 4px 15px rgba(0, 0, 0, 0.4)) !important;
-}
-
-.island.disabled:hover .island-image {
   filter: grayscale(0.6) brightness(0.8) drop-shadow(0 4px 15px rgba(0, 0, 0, 0.4)) !important;
 }
 
@@ -582,6 +606,62 @@
   }
 }
 
+/* Responsive adjustments for very small screens */
+@media (max-width: 380px) {
+  .character-container {
+    bottom: 5%;
+    right: 2%;
+  }
+  
+  .text-bubble p {
+    font-size: 0.7rem;
+  }
+  
+  .label-name {
+    font-size: 0.5rem;
+  }
+  
+  .label-desc {
+    font-size: 0.45rem;
+  }
+  
+  .mission-status {
+    font-size: 0.4rem;
+  }
+}
+
+@media (max-height: 600px) and (orientation: landscape) {
+  .character-container {
+    bottom: 10%;
+    right: 5%;
+  }
+  
+  .character-image {
+    width: 100px;
+    max-height: 80px;
+  }
+  
+  .text-bubble {
+    padding: 0.5rem 0.8rem;
+  }
+  
+  .text-bubble p {
+    font-size: 0.7rem;
+  }
+  
+  .island-image {
+    max-height: 40vh;
+  }
+}
+
+/* High-resolution tablets */
+@media (min-width: 1024px) and (max-height: 1366px) {
+  .character-container {
+    bottom: 10%;
+    right: 8%;
+  }
+}
+
 /* Prevent any scrollbars */
 .mission-map * {
   box-sizing: border-box;
@@ -600,23 +680,26 @@
   animation: talking 0.5s ease-in-out infinite;
 }
 
-/* Audio status indicator */
-.audio-status-indicator {
-  position: absolute;
-  top: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(74, 144, 226, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(147, 197, 253, 0.3);
-  color: #e2e8f0;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  z-index: 5;
-  opacity: 0;
-  animation: fadeInOut 5s ease forwards;
-  pointer-events: none;
+/* Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
 }
 
 @keyframes fadeInOut {
@@ -671,19 +754,20 @@
 /* Admin Button */
 .admin-button {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: clamp(10px, 3vw, 20px);
+  right: clamp(10px, 3vw, 20px);
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #fff;
-  padding: 8px 16px;
+  padding: clamp(6px, 1.5vw, 8px) clamp(12px, 3vw, 16px);
   border-radius: 20px;
-  font-size: 14px;
+  font-size: clamp(12px, 3vw, 14px);
   cursor: pointer;
   transition: all 0.3s ease;
   animation: pulse 2s infinite;
   z-index: 1000;
+  white-space: nowrap;
 }
 
 .admin-button:hover {
@@ -706,17 +790,19 @@
 /* Click Counter */
 .click-counter {
   position: fixed;
-  bottom: 20px;
+  bottom: clamp(10px, 3vh, 20px);
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.8);
   color: #fff;
-  padding: 8px 16px;
+  padding: clamp(6px, 2vh, 8px) clamp(12px, 4vw, 16px);
   border-radius: 20px;
-  font-size: 14px;
+  font-size: clamp(12px, 3vw, 14px);
   z-index: 1000;
   animation: fadeInOut 0.5s ease;
+  white-space: nowrap;
 }
+
 
 @keyframes fadeInOut {
   0% { opacity: 0; transform: translateX(-50%) translateY(10px); }

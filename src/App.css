@@ -184,3 +184,435 @@
   font-size: var(--font-size-xl);
   padding: 0 var(--space-sm);
 }
+
+
+/* Debug Panel - Responsive Design */
+.debug-panel {
+  position: fixed;
+  background: rgba(10, 15, 25, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #0ff;
+  border-radius: 12px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 13px;
+  border: 2px solid rgba(0, 255, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(0, 255, 255, 0.1), 0 0 20px rgba(0, 255, 255, 0.2);
+  min-width: 280px;
+  max-width: min(400px, 90vw);
+  user-select: none;
+  z-index: 9999;
+  animation: debugFadeIn 0.2s ease-out;
+}
+
+@keyframes debugFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Debug Panel - Positioned on Right by Default */
+.debug-panel {
+  position: fixed;
+  background: rgba(10, 15, 25, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #0ff;
+  border-radius: 12px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 13px;
+  border: 2px solid rgba(0, 255, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(0, 255, 255, 0.1), 0 0 20px rgba(0, 255, 255, 0.2);
+  min-width: 280px;
+  max-width: min(400px, 90vw);
+  user-select: none;
+  z-index: 9999;
+  animation: debugFadeIn 0.2s ease-out;
+  /* Default positioning will be set by inline style */
+}
+
+@keyframes debugFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Debug Panel - Positioned at Top Left by Default */
+.debug-panel {
+  position: fixed;
+  background: rgba(10, 15, 25, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #0ff;
+  border-radius: 12px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 13px;
+  border: 2px solid rgba(0, 255, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(0, 255, 255, 0.1), 0 0 20px rgba(0, 255, 255, 0.2);
+  min-width: 280px;
+  max-width: min(400px, 90vw);
+  user-select: none;
+  z-index: 9999;
+  animation: debugFadeIn 0.2s ease-out;
+  /* Default positioning will be set by inline style (top left) */
+}
+
+@keyframes debugFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.debug-header {
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.15) 0%, rgba(0, 150, 255, 0.05) 100%);
+  border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: grab;
+  transition: background 0.2s ease;
+}
+
+.debug-header:active {
+  cursor: grabbing;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.25) 0%, rgba(0, 150, 255, 0.15) 100%);
+}
+
+.debug-title {
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  font-size: clamp(12px, 3vw, 14px);
+  letter-spacing: 0.5px;
+}
+
+.debug-close {
+  background: none;
+  border: none;
+  color: #0ff;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0 8px;
+  line-height: 1;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.debug-close:hover {
+  background: rgba(255, 0, 0, 0.3);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.debug-content {
+  padding: 16px;
+  max-height: min(600px, 70vh);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 255, 0.5) rgba(0, 0, 0, 0.3);
+}
+
+.debug-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.debug-content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
+.debug-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 255, 0.5);
+  border-radius: 3px;
+}
+
+.debug-section {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.debug-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.debug-section-title {
+  color: #ff0;
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: clamp(11px, 2.5vw, 12px);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 5px rgba(255, 255, 0, 0.3);
+}
+
+.debug-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: clamp(11px, 2.5vw, 12px);
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.debug-label {
+  color: rgba(0, 255, 255, 0.8);
+  font-weight: 500;
+  min-width: 90px;
+  white-space: nowrap;
+}
+
+.debug-value {
+  color: #fff;
+  font-weight: 500;
+  text-align: right;
+  word-break: break-word;
+  max-width: 200px;
+}
+
+.debug-value.highlight {
+  color: #0ff;
+  text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+}
+
+.debug-value.success {
+  color: #0f0;
+  text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+}
+
+.debug-value.warning {
+  color: #ff0;
+  text-shadow: 0 0 5px rgba(255, 255, 0, 0.3);
+}
+
+.debug-value.error {
+  color: #f00;
+  text-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+}
+
+.debug-value.muted {
+  color: #888;
+}
+
+.debug-value.mono {
+  font-family: monospace;
+  font-size: 11px;
+}
+
+.debug-footer {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 255, 255, 0.2);
+  font-size: 10px;
+  color: rgba(0, 255, 255, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.debug-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.shortcut-key {
+  background: rgba(0, 255, 255, 0.15);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  color: #0ff;
+  font-weight: bold;
+  margin: 0 2px;
+}
+
+.debug-drag-hint {
+  color: rgba(255, 255, 255, 0.3);
+  font-style: italic;
+  white-space: nowrap;
+}
+
+/* Debug Toggle Button - Positioned at Top Left */
+.debug-toggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(0, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(0, 255, 255, 0.5);
+  color: #0ff;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  animation: pulseGlow 2s infinite;
+}
+
+.debug-toggle:hover {
+  transform: scale(1.1);
+  background: rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+  }
+}
+
+/* Mobile Responsive Debug Panel */
+@media (max-width: 768px) {
+  .debug-panel {
+    min-width: 240px;
+    max-width: calc(100vw - 20px);
+    font-size: 12px;
+  }
+
+  .debug-header {
+    padding: 10px 12px;
+  }
+
+  .debug-content {
+    padding: 12px;
+    max-height: 60vh;
+  }
+
+  .debug-row {
+    margin-bottom: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .debug-label {
+    min-width: auto;
+    width: 100%;
+    white-space: normal;
+  }
+
+  .debug-value {
+    width: 100%;
+    text-align: left;
+    padding-left: 8px;
+    border-left: 2px solid rgba(0, 255, 255, 0.3);
+    max-width: none;
+    word-break: break-all;
+  }
+
+  .debug-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .debug-shortcuts {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .debug-drag-hint {
+    width: 100%;
+    text-align: center;
+  }
+
+  .debug-toggle {
+    top: 15px;
+    left: 15px;
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+  .debug-panel {
+    min-width: 200px;
+  }
+
+  .debug-title {
+    font-size: 12px;
+  }
+
+  .debug-section-title {
+    font-size: 11px;
+  }
+
+  .debug-value {
+    font-size: 11px;
+  }
+
+  .shortcut-key {
+    font-size: 9px;
+    padding: 1px 4px;
+  }
+}
+
+/* Handle landscape orientation */
+@media (max-height: 500px) and (orientation: landscape) {
+  .debug-content {
+    max-height: 40vh;
+  }
+
+  .debug-section {
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+  }
+
+  .debug-row {
+    margin-bottom: 4px;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .debug-header {
+    cursor: default;
+    padding: 15px 12px; /* Larger touch target */
+  }
+
+  .debug-close {
+    padding: 8px 12px;
+    font-size: 28px;
+  }
+
+  .debug-toggle {
+    width: 56px;
+    height: 56px;
+    top: 20px;
+    left: 20px;
+  }
+}

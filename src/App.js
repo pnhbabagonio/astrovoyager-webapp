@@ -26,11 +26,32 @@ function AppContent() {
   const [showLaunchVideo, setShowLaunchVideo] = useState(false);
   const [showJourneyLoading, setShowJourneyLoading] = useState(false);
   const [playerData, setPlayerData] = useState(null);
+  const [showDebug, setShowDebug] = useState(false);
+  const [debugPosition, setDebugPosition] = useState({ 
+    x: 10, // Position from left
+    y: 10  // Position from top
+  });
+  const debugRef = useRef(null);
+  const isDraggingRef = useRef(false);
+  const dragOffsetRef = useRef({ x: 0, y: 0 });
   
   // Refs for timeout management
   const loadingTimeoutRef = useRef(null);
   const isMountedRef = useRef(true);
   const previousViewRef = useRef(gameState.currentView);
+
+  // Toggle debug panel with Ctrl+Shift+D
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.ctrlKey && event.shiftKey && event.key === 'D') {
+        event.preventDefault();
+        setShowDebug(prev => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Helper function to safely format ID for display
   const formatId = (id) => {
@@ -427,6 +448,71 @@ function AppContent() {
     }
   }, [gameState.gameProgress, gameState.currentView, gameState.isInitialLoad, gameDispatch, audioActions]);
 
+  // Dragging functionality for debug panel
+  const handleMouseDown = (e) => {
+    if (!debugRef.current) return;
+    isDraggingRef.current = true;
+    const rect = debugRef.current.getBoundingClientRect();
+    dragOffsetRef.current = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDraggingRef.current) return;
+    
+    let newX = e.clientX - dragOffsetRef.current.x;
+    let newY = e.clientY - dragOffsetRef.current.y;
+    
+    // Constrain to viewport
+    const panelWidth = debugRef.current.offsetWidth;
+    const panelHeight = debugRef.current.offsetHeight;
+    
+    newX = Math.max(5, Math.min(window.innerWidth - panelWidth - 5, newX));
+    newY = Math.max(5, Math.min(window.innerHeight - panelHeight - 5, newY));
+    
+    setDebugPosition({ x: newX, y: newY });
+  };
+
+  const handleMouseUp = () => {
+    isDraggingRef.current = false;
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+  };
+
+  // Keep panel within viewport on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setDebugPosition(prev => {
+        const panelWidth = debugRef.current?.offsetWidth || 320;
+        const panelHeight = debugRef.current?.offsetHeight || 400;
+        
+        let newX = prev.x;
+        let newY = prev.y;
+        
+        // Ensure panel stays within viewport
+        if (newX + panelWidth > window.innerWidth - 10) {
+          newX = window.innerWidth - panelWidth - 10;
+        }
+        if (newY + panelHeight > window.innerHeight - 10) {
+          newY = window.innerHeight - panelHeight - 10;
+        }
+        
+        // Ensure panel doesn't go off left/top edges
+        newX = Math.max(10, newX);
+        newY = Math.max(10, newY);
+        
+        return { x: newX, y: newY };
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const renderCurrentView = () => {
     // Debug: Log what's being rendered
     console.log('Rendering view:', {
@@ -485,165 +571,166 @@ function AppContent() {
 
   return (
     <div className="astrovoyager-app">
-      {/* Simple Debug Panel */}
-      {process.env.NODE_ENV === 'development' && (
-        <div style={{
-          position: 'fixed',
-          top: '10px',
-          left: '10px',
-          background: 'rgba(0,0,0,0.8)',
-          color: '#0ff',
-          padding: '8px 12px',
-          borderRadius: '5px',
-          fontSize: '14px',
-          zIndex: 9999,
-          fontFamily: 'monospace',
-          border: '1px solid #00ffff',
-          boxShadow: '0 0 10px rgba(0,255,255,0.3)'
-        }}>
-          <div>View: <strong style={{color: '#fff'}}>{gameState.currentView}</strong></div>
-          <div>Initial: <strong style={{color: gameState.isInitialLoad ? '#ff0' : '#0f0'}}>{gameState.isInitialLoad ? 'Yes' : 'No'}</strong></div>
-          <div>Data Loaded: <strong style={{color: gameState.isDataLoaded ? '#0f0' : '#f00'}}>{gameState.isDataLoaded ? 'Yes' : 'No'}</strong></div>
-          <div>Journey Loading: <strong style={{color: showJourneyLoading ? '#ff0' : '#888'}}>{showJourneyLoading ? 'Yes' : 'No'}</strong></div>
-          <div>Video: <strong style={{color: showLaunchVideo ? '#0f0' : '#888'}}>{showLaunchVideo ? 'Yes' : 'No'}</strong></div>
-          <div>Global Loading: <strong style={{color: gameState.isLoading ? '#f00' : '#0f0'}}>{gameState.isLoading ? 'Yes' : 'No'}</strong></div>
-          <div>Local Player: <strong style={{color: playerData ? '#0f0' : '#888'}}>{playerData?.name || 'None'}</strong></div>
-          <div>Context Player: <strong style={{color: playerState.currentPlayer ? '#0f0' : '#888'}}>{playerState.currentPlayer?.name || 'None'}</strong></div>
-          <div>Player ID: <strong style={{color: playerData?.id ? '#0f0' : '#888'}}>
-            {formatId(playerData?.id)}
-          </strong></div>
-          <div>ID Type: <strong style={{color: '#0ff'}}>
-            {getIdType(playerData?.id)}
-          </strong></div>
-          <div>DB Status: <strong style={{color: gameState.isDataLoaded ? '#0f0' : '#f00'}}>
-            {gameState.isDataLoaded ? 'Ready' : 'Loading'}
-          </strong></div>
-          <div style={{marginTop: '5px', fontSize: '12px', color: '#888'}}>
-            Ctrl+Shift+E/M/L/D
+      {/* Responsive Debug Panel - Positioned at Top Left by Default */}
+      {process.env.NODE_ENV === 'development' && showDebug && (
+        <div 
+          ref={debugRef}
+          className="debug-panel"
+          style={{
+            position: 'fixed',
+            left: `${debugPosition.x}px`,
+            top: `${debugPosition.y}px`,
+            zIndex: 9999,
+          }}
+        >
+          <div className="debug-header" onMouseDown={handleMouseDown}>
+            <span className="debug-title">🚀 ASTROVOYAGER DEBUG</span>
+            <button className="debug-close" onClick={() => setShowDebug(false)}>×</button>
+          </div>
+          
+          <div className="debug-content">
+            <div className="debug-section">
+              <div className="debug-row">
+                <span className="debug-label">View:</span>
+                <span className="debug-value highlight">{gameState.currentView}</span>
+              </div>
+              
+              <div className="debug-row">
+                <span className="debug-label">Initial Load:</span>
+                <span className={`debug-value ${gameState.isInitialLoad ? 'warning' : 'success'}`}>
+                  {gameState.isInitialLoad ? 'Yes' : 'No'}
+                </span>
+              </div>
+              
+              <div className="debug-row">
+                <span className="debug-label">Data Loaded:</span>
+                <span className={`debug-value ${gameState.isDataLoaded ? 'success' : 'error'}`}>
+                  {gameState.isDataLoaded ? 'Yes' : 'No'}
+                </span>
+              </div>
+              
+              <div className="debug-row">
+                <span className="debug-label">Journey Loading:</span>
+                <span className={`debug-value ${showJourneyLoading ? 'warning' : 'muted'}`}>
+                  {showJourneyLoading ? 'Yes' : 'No'}
+                </span>
+              </div>
+              
+              <div className="debug-row">
+                <span className="debug-label">Video:</span>
+                <span className={`debug-value ${showLaunchVideo ? 'success' : 'muted'}`}>
+                  {showLaunchVideo ? 'Yes' : 'No'}
+                </span>
+              </div>
+              
+              <div className="debug-row">
+                <span className="debug-label">Global Loading:</span>
+                <span className={`debug-value ${gameState.isLoading ? 'error' : 'success'}`}>
+                  {gameState.isLoading ? 'Yes' : 'No'}
+                </span>
+              </div>
+              
+              <div className="debug-row">
+                <span className="debug-label">Audio:</span>
+                <span className={`debug-value ${gameState.audioEnabled ? 'success' : 'error'}`}>
+                  {gameState.audioEnabled ? 'On' : 'Off'}
+                </span>
+              </div>
+            </div>
+
+            <div className="debug-section">
+              <div className="debug-section-title">👤 PLAYER INFO</div>
+              
+              <div className="debug-row">
+                <span className="debug-label">Local Player:</span>
+                <span className={`debug-value ${playerData ? 'success' : 'muted'}`}>
+                  {playerData?.name || 'None'}
+                </span>
+              </div>
+              
+              <div className="debug-row">
+                <span className="debug-label">Context Player:</span>
+                <span className={`debug-value ${playerState.currentPlayer ? 'success' : 'muted'}`}>
+                  {playerState.currentPlayer?.name || 'None'}
+                </span>
+              </div>
+              
+              <div className="debug-row">
+                <span className="debug-label">Player ID:</span>
+                <span className="debug-value mono">
+                  {formatId(playerData?.id)}
+                </span>
+              </div>
+              
+              <div className="debug-row">
+                <span className="debug-label">ID Type:</span>
+                <span className="debug-value highlight">
+                  {getIdType(playerData?.id)}
+                </span>
+              </div>
+              
+              <div className="debug-row">
+                <span className="debug-label">DB Player ID:</span>
+                <span className={`debug-value ${playerState.currentPlayer?.id ? 'success' : 'muted'}`}>
+                  {playerState.currentPlayer?.id ? `Yes (${getIdType(playerState.currentPlayer.id)})` : 'No'}
+                </span>
+              </div>
+              
+              <div className="debug-row">
+                <span className="debug-label">Total Players:</span>
+                <span className="debug-value highlight">
+                  {playerState.players?.length || 0}
+                </span>
+              </div>
+            </div>
+
+            <div className="debug-section">
+              <div className="debug-section-title">🎮 GAME PROGRESS</div>
+              
+              <div className="debug-row">
+                <span className="debug-label">Game 1:</span>
+                <span className={`debug-value ${gameState.gameProgress?.game1?.completed ? 'success' : 'muted'}`}>
+                  {gameState.gameProgress?.game1?.completed ? '✓' : '○'} Score: {gameState.gameProgress?.game1?.score || 0}
+                </span>
+              </div>
+              
+              <div className="debug-row">
+                <span className="debug-label">Game 2:</span>
+                <span className={`debug-value ${gameState.gameProgress?.game2?.completed ? 'success' : 'muted'}`}>
+                  {gameState.gameProgress?.game2?.completed ? '✓' : '○'} Score: {gameState.gameProgress?.game2?.score || 0}
+                </span>
+              </div>
+              
+              <div className="debug-row">
+                <span className="debug-label">Game 3:</span>
+                <span className={`debug-value ${gameState.gameProgress?.game3?.completed ? 'success' : 'muted'}`}>
+                  {gameState.gameProgress?.game3?.completed ? '✓' : '○'} Score: {gameState.gameProgress?.game3?.score || 0}
+                </span>
+              </div>
+            </div>
+
+            <div className="debug-footer">
+              <span className="debug-shortcuts">
+                <span className="shortcut-key">Ctrl+Shift+E</span> (End) | 
+                <span className="shortcut-key">M</span> (Map) | 
+                <span className="shortcut-key">L</span> (Launch) | 
+                <span className="shortcut-key">D</span> (Hide)
+              </span>
+              <span className="debug-drag-hint">Drag to move</span>
+            </div>
           </div>
         </div>
       )}
-      
-      {/* Enhanced Debug Panel (commented out - can enable if needed) */}
-      {false && process.env.NODE_ENV === 'development' && (
-        <div style={{
-          position: 'fixed',
-          top: '10px',
-          left: '10px',
-          background: 'rgba(0,0,0,0.9)',
-          color: '#0ff',
-          padding: '12px 16px',
-          borderRadius: '8px',
-          fontSize: '13px',
-          zIndex: 9999,
-          fontFamily: 'monospace',
-          border: '2px solid #00ffff',
-          boxShadow: '0 0 20px rgba(0,255,255,0.5)',
-          maxWidth: '300px',
-          pointerEvents: 'none'
-        }}>
-          <div style={{borderBottom: '1px solid #00ffff', marginBottom: '8px', paddingBottom: '4px', fontWeight: 'bold', color: '#fff'}}>
-            🚀 ASTROVOYAGER DEBUG
-          </div>
-          
-          <div style={{display: 'grid', gridTemplateColumns: '100px 1fr', gap: '4px 8px'}}>
-            <span style={{color: '#0ff'}}>View:</span>
-            <strong style={{color: '#fff'}}>{gameState.currentView}</strong>
-            
-            <span style={{color: '#0ff'}}>Initial Load:</span>
-            <strong style={{color: gameState.isInitialLoad ? '#ff0' : '#0f0'}}>
-              {gameState.isInitialLoad ? 'Yes' : 'No'}
-            </strong>
-            
-            <span style={{color: '#0ff'}}>Data Loaded:</span>
-            <strong style={{color: gameState.isDataLoaded ? '#0f0' : '#f00'}}>
-              {gameState.isDataLoaded ? 'Yes' : 'No'}
-            </strong>
-            
-            <span style={{color: '#0ff'}}>Journey Loading:</span>
-            <strong style={{color: showJourneyLoading ? '#ff0' : '#888'}}>
-              {showJourneyLoading ? 'Yes' : 'No'}
-            </strong>
-            
-            <span style={{color: '#0ff'}}>Video:</span>
-            <strong style={{color: showLaunchVideo ? '#0f0' : '#888'}}>
-              {showLaunchVideo ? 'Yes' : 'No'}
-            </strong>
-            
-            <span style={{color: '#0ff'}}>Global Loading:</span>
-            <strong style={{color: gameState.isLoading ? '#f00' : '#0f0'}}>
-              {gameState.isLoading ? 'Yes' : 'No'}
-            </strong>
-            
-            <span style={{color: '#0ff'}}>Audio:</span>
-            <strong style={{color: gameState.audioEnabled ? '#0f0' : '#f00'}}>
-              {gameState.audioEnabled ? 'On' : 'Off'}
-            </strong>
-          </div>
-          
-          <div style={{borderTop: '1px solid #00ffff', marginTop: '8px', paddingTop: '8px'}}>
-            <div style={{color: '#ff0', marginBottom: '4px'}}>👤 PLAYER INFO</div>
-            <div style={{display: 'grid', gridTemplateColumns: '100px 1fr', gap: '4px 8px'}}>
-              <span style={{color: '#0ff'}}>Local Player:</span>
-              <strong style={{color: playerData ? '#0f0' : '#888'}}>
-                {playerData?.name || 'None'}
-              </strong>
-              
-              <span style={{color: '#0ff'}}>Context Player:</span>
-              <strong style={{color: playerState.currentPlayer ? '#0f0' : '#888'}}>
-                {playerState.currentPlayer?.name || 'None'}
-              </strong>
-              
-              <span style={{color: '#0ff'}}>Player ID:</span>
-              <strong style={{color: playerData?.id ? '#0f0' : '#888'}}>
-                {formatId(playerData?.id)}
-              </strong>
-              
-              <span style={{color: '#0ff'}}>ID Type:</span>
-              <strong style={{color: '#0ff'}}>
-                {getIdType(playerData?.id)}
-              </strong>
-              
-              <span style={{color: '#0ff'}}>DB Player ID:</span>
-              <strong style={{color: playerState.currentPlayer?.id ? '#0f0' : '#888'}}>
-                {playerState.currentPlayer?.id ? `Yes (${getIdType(playerState.currentPlayer.id)})` : 'No'}
-              </strong>
-              
-              <span style={{color: '#0ff'}}>Total Players:</span>
-              <strong style={{color: playerState.players?.length ? '#0f0' : '#888'}}>
-                {playerState.players?.length || 0}
-              </strong>
-            </div>
-          </div>
-          
-          <div style={{borderTop: '1px solid #00ffff', marginTop: '8px', paddingTop: '8px'}}>
-            <div style={{color: '#ff0', marginBottom: '4px'}}>🎮 GAME PROGRESS</div>
-            <div style={{display: 'grid', gridTemplateColumns: '60px 1fr', gap: '4px 8px'}}>
-              <span style={{color: '#0ff'}}>Game 1:</span>
-              <strong style={{color: gameState.gameProgress?.game1?.completed ? '#0f0' : '#888'}}>
-                {gameState.gameProgress?.game1?.completed ? '✓' : '○'} Score: {gameState.gameProgress?.game1?.score || 0}
-              </strong>
-              
-              <span style={{color: '#0ff'}}>Game 2:</span>
-              <strong style={{color: gameState.gameProgress?.game2?.completed ? '#0f0' : '#888'}}>
-                {gameState.gameProgress?.game2?.completed ? '✓' : '○'} Score: {gameState.gameProgress?.game2?.score || 0}
-              </strong>
-              
-              <span style={{color: '#0ff'}}>Game 3:</span>
-              <strong style={{color: gameState.gameProgress?.game3?.completed ? '#0f0' : '#888'}}>
-                {gameState.gameProgress?.game3?.completed ? '✓' : '○'} Score: {gameState.gameProgress?.game3?.score || 0}
-              </strong>
-            </div>
-          </div>
-          
-          <div style={{borderTop: '1px solid #00ffff', marginTop: '8px', paddingTop: '8px', fontSize: '11px', color: '#888'}}>
-            <span>Press Ctrl+Shift+</span>
-            <span style={{color: '#ff0'}}>E</span><span style={{color: '#888'}}> (End) | </span>
-            <span style={{color: '#ff0'}}>M</span><span style={{color: '#888'}}> (Map) | </span>
-            <span style={{color: '#ff0'}}>L</span><span style={{color: '#888'}}> (Launch) | </span>
-            <span style={{color: '#ff0'}}>D</span><span style={{color: '#888'}}> (Debug)</span>
-          </div>
-        </div>
+
+      {/* Simple Debug Toggle Button - Positioned at Top Left */}
+      {process.env.NODE_ENV === 'development' && !showDebug && (
+        <button 
+          className="debug-toggle"
+          onClick={() => setShowDebug(true)}
+          title="Show Debug Panel (Ctrl+Shift+D)"
+        >
+          🐞
+        </button>
       )}
       
       {gameState.currentView !== 'loading' && !showLaunchVideo && !showJourneyLoading && <AudioControls />}
