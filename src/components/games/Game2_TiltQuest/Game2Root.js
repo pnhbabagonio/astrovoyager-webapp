@@ -1,3 +1,4 @@
+// Game2Root.js (updated with new back button)
 import React, { useState, useEffect, useRef } from 'react';
 import { useGameState } from '../../../contexts/GameStateContext';
 import { useAudio } from '../../../contexts/AudioContext';
@@ -276,19 +277,35 @@ const Game2Root = ({ onComplete }) => {
 
   return (
     <div className="astro-game-root">
+
       <div className="astro-header">
-        <button onClick={handleBackToMap} className="astro-back-button">
-          <span className="back-icon">←</span>
-          Back to Mission Map
+        <button onClick={handleBackToMap} className="back-button space-button">
+          <svg className="back-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 6L9 3L15 6L21 3V18L15 21L9 18L3 21V6Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M9 3V18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M15 6V21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M3 6L9 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M15 6L21 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M3 21L9 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M15 21L21 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
+          <span className="button-text">Mission Map</span>
+          <div className="back-btn-shine"></div>
         </button>
-        <div className="astro-title">
-          <h1>ASTROVOYAGER – TILTQUEST</h1>
-          <p className="subtitle">Discover how Earth's tilt affects daylight!</p>
+
+        <div className="header-center">
+          <div className="astro-title">
+            <h1>ASTROVOYAGER – TILTQUEST</h1>
+            <p className="subtitle">Discover how Earth's tilt affects daylight!</p>
+          </div>
         </div>
-        <div className="astro-score">
-          <span className="score-label">Total Progress:</span>
-          <span className="score-value">{getCompletedCount()}/3 Locations</span>
-          <span className="score-total">Score: {getTotalScore()}/9</span>
+
+        <div className="right-container">
+          <div className="astro-score">
+            <span className="score-label">Total Progress:</span>
+            <span className="score-value">{getCompletedCount()}/3 Locations</span>
+            <span className="score-total">Score: {getTotalScore()}/9</span>
+          </div>
         </div>
       </div>
 

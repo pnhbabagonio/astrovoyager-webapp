@@ -1,5 +1,8 @@
+/* Game2.css - Fully Responsive Version with Game1-style Header */
+
 .astro-game-root {
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
   background: linear-gradient(135deg, #0a0e2a, #1a1f4b, #2d2b5c);
   background-image: 
     radial-gradient(circle at 10% 20%, rgba(41, 196, 255, 0.1) 0%, transparent 20%),
@@ -7,9 +10,9 @@
   color: #ffffff;
   display: flex;
   flex-direction: column;
-  overflow: auto;
   font-family: 'Arial', sans-serif;
   position: relative;
+  overflow-x: hidden;
 }
 
 .astro-game-root::before {
@@ -25,93 +28,293 @@
   z-index: 0;
 }
 
+/* ===== HEADER SECTION - GAME1 STYLE WITH GAME2 COLORS ===== */
 .astro-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  justify-content: space-between;
+  padding: 0.75rem 2rem;
   background: rgba(10, 14, 42, 0.8);
-  border-bottom: 3px solid #4a7dff;
   backdrop-filter: blur(15px);
-  z-index: 10;
+  -webkit-backdrop-filter: blur(15px);
   position: relative;
+  z-index: 10;
+  min-height: 70px;
+  flex-shrink: 0;
 }
 
-.astro-title {
-  text-align: center;
-  flex-grow: 1;
+/* Bottom border accent - using game2 colors */
+.astro-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #4a7dff, #8a4fff, #4a7dff);
 }
 
-.astro-title h1 {
-  font-size: 1.8rem;
-  background: linear-gradient(45deg, #4a7dff, #8a4fff);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin: 0 0 0.3rem 0;
-  text-shadow: 0 0 20px rgba(74, 125, 255, 0.5);
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-size: 0.9rem;
-  color: #a0b9ff;
-  margin: 0;
-  font-weight: 300;
-}
-
-.astro-back-button {
+/* Back Button Container - fixed width to match spacer */
+.astro-header .back-button {
   background: rgba(74, 125, 255, 0.2);
   border: 2px solid #4a7dff;
   color: #a0b9ff;
-  padding: 0.5rem 1.2rem;
+  padding: 0.4rem 1.2rem;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.9rem;
+  font-weight: 600;
   white-space: nowrap;
   backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  min-height: 44px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  width: 120px; /* Fixed width to match spacer + score */
 }
 
-.astro-back-button:hover {
+.astro-header .back-button:hover {
   background: rgba(74, 125, 255, 0.4);
   border-color: #8a4fff;
   color: #ffffff;
-  box-shadow: 0 0 15px rgba(74, 125, 255, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(74, 125, 255, 0.4);
 }
 
-/* Location Progress Summary in Header */
-.astro-score {
-  background: rgba(0, 0, 0, 0.3);
-  border: 2px solid #ffd166;
-  border-radius: 12px;
-  padding: 0.8rem 1.2rem;
+.astro-header .back-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(74, 125, 255, 0.2);
+}
+
+.astro-header .back-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+  color: currentColor;
+}
+
+.astro-header .back-button:hover .back-icon {
+  transform: translateX(-3px);
+}
+
+.astro-header .back-text {
+  position: relative;
+  z-index: 2;
+}
+
+/* Shine effect - matching game1 */
+.back-btn-shine {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 70%
+  );
+  transform: rotate(45deg);
+  animation: shine 3s infinite;
+  pointer-events: none;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  20%, 100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
+/* Header Center Content - absolutely centered */
+.astro-header .header-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  min-width: 0;
+  max-width: 60%; /* Prevent overflow */
+  pointer-events: none; /* Allow clicks to pass through if needed */
+}
+
+.astro-header .header-center .astro-title {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 180px;
+  justify-content: center;
+  gap: 0.15rem;
+  pointer-events: auto; /* Re-enable clicks for interactive elements */
 }
 
+.astro-header .header-center .astro-title h1 {
+  font-size: clamp(1.25rem, 4vw, 1.8rem);
+  background: linear-gradient(45deg, #4a7dff, #8a4fff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+  text-shadow: 0 0 20px rgba(74, 125, 255, 0.5);
+  letter-spacing: 5px;
+  line-height: 1.2;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.astro-header .header-center .subtitle {
+  color: #a0b9ff;
+  margin: 0;
+  font-weight: 300;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-size: clamp(0.75rem, 2vw, 0.9rem);
+  white-space: nowrap;
+}
+
+/* Right side container - fixed width to match back button */
+.astro-header .right-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 420px; /* Fixed width to match back button */
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+/* Header Spacer (for balance) - exactly like Game1 */
+/* .astro-header .header-spacer {
+  width: 100px;
+  flex-shrink: 0;
+} */
+
+/* Score Display */
+.astro-header .astro-score {
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: auto;
+}
+
+
 .score-label {
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 2vw, 0.8rem);
   color: #ffd166;
-  margin-bottom: 0.2rem;
 }
 
 .score-value {
-  font-size: 1.2rem;
+  font-size: clamp(0.7rem, 2vw, 0.8rem);
   font-weight: bold;
   color: #ffffff;
   text-shadow: 0 0 10px #ffd166;
 }
 
 .score-total {
-  font-size: 0.8rem;
-  color: #a0b9ff;
-  margin-top: 0.2rem;
+  font-size: clamp(0.7rem, 2vw, 0.8rem);
+  color: #ffffff;
 }
 
-/* Location Progress Summary at Bottom */
+/* ===== MAIN CONTENT AREA ===== */
+.astro-content {
+  flex: 1;
+  padding: clamp(1rem, 3vw, 2rem);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 0;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Ensure all child components are responsive */
+.astro-content > * {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  min-height: auto;
+}
+
+/* ===== PROGRESS SECTION ===== */
+.astro-progress {
+  padding: clamp(0.5rem, 2vw, 1rem);
+  background: rgba(10, 14, 42, 0.8);
+  border-top: 1px solid rgba(74, 125, 255, 0.3);
+  z-index: 10;
+  position: relative;
+}
+
+.progress-steps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+  min-width: 60px;
+}
+
+.step.active {
+  opacity: 1;
+}
+
+.step.current .step-number {
+  background: linear-gradient(45deg, #4a7dff, #8a4fff);
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(74, 125, 255, 0.5);
+}
+
+.step-number {
+  width: clamp(30px, 6vw, 40px);
+  height: clamp(30px, 6vw, 40px);
+  border-radius: 50%;
+  background: rgba(74, 125, 255, 0.2);
+  border: 2px solid #4a7dff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  transition: all 0.3s ease;
+  font-size: clamp(0.8rem, 2vw, 1rem);
+}
+
+.step-name {
+  font-size: clamp(0.7rem, 2vw, 0.85rem);
+  color: #a0b9ff;
+  font-weight: 300;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Location Progress Tags */
 .location-progress-summary {
   margin-top: 1rem;
   padding-top: 1rem;
@@ -120,21 +323,22 @@
 
 .location-tags {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
   flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .location-tag {
   background: rgba(74, 125, 255, 0.1);
   border: 2px solid rgba(74, 125, 255, 0.3);
-  border-radius: 20px;
-  padding: 0.5rem 1rem;
-  display: flex;
+  border-radius: 30px;
+  padding: 0.3rem 0.8rem;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.3rem;
   transition: all 0.3s ease;
-  font-size: 0.9rem;
+  font-size: clamp(0.7rem, 2vw, 0.9rem);
+  white-space: nowrap;
 }
 
 .location-tag.completed {
@@ -149,7 +353,7 @@
 }
 
 .tag-icon {
-  font-size: 1.2rem;
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
 }
 
 .tag-name {
@@ -160,45 +364,50 @@
 .tag-score {
   color: #28c896;
   font-weight: bold;
-  font-size: 0.85rem;
+  font-size: clamp(0.7rem, 2vw, 0.85rem);
 }
 
-/* Updated ScoreDisplay Styles */
+/* ===== SCORE DISPLAY COMPONENTS ===== */
 .final-summary {
   background: rgba(20, 25, 60, 0.8);
   border-radius: 20px;
-  padding: 2rem;
+  padding: clamp(1rem, 4vw, 2rem);
   margin-bottom: 2rem;
   border: 2px solid rgba(74, 125, 255, 0.3);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .final-score-card {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 3rem;
+  gap: clamp(1rem, 5vw, 3rem);
   margin-bottom: 2rem;
 }
 
 .final-score-visual {
-  flex: 0 0 200px;
+  flex: 0 1 auto;
+  margin: 0 auto;
 }
 
 .final-score-circle {
-  width: 200px;
-  height: 200px;
+  width: clamp(150px, 30vw, 200px);
+  height: clamp(150px, 30vw, 200px);
   background: radial-gradient(circle at 30% 30%, #1a1f4b, #0a0e2a);
   border-radius: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 6px solid #4a7dff;
+  border: 4px solid #4a7dff;
   box-shadow: 0 0 30px rgba(74, 125, 255, 0.5);
   position: relative;
+  margin: 0 auto;
 }
 
 .final-score-number {
-  font-size: 4rem;
+  font-size: clamp(2rem, 8vw, 4rem);
   font-weight: bold;
   color: #ffd166;
   line-height: 1;
@@ -206,48 +415,54 @@
 
 .final-score-label {
   color: #a0b9ff;
-  font-size: 1rem;
+  font-size: clamp(0.8rem, 2.5vw, 1rem);
   margin-top: 0.5rem;
 }
 
 .final-score-percentage {
   position: absolute;
-  bottom: -25px;
+  bottom: -15px;
   background: #4a7dff;
   color: white;
-  padding: 0.5rem 1rem;
+  padding: 0.3rem 0.8rem;
   border-radius: 20px;
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: clamp(0.7rem, 2vw, 0.9rem);
+  white-space: nowrap;
 }
 
 .final-score-details {
   flex: 1;
+  min-width: 250px;
 }
 
 .final-message {
   color: #ffffff;
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
   line-height: 1.5;
   margin-bottom: 1.5rem;
 }
 
+/* Location Scores */
 .location-scores-summary {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .location-scores-summary h4 {
   color: #ffffff;
   margin-bottom: 1rem;
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
 }
 
 .location-score-item {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem 1rem;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -262,11 +477,13 @@
 .location-name {
   color: #ffffff;
   font-weight: 500;
-  min-width: 150px;
+  min-width: 100px;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
 }
 
 .score-bar-container {
   flex: 1;
+  min-width: 150px;
   height: 20px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
@@ -290,33 +507,37 @@
   font-size: 0.8rem;
   font-weight: bold;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
 }
 
+/* Achievements Grid */
 .final-achievements {
   background: rgba(20, 25, 60, 0.7);
   border-radius: 15px;
-  padding: 2rem;
+  padding: clamp(1rem, 4vw, 2rem);
   margin-bottom: 2rem;
   border: 1px solid rgba(74, 125, 255, 0.3);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .final-achievements h4 {
   color: #ffffff;
   text-align: center;
-  font-size: 1.3rem;
+  font-size: clamp(1.1rem, 3vw, 1.3rem);
   margin-bottom: 1.5rem;
 }
 
 .achievements-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: clamp(0.8rem, 2vw, 1.5rem);
 }
 
 .achievement {
   background: rgba(74, 125, 255, 0.1);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
   text-align: center;
   border: 1px solid rgba(74, 125, 255, 0.2);
   transition: transform 0.3s ease;
@@ -328,80 +549,87 @@
 }
 
 .achievement-icon {
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
   display: block;
   margin-bottom: 0.5rem;
 }
 
 .achievement h5 {
   color: #ffffff;
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
   margin: 0.5rem 0;
 }
 
 .achievement p {
   color: #a0b9ff;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
   margin: 0;
+}
+
+/* Buttons */
+.complete-mission-button,
+.try-another-button,
+.complete-all-button,
+.review-button {
+  min-height: 44px;
+  padding: 0.8rem 1.5rem;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  border: none;
+  font-weight: bold;
+  width: 100%;
+  max-width: 400px;
+  margin: 0.5rem auto;
+  display: block;
 }
 
 .complete-mission-button {
   background: linear-gradient(45deg, #ffd166, #ff9966);
   color: #1a1f4b;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 12px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 1rem;
   box-shadow: 0 5px 20px rgba(255, 209, 102, 0.4);
-  display: block;
-  width: 100%;
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
-.complete-mission-button:hover {
+.try-another-button,
+.complete-all-button {
+  background: linear-gradient(45deg, #4a7dff, #8a4fff);
+  color: white;
+  box-shadow: 0 5px 20px rgba(74, 125, 255, 0.4);
+}
+
+.review-button {
+  background: rgba(255, 209, 102, 0.2);
+  color: #ffd166;
+  border: 2px solid #ffd166;
+}
+
+/* Button hover states */
+.complete-mission-button:hover,
+.try-another-button:hover,
+.complete-all-button:hover,
+.review-button:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 25px rgba(255, 209, 102, 0.6);
-}
-
-.mission-complete-message {
-  background: rgba(40, 200, 150, 0.1);
-  border-radius: 15px;
-  padding: 1.5rem;
-  border: 1px solid #28c896;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-.mission-complete-message p {
-  color: #ffffff;
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.5;
-}
-
-.mission-complete-message strong {
-  color: #28c896;
 }
 
 /* Continue Options */
 .continue-options {
   background: rgba(20, 25, 60, 0.7);
   border-radius: 15px;
-  padding: 2rem;
+  padding: clamp(1rem, 4vw, 2rem);
   margin-top: 2rem;
   border: 1px solid rgba(74, 125, 255, 0.3);
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* Mission Progress Summary */
 .mission-progress-summary {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
   margin-bottom: 1.5rem;
 }
 
@@ -415,7 +643,7 @@
 
 .progress-label {
   color: #a0b9ff;
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 2.2vw, 0.95rem);
   display: block;
   margin-bottom: 0.5rem;
 }
@@ -444,121 +672,63 @@
   color: #ffffff;
   font-size: 0.8rem;
   font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
 }
 
 .progress-value {
   color: #ffffff;
   font-weight: 500;
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
 }
 
-.next-location-section,
-.complete-mission-section {
+/* Mission Complete Message */
+.mission-complete-message {
+  background: rgba(40, 200, 150, 0.1);
+  border-radius: 15px;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border: 1px solid #28c896;
   text-align: center;
+  margin-top: 2rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.next-location-section h4,
-.complete-mission-section h4 {
+.mission-complete-message p {
   color: #ffffff;
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
+  margin: 0;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  line-height: 1.5;
 }
 
-.next-location-section p,
-.complete-mission-section p {
-  color: #a0b9ff;
-  margin-bottom: 1.5rem;
+.mission-complete-message strong {
+  color: #28c896;
 }
 
-.try-another-button,
-.complete-all-button {
-  background: linear-gradient(45deg, #4a7dff, #8a4fff);
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 1rem;
-  box-shadow: 0 5px 20px rgba(74, 125, 255, 0.4);
-  min-width: 250px;
-}
-
-.try-another-button:hover,
-.complete-all-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(74, 125, 255, 0.6);
-}
-
-.review-button {
-  background: rgba(255, 209, 102, 0.2);
-  color: #ffd166;
-  border: 2px solid #ffd166;
-  padding: 0.8rem 1.5rem;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-left: 1rem;
-}
-
-.review-button:hover {
-  background: rgba(255, 209, 102, 0.3);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(255, 209, 102, 0.3);
-}
-
-/* Updated LocationSelector.css additions */
+/* Location Selector Additions */
 .location-card.completed {
   opacity: 0.8;
   border-color: #28c896;
 }
 
-.location-card.completed:hover {
-  transform: none;
-  cursor: not-allowed;
-  border-color: #28c896;
-}
-
 .location-status {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  font-size: 0.8rem;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: clamp(0.7rem, 2vw, 0.8rem);
   font-weight: bold;
   padding: 0.2rem 0.5rem;
   border-radius: 10px;
   background: rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
 }
 
 .location-score {
   background: rgba(40, 200, 150, 0.1);
-  padding: 0.8rem;
+  padding: 0.5rem 0.8rem;
   border-radius: 10px;
   margin-top: 1rem;
   border: 1px solid #28c896;
-}
-
-.score-label {
-  display: block;
-  color: #a0b9ff;
-  font-size: 0.8rem;
-  margin-bottom: 0.2rem;
-}
-
-.score-value {
-  display: block;
-  color: #28c896;
-  font-size: 1.1rem;
-  font-weight: bold;
-}
-
-.completed-indicator {
-  color: #28c896;
-  font-weight: bold;
 }
 
 .selector-footer {
@@ -566,14 +736,17 @@
   flex-direction: column;
   gap: 1rem;
   margin-top: 2rem;
+  width: 100%;
 }
 
 .mission-summary {
   display: flex;
-  justify-content: space-around;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 2rem;
   background: rgba(74, 125, 255, 0.1);
   border-radius: 12px;
-  padding: 1rem;
+  padding: clamp(0.8rem, 2vw, 1rem);
   border: 1px solid rgba(74, 125, 255, 0.3);
 }
 
@@ -585,182 +758,14 @@
 
 .summary-label {
   color: #a0b9ff;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
   margin-bottom: 0.3rem;
 }
 
 .summary-value {
   color: #ffffff;
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
   font-weight: bold;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .final-score-card {
-    flex-direction: column;
-    text-align: center;
-    gap: 2rem;
-  }
-  
-  .final-score-visual {
-    flex: none;
-  }
-  
-  .location-tags {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .location-tag {
-    width: 100%;
-    max-width: 200px;
-  }
-  
-  .try-another-button,
-  .review-button {
-    margin: 0.5rem 0;
-    width: 100%;
-  }
-  
-  .review-button {
-    margin-left: 0;
-  }
-}
-
-.astro-content {
-  flex: 1;
-  padding: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 0;
-  position: relative;
-  z-index: 1;
-}
-
-.astro-progress {
-  padding: 1rem 2rem;
-  background: rgba(10, 14, 42, 0.8);
-  border-top: 1px solid rgba(74, 125, 255, 0.3);
-  z-index: 10;
-  position: relative;
-}
-
-.progress-steps {
-  display: flex;
-  justify-content: space-around;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  opacity: 0.5;
-  transition: all 0.3s ease;
-}
-
-.step.active {
-  opacity: 1;
-}
-
-.step.current .step-number {
-  background: linear-gradient(45deg, #4a7dff, #8a4fff);
-  transform: scale(1.1);
-  box-shadow: 0 0 15px rgba(74, 125, 255, 0.5);
-}
-
-.step-number {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(74, 125, 255, 0.2);
-  border: 2px solid #4a7dff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  transition: all 0.3s ease;
-}
-
-.step-name {
-  font-size: 0.85rem;
-  color: #a0b9ff;
-  font-weight: 300;
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-  .astro-header {
-    padding: 0.8rem 1.5rem;
-  }
-  
-  .astro-title h1 {
-    font-size: 1.5rem;
-  }
-  
-  .astro-content {
-    padding: 1.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .astro-header {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem;
-  }
-  
-  .astro-back-button {
-    align-self: flex-start;
-  }
-  
-  .astro-title {
-    order: 2;
-  }
-  
-  .astro-score {
-    order: 3;
-    align-self: stretch;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  
-  .progress-steps {
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  
-  .step {
-    min-width: 80px;
-  }
-}
-
-@media (max-width: 480px) {
-  .astro-title h1 {
-    font-size: 1.2rem;
-  }
-  
-  .subtitle {
-    font-size: 0.8rem;
-  }
-  
-  .astro-content {
-    padding: 1rem;
-  }
-  
-  .step-number {
-    width: 30px;
-    height: 30px;
-    font-size: 0.9rem;
-  }
-  
-  .step-name {
-    font-size: 0.75rem;
-  }
 }
 
 /* Animation for stars */
@@ -771,4 +776,451 @@
 
 .step-number:hover {
   animation: twinkle 1s infinite;
+}
+
+/* ===== RESPONSIVE BREAKPOINTS - MATCHING GAME1 ===== */
+
+/* Tablet */
+/* Tablet */
+@media (max-width: 1024px) {
+  .astro-header {
+    padding: 0.6rem 1.5rem;
+    min-height: 65px;
+  }
+  
+  .astro-header .back-button {
+    width: 100px;
+  }
+  
+  .astro-header .right-container {
+    width: 100px;
+  }
+}
+
+/* Mobile Landscape & Small Tablets */
+@media (max-width: 768px) {
+  .astro-header {
+    flex-wrap: wrap;
+    min-height: auto;
+    padding: 0.5rem 1rem;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .astro-header .back-button {
+    order: 1;
+    width: auto;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.85rem;
+    position: static;
+  }
+
+  .astro-header .header-center {
+    position: static;
+    transform: none;
+    order: 2;
+    width: 100%;
+    max-width: 100%;
+    margin: 0.25rem 0;
+  }
+
+  .astro-header .header-center .astro-title h1 {
+    font-size: 1.25rem;
+    white-space: normal;
+    line-height: 1.2;
+    margin: 0.1rem 0;
+  }
+
+  .astro-header .header-center .subtitle {
+    gap: 0.5rem;
+    margin: 0.1rem 0;
+    white-space: normal;
+  }
+
+  .astro-header .right-container {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .astro-header .astro-score {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .step-name {
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 80px;
+  }
+}
+
+/* Mobile Portrait */
+@media (max-width: 480px) {
+  .astro-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    padding: 0.75rem 0.75rem 0.5rem 0.75rem;
+    row-gap: 0.4rem;
+  }
+
+
+
+  /* Back button with house icon - icon only */
+  /* .astro-header .back-button {
+    padding: 0.4rem;
+    border-radius: 8px;
+    border-width: 1.5px;
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(74, 125, 255, 0.15);
+  } */
+
+    /* Back button top-left */
+  .astro-header .back-button {
+    grid-column: 1;
+    grid-row: 1;
+    position: static;
+  }
+
+
+  .astro-header .back-button .back-icon {
+    width: 22px;
+    height: 22px;
+    color: #a0b9ff;
+    transition: all 0.3s ease;
+  }
+
+  .astro-header .back-button:hover .back-icon {
+    color: #ffffff;
+    transform: scale(1.1);
+  }
+
+  .astro-header .back-button .back-text {
+    display: none;
+  }
+  
+
+  /* Header Center - contains both title and subtitle */
+  .astro-header .header-center {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    justify-self: center;
+    text-align: center;
+    width: 100%;
+  }
+
+
+  /* Header Center - contains both title and subtitle */
+  .astro-header .header-center {
+    width: 100%;
+    padding: 0;
+  }
+
+.astro-header .header-center .astro-title {
+  pointer-events: auto;
+}
+
+  .astro-header .header-center .astro-title h1 {
+    font-size:1rem;
+    letter-spacing: 3px;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    white-space: nowrap;
+    /* overflow: hidden;
+    text-overflow: ellipsis; */
+    max-width: 400px;
+  }
+
+
+  /* Subtitle - centered below */
+  .astro-header .header-center .subtitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    margin: 0.25rem 0 0 0;
+    padding: 0;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  /* Move back button to bottom-left */
+.astro-header .back-button {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.75rem;
+  margin: 0;
+}
+
+  /* Score below title */
+  .astro-header .right-container {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    justify-content: center;
+  }
+
+
+  .astro-header .astro-score {
+    justify-content: center;
+  }
+
+
+  .score-label {
+    font-size: 0.65rem;
+  }
+  
+  .score-value {
+    font-size: 0.6rem;
+  }
+  
+  .score-total {
+    font-size: 0.65rem;
+  }
+
+  /* Hide spacer on mobile */
+  .astro-header .header-spacer {
+    display: none;
+  }
+
+  .astro-content {
+    padding: 0.5rem;
+  }
+
+  .astro-progress {
+    padding: 0.5rem;
+  }
+
+  .progress-steps {
+    gap: 0.3rem;
+  }
+  
+  .step {
+    min-width: 50px;
+  }
+  
+  .step-name {
+    font-size: 0.65rem;
+    max-width: 60px;
+  }
+  
+  .location-tags {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .location-tag {
+    width: 100%;
+    max-width: 200px;
+    justify-content: center;
+  }
+  
+  .final-score-circle {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .final-score-number {
+    font-size: 2.5rem;
+  }
+  
+  .achievements-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .mission-summary {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 360px) {
+  .astro-header {
+    padding: 0.4rem 0.5rem;
+    gap: 0.2rem;
+  }
+
+  .astro-header .back-button {
+    padding: 0.3rem;
+    min-width: 32px;
+    height: 32px;
+  }
+
+  .astro-header .back-button .back-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .astro-header .header-center .astro-title {
+    min-height: 32px;
+  }
+
+  .astro-header .header-center .astro-title h1 {
+    font-size: 0.9rem;
+    max-width: 150px;
+  }
+
+  .astro-header .header-center .subtitle {
+    gap: 0.35rem;
+    margin-top: 0.15rem;
+    font-size: 0.6rem;
+  }
+
+  .astro-header .astro-score {
+    padding: 0.25rem 0.5rem;
+  }
+
+  .score-label {
+    font-size: 0.6rem;
+  }
+  
+  .score-value {
+    font-size: 0.8rem;
+  }
+  
+  .score-total {
+    font-size: 0.6rem;
+  }
+
+  .step {
+    min-width: 40px;
+  }
+  
+  .step-name {
+    font-size: 0.6rem;
+  }
+  
+  .final-score-circle {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .final-score-number {
+    font-size: 2rem;
+  }
+}
+
+/* Height-based adjustments for very short screens */
+@media (max-height: 600px) {
+  .astro-header {
+    min-height: 50px;
+    padding: 0.3rem 1rem;
+  }
+
+  .astro-header .back-button {
+    padding: 0.25rem 0.8rem;
+    min-height: 36px;
+  }
+
+  .astro-header .header-center .astro-title h1 {
+    font-size: clamp(1rem, 3vh, 1.3rem);
+  }
+
+  .astro-header .header-center .subtitle {
+    font-size: clamp(0.65rem, 1.5vh, 0.8rem);
+  }
+
+  .astro-header .astro-score {
+    padding: 0.25rem 0.6rem;
+  }
+
+  .astro-content {
+    padding: 0.5rem;
+  }
+
+  .astro-progress {
+    padding: 0.35rem 0.5rem;
+  }
+
+  .step-number {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .final-score-circle {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .final-score-number {
+    font-size: 1.8rem;
+  }
+}
+
+/* High-resolution screens */
+@media (min-width: 1440px) {
+  .astro-content {
+    max-width: 1600px;
+  }
+  
+  .astro-header .header-center .astro-title h1 {
+    font-size: 2.2rem;
+  }
+  
+  .astro-header .header-center .subtitle {
+    font-size: 1.1rem;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .complete-mission-button,
+  .try-another-button,
+  .complete-all-button,
+  .review-button,
+  .location-tag {
+    cursor: default;
+  }
+  
+  .complete-mission-button:active,
+  .try-another-button:active,
+  .complete-all-button:active,
+  .review-button:active {
+    transform: scale(0.98);
+  }
+  
+  .astro-header .back-button:active {
+    transform: scale(0.98);
+  }
+  
+  .back-btn-shine {
+    display: none;
+  }
+  
+  .step-number {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .location-tag {
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  .astro-game-root {
+    background: white;
+    color: black;
+    height: auto;
+    overflow: visible;
+  }
+  
+  .astro-header .back-button,
+  .astro-progress,
+  .complete-mission-button,
+  .try-another-button,
+  .review-button {
+    display: none;
+  }
 }
