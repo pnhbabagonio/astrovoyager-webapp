@@ -1,13 +1,16 @@
-/* Celestial Observatory Theme - Compact Design */
+/* Game3.css - Fixed Responsive Version (Following Game 1 Pattern) */
+
+/* ==================== BASE STYLES ==================== */
 .season-navigator-root {
   min-height: 100vh;
   background: radial-gradient(ellipse at bottom, #0d1b2a 0%, #1b263b 70%, #415a77 100%);
   color: #e0e1dd;
   display: flex;
   flex-direction: column;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  height: 100vh;
+  overflow: hidden;
   position: relative;
-  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 /* Season Classes */
@@ -50,19 +53,39 @@
 .autumn-overlay { background: linear-gradient(45deg, rgba(239, 108, 0, 0.1), transparent); }
 .winter-overlay { background: linear-gradient(45deg, rgba(21, 101, 192, 0.1), transparent); }
 
-/* ==================== MODERN HEADER ==================== */
+/* ==================== ANIMATIONS ==================== */
+@keyframes stars-twinkle {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes telescope-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.1; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.15; }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  20%, 100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
+/* ==================== HEADER - FIXED RESPONSIVE LAYOUT ==================== */
 .game3-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  height: 150px;  
-  padding: 0 2rem;
-  min-height: 150px;  
-  box-sizing: border-box;
+  justify-content: space-between;
+  padding: 0.75rem 2rem;
   background: rgba(10, 14, 42, 0.8);
   backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   position: relative;
   z-index: 10;
+  min-height: 70px;
+  flex-shrink: 0;
 }
 
 /* Bottom border accent */
@@ -77,52 +100,67 @@
 }
 
 /* Back Button */
-.game3-header .back-button {
+.game3-header .back-button.space-button {
   background: rgba(74, 125, 255, 0.2);
   border: 2px solid #4a7dff;
   color: #a0b9ff;
-  padding: 0.5rem 1.2rem;
+  padding: 0.4rem 1.2rem;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.9rem;
   white-space: nowrap;
   backdrop-filter: blur(5px);
-  margin: 0; 
-  align-self: center; 
+  -webkit-backdrop-filter: blur(5px);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
 }
 
-.game3-header .back-button:hover {
+.game3-header .back-button.space-button:hover {
   background: rgba(74, 125, 255, 0.4);
   border-color: #8a4fff;
   color: #ffffff;
   box-shadow: 0 0 15px rgba(74, 125, 255, 0.4);
 }
 
-/* Spacer to balance the back button and center the title */
-.header-spacer {
-  width: 0;
-  flex: 0 0 auto;
-  visibility: hidden;
-  align-self: center;
+.back-icon {
+  width: 20px;
+  height: 20px;
+  color: currentColor;
+  transition: all 0.3s ease;
 }
 
-/* Match spacer width to back button */
-.game3-header .back-button,
-.header-spacer {
-  flex-basis: 160px;
-  flex-shrink: 0;
+.back-btn-shine {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 70%
+  );
+  transform: rotate(45deg);
+  animation: shine 3s infinite;
+  pointer-events: none;
 }
 
-/* Header Title Area */
+/* Header Center Content */
 .header-content {
+  flex: 1;
   text-align: center;
-  flex-grow: 1;
-  align-self: center;
+  padding: 0 1rem;
+  min-width: 0; /* Allows text truncation */
 }
 
 .header-content h1 {
-  font-size: 2rem;
+  font-size: clamp(1.25rem, 4vw, 2rem);
   background: linear-gradient(45deg, #4a7dff, #8a4fff);
   background-clip: text;
   -webkit-background-clip: text;
@@ -130,6 +168,12 @@
   margin: 0 0 0.15rem 0;
   text-shadow: 0 0 20px rgba(74, 125, 255, 0.5);
   letter-spacing: 1px;
+  line-height: 1.2;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 /* Subtitle */
@@ -137,40 +181,25 @@
   color: #a0b9ff;
   margin: 0;
   font-weight: 300;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-size: clamp(0.75rem, 2vw, 1.1rem);
 }
 
 .header-subtitle span {
-  margin: 0 0.25rem;
-  font-size: 1.1rem;
-  color: #a0b9ff;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
 }
 
-/* Compact Control Panel */
-.observatory-control-panel {
-  background: rgba(13, 27, 42, 0.8);
-  border: 1px solid var(--secondary-color);
-  border-radius: 8px;
-  padding: 0.4rem 0.8rem;
-  text-align: center;
-  min-width: 90px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.control-label {
-  display: block;
-  font-size: 0.7rem;
-  color: #b8c2cc;
-  margin-bottom: 0.1rem;
-}
-
-.control-value {
-  display: block;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: var(--secondary-color);
-  line-height: 1;
+/* Header Spacer (for balance on desktop) */
+.header-spacer {
+  width: 100px;
+  flex-shrink: 0;
 }
 
 /* ==================== COMPACT STATUS BAR ==================== */
@@ -178,14 +207,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem;
-  margin: 1rem 1rem 0.5rem;
+  gap: 1.5rem;
+  margin: 1rem 1.5rem;
   padding: 1rem 1.5rem;
   background: linear-gradient(135deg, rgba(13, 27, 42, 0.95), rgba(27, 38, 59, 0.9));
   border-radius: 12px;
   border: 1px solid rgba(76, 201, 240, 0.2);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+  z-index: 5;
 }
 
 /* Phase Steps */
@@ -193,6 +225,7 @@
   display: flex;
   align-items: center;
   gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .phase-step {
@@ -203,7 +236,6 @@
   border-radius: 30px;
   background: rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
-  position: relative;
 }
 
 .phase-step .step-icon {
@@ -216,6 +248,7 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .phase-step.active {
@@ -235,23 +268,12 @@
   color: #4caf50;
 }
 
-.step-connector {
-  position: absolute;
-  right: -1.5rem;
-  width: 1.5rem;
-  height: 2px;
-  background: rgba(76, 201, 240, 0.3);
-}
-
-.phase-step.completed .step-connector {
-  background: #4caf50;
-}
-
 /* Stats Row */
 .stats-row {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  flex-shrink: 0;
 }
 
 .stat-chip {
@@ -262,6 +284,7 @@
   background: rgba(0, 0, 0, 0.25);
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
 }
 
 .stat-chip .chip-icon {
@@ -279,17 +302,20 @@
   font-weight: 700;
 }
 
-/* Main Content Area */
+/* ==================== MAIN CONTENT AREA ==================== */
 .game3-content {
   flex: 1;
-  padding: 0.5rem 1rem 1rem;
-  position: relative;
-  z-index: 2;
+  padding: clamp(1rem, 3vw, 2rem);
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
 }
 
 /* Telescope Focus Effect */
@@ -304,9 +330,10 @@
   box-shadow: 0 0 100px 50px rgba(76, 201, 240, 0.1);
   pointer-events: none;
   z-index: 1;
+  animation: telescope-pulse 4s ease-in-out infinite;
 }
 
-/* All Regions Completed */
+/* ==================== ALL REGIONS COMPLETED SCREEN ==================== */
 .all-regions-completed {
   width: 100%;
   max-width: 600px;
@@ -315,16 +342,23 @@
 
 .completion-content {
   background: rgba(13, 27, 42, 0.9);
-  border-radius: 15px;
-  padding: 2rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: clamp(1.5rem, 5vw, 2.5rem);
   text-align: center;
   border: 2px solid var(--secondary-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 .completion-content h2 {
   color: var(--secondary-color);
   margin-bottom: 1rem;
-  font-size: 1.8rem;
+  font-size: clamp(1.4rem, 5vw, 2rem);
 }
 
 .completion-badge {
@@ -334,12 +368,12 @@
   background: rgba(255, 215, 0, 0.2);
   border: 1px solid #ffd700;
   padding: 0.5rem 1rem;
-  border-radius: 20px;
+  border-radius: 50px;
   margin: 1rem 0;
 }
 
 .badge-icon {
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 
 .badge-text {
@@ -353,36 +387,42 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 0.8rem;
   margin: 1.5rem 0;
+  width: 100%;
 }
 
 .stat-item.large {
   background: rgba(255, 255, 255, 0.05);
   padding: 1rem;
-  border-radius: 10px;
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .stat-label.large {
   display: block;
   color: #b8c2cc;
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 2vw, 0.8rem);
   margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .stat-value.large {
   display: block;
   color: var(--secondary-color);
-  font-size: 1.4rem;
+  font-size: clamp(1.2rem, 4vw, 1.8rem);
   font-weight: bold;
 }
 
 .region-scores-summary {
   margin: 1.5rem 0;
+  width: 100%;
 }
 
 .region-scores-summary h3 {
   color: var(--secondary-color);
   margin-bottom: 1rem;
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 3vw, 1.2rem);
 }
 
 .scores-grid {
@@ -395,196 +435,492 @@
   justify-content: space-between;
   align-items: center;
   background: rgba(255, 255, 255, 0.05);
-  padding: 0.6rem;
-  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .region-name {
   color: #e0e1dd;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+  font-weight: 500;
 }
 
 .region-score {
   color: var(--secondary-color);
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 2.5vw, 0.95rem);
 }
 
-.continue-button {
-  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-  color: white;
-  border: none;
-  padding: 0.8rem 2rem;
-  border-radius: 25px;
-  font-size: 1rem;
-  font-weight: bold;
+/* Completion Buttons */
+.completion-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 25px auto 0;
+  width: 100%;
+  max-width: 400px;
+  align-items: center;
+}
+
+.complete-mission-button,
+.continue-button.secondary {
+  width: 100%;
+  padding: clamp(12px, 3vw, 16px) clamp(16px, 4vw, 24px);
+  border-radius: 16px;
+  font-size: clamp(14px, 4vw, 16px);
+  font-weight: 600;
   cursor: pointer;
-  margin-top: 1rem;
-  transition: transform 0.2s ease;
+  transition: all 0.3s ease;
+  border: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.5px;
 }
 
-.continue-button:hover {
-  transform: scale(1.05);
+.complete-mission-button {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  color: white;
+  box-shadow: 0 6px 15px rgba(46, 125, 50, 0.3);
 }
 
-/* Animations */
-@keyframes stars-twinkle {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+.complete-mission-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(46, 125, 50, 0.4);
 }
 
-/* ==================== RESPONSIVE DESIGN ==================== */
+.continue-button.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #e0e1dd;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.continue-button.secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* ==================== UTILITY CLASSES ==================== */
+.space-panel {
+  background: rgba(15, 20, 40, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 1px 0 rgba(255, 255, 255, 0.1) inset;
+}
+
+/* ==================== RESPONSIVE BREAKPOINTS ==================== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .game3-header {
+    padding: 0.6rem 1.5rem;
+    min-height: 65px;
+  }
+  
+  .header-spacer {
+    width: 80px;
+  }
+  
+  .compact-status-bar {
+    margin: 0.75rem 1rem;
+    padding: 0.75rem 1rem;
+  }
+  
+  .phase-steps {
+    gap: 1rem;
+  }
+  
+  .phase-step {
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* Mobile Landscape & Small Tablets */
 @media (max-width: 768px) {
   .game3-header {
-    flex-direction: column;
-    padding: 0.6rem 0.8rem;
-    gap: 0.5rem;
-  }
-
-  .back-button {
-    align-self: flex-start;
-    font-size: 0.72rem;
-    padding: 0.3rem 0.7rem;
-  }
-
-  .header-content {
-    width: 100%;
-  }
-
-  .header-content h1 {
-    font-size: 1.05rem;
-    letter-spacing: 1.5px;
-  }
-
-  .header-subtitle {
+    flex-wrap: wrap;
+    min-height: auto;
+    padding: 0.5rem 1rem;
     gap: 0.35rem;
   }
 
-  .header-subtitle span {
-    font-size: 0.68rem;
-    padding: 0.2rem 0.5rem;
+  .game3-header .back-button.space-button {
+    order: 1;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.85rem;
   }
 
-  .observatory-control-panel {
-    min-width: 80px;
-    padding: 0.3rem 0.6rem;
+  .header-content {
+    order: 2;
+    width: 100%;
+    padding: 0 0.25rem;
+    flex: 0 0 100%;
   }
 
-  .control-value {
-    font-size: 1rem;
+  .header-content h1 {
+    font-size: 1.25rem;
+    white-space: normal;
+    line-height: 1.2;
+    margin: 0.1rem 0;
+  }
+
+  .header-subtitle {
+    gap: 0.5rem;
+    margin: 0.1rem 0;
+  }
+
+  .header-spacer {
+    display: none;
   }
 
   .compact-status-bar {
-    gap: 0.8rem;
-    max-height: none;
-    margin: 0.5rem 0.5rem 1rem;
-    padding: 0.6rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin: 0.5rem 0.75rem;
+    padding: 0.75rem;
   }
 
-  .phase-dots {
+  .phase-steps {
     justify-content: center;
   }
 
-  .final-stats {
-    grid-template-columns: 1fr;
+  .stats-row {
+    justify-content: center;
+  }
+
+  .game3-content {
+    padding: 0.75rem;
+  }
+}
+
+/* Mobile Portrait */
+@media (max-width: 480px) {
+  .game3-header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0.5rem 0.75rem;
+    gap: 0.25rem;
+    min-height: auto;
+  }
+
+  /* Back button with telescope icon */
+  .game3-header .back-button.space-button {
+    padding: 0.4rem;
+    border-radius: 8px;
+    border-width: 1.5px;
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(74, 125, 255, 0.15);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .game3-header .back-button.space-button .back-icon {
+    width: 22px;
+    height: 22px;
+    color: #4a7dff;
+    transition: all 0.3s ease;
+  }
+
+  .game3-header .back-button.space-button:hover .back-icon {
+    color: #ffffff;
+    transform: scale(1.1);
+  }
+
+  .game3-header .back-button.space-button .button-text {
+    display: none;
+  }
+
+  .back-btn-shine {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 70%
+    );
+    transform: rotate(45deg);
+    animation: shine 3s infinite;
+    pointer-events: none;
+  }
+
+  .back-icon {
+    width: 22px;
+    height: 22px;
+    margin: 0;
+  }
+
+  .button-text {
+    display: none;
+  }
+
+  /* Header Center - contains both title and subtitle */
+  .header-content {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Title row - vertically aligned with back button */
+.header-content h1 {
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  margin: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  text-align: center;     /* ✅ center text */
+  display: block;         /* ✅ remove flex alignment */
+}
+
+  /* Subtitle - centered below */
+  .header-subtitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    margin: 0.25rem 0 0 0;
+    padding: 0;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .header-subtitle span {
+    font-size: 0.65rem;
+    gap: 0.15rem;
+    white-space: nowrap;
+    background: rgba(74, 125, 255, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+  }
+
+  /* Hide spacer on mobile */
+  .header-spacer {
+    display: none;
+  }
+
+  .compact-status-bar {
+    margin: 0.5rem;
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+
+  .phase-steps {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .phase-step {
+    flex: 1 1 auto;
+    justify-content: center;
+    min-width: 60px;
+    padding: 0.4rem 0.5rem;
+  }
+
+  .phase-step .step-icon {
+    font-size: 0.9rem;
+  }
+
+  .phase-step .step-label {
+    font-size: 0.6rem;
+  }
+
+  .stats-row {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+
+  .stat-chip {
+    padding: 0.4rem 0.6rem;
+    gap: 0.3rem;
+  }
+
+  .stat-chip .chip-icon {
+    font-size: 0.9rem;
+  }
+
+  .stat-chip .chip-value {
+    font-size: 0.75rem;
   }
 
   .game3-content {
     padding: 0.5rem;
   }
+
+  /* Completion Screen Mobile */
+  .completion-content {
+    padding: 1rem;
+  }
+
+  .completion-content h2 {
+    font-size: 1.3rem;
+  }
+
+  .completion-badge {
+    padding: 0.4rem 0.8rem;
+    margin: 0.5rem 0;
+  }
+
+  .badge-text {
+    font-size: 0.8rem;
+  }
+
+  .final-stats {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+
+  .stat-item.large {
+    padding: 0.75rem;
+  }
+
+  .region-score-card {
+    padding: 0.6rem 0.75rem;
+  }
+
+  .completion-buttons {
+    gap: 8px;
+    margin: 15px auto 0;
+  }
+
+  .complete-mission-button,
+  .continue-button.secondary {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
 }
 
-@media (max-width: 480px) {
+/* Small Mobile */
+@media (max-width: 360px) {
   .game3-header {
-    padding: 0.5rem 0.6rem;
+    padding: 0.4rem 0.5rem;
+    gap: 0.2rem;
+  }
+
+  .game3-header .back-button.space-button {
+    padding: 0.3rem;
+    min-width: 32px;
+    height: 32px;
+  }
+
+  .back-icon {
+    width: 18px;
+    height: 18px;
   }
 
   .header-content h1 {
-    font-size: 0.92rem;
-    letter-spacing: 1px;
+    font-size: 0.95rem;
+    max-width: 140px;
+    min-height: 32px;
   }
 
   .header-subtitle {
-    flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.35rem;
+    margin-top: 0.15rem;
   }
 
   .header-subtitle span {
-    font-size: 0.65rem;
-    padding: 0.18rem 0.45rem;
-  }
-  
-  .quick-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .stat-item {
-    padding: 0.3rem;
-    min-height: 35px;
-  }
-  
-  .stat-label {
     font-size: 0.6rem;
+    padding: 0.15rem 0.4rem;
   }
-  
-  .stat-value {
+
+  .phase-step {
+    min-width: 50px;
+    padding: 0.3rem 0.4rem;
+  }
+
+  .phase-step .step-icon {
     font-size: 0.8rem;
   }
+
+  .phase-step .step-label {
+    font-size: 0.55rem;
+  }
+
+  .stat-chip {
+    padding: 0.3rem 0.5rem;
+  }
+
+  .stat-chip .chip-icon {
+    font-size: 0.8rem;
+  }
+
+  .stat-chip .chip-value {
+    font-size: 0.7rem;
+  }
 }
 
-/* Add these styles for the completion buttons */
-/* Update the completion-buttons styles */
-.completion-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin: 30px auto 0; /* Centers horizontally with auto left/right margins */
-  width: 100%;
-  max-width: 400px;
-  align-items: center; /* Centers items inside the container */
-}
+/* Height-based adjustments for very short screens */
+@media (max-height: 600px) {
+  .game3-header {
+    min-height: 50px;
+    padding: 0.3rem 1rem;
+  }
 
-/* Optional: Make the completion content better for centering */
-.completion-content {
-  background: rgba(13, 27, 42, 0.9);
-  border-radius: 15px;
-  padding: 2rem;
-  text-align: center;
-  border: 2px solid var(--secondary-color);
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* This ensures child elements are centered */
-  width: 100%;
-}
+  .game3-header .back-button.space-button {
+    padding: 0.25rem 0.8rem;
+  }
 
-/* Update button widths for better centering */
-.complete-mission-button {
-  background: linear-gradient(135deg, #4CAF50, #2E7D32);
-  color: white;
-  border: none;
-  padding: 18px 24px;
-  border-radius: 15px;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 6px 15px rgba(46, 125, 50, 0.4);
-  position: relative;
-  overflow: hidden;
-  width: 100%; /* Make button take full width of container */
-  max-width: 400px; /* Optional: limit max width */
-}
+  .header-content h1 {
+    font-size: clamp(1rem, 3vh, 1.3rem);
+  }
 
-.continue-button.secondary {
-  background: linear-gradient(135deg, #757575, #424242);
-  color: white;
-  border: none;
-  padding: 15px 24px;
-  border-radius: 15px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  opacity: 0.8;
-  width: 100%; /* Make button take full width of container */
-  max-width: 400px; /* Optional: limit max width */
+  .header-subtitle {
+    font-size: clamp(0.65rem, 1.5vh, 0.8rem);
+  }
+
+  .compact-status-bar {
+    padding: 0.4rem 0.75rem;
+    margin: 0.3rem 0.75rem;
+  }
+
+  .phase-step {
+    padding: 0.3rem 0.6rem;
+  }
+
+  .phase-step .step-icon {
+    font-size: 0.9rem;
+  }
+
+  .phase-step .step-label {
+    font-size: 0.65rem;
+  }
+
+  .stat-chip {
+    padding: 0.3rem 0.6rem;
+  }
+
+  .game3-content {
+    padding: 0.5rem;
+  }
 }

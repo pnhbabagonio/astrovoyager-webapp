@@ -392,13 +392,18 @@ const Game3Root = ({ onComplete }) => {
 
       {/* Compact Header */}
       <div className="game3-header">
-        <button
-          onClick={handleBackToMap}
-          className="back-button"
-          aria-label="Return to mission map"
-        >
-          <span className="back-icon">←</span>
-          <span className="back-text">Back to Mission Map</span>
+        <button onClick={handleBackToMap} className="back-button space-button">
+          <svg className="back-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 6L9 3L15 6L21 3V18L15 21L9 18L3 21V6Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M9 3V18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M15 6V21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M3 6L9 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M15 6L21 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M3 21L9 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M15 21L21 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
+          <span className="button-text">Mission Map</span>
+          <div className="back-btn-shine"></div>
         </button>
 
         
