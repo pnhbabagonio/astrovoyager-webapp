@@ -1,4 +1,4 @@
-// Game2Root.js (updated with new back button)
+// Game2Root.js - Fixed Responsive Version
 import React, { useState, useEffect, useRef } from 'react';
 import { useGameState } from '../../../contexts/GameStateContext';
 import { useAudio } from '../../../contexts/AudioContext';
@@ -189,9 +189,6 @@ const Game2Root = ({ onComplete }) => {
     if (playerActions.updatePlayerProgress) {
       playerActions.updatePlayerProgress('game2', locationResult);
     }
-    
-    // Play appropriate sound effect
-    // audioActions.playSoundEffect?.(calculatedScore > 0 ? 'success' : 'error');
   };
 
   const handleTryAnotherLocation = () => {
@@ -220,8 +217,7 @@ const Game2Root = ({ onComplete }) => {
       locationsCompleted: Object.values(locationProgress).filter(loc => loc.completed).length,
       details: locationProgress,
       date: now,
-      // Ensure all required fields for IndexedDB are present
-      completionDate: now // This is required for the IndexedDB index
+      completionDate: now
     };
 
     // Update global progress
@@ -230,15 +226,11 @@ const Game2Root = ({ onComplete }) => {
       payload: { game: 'game2', progress: gameResult }
     });
 
-    // Save to player progress - ensure proper structure
+    // Save to player progress
     if (playerActions.updatePlayerProgress) {
       playerActions.updatePlayerProgress('game2', gameResult);
     }
-
-    // Play success sound
-    // audioActions.playSoundEffect?.('success');
     
-    // Small delay before calling onComplete to allow sound to play
     const completeTimeout = setTimeout(() => {
       if (isMounted.current && onComplete) {
         onComplete(gameResult);
@@ -253,7 +245,6 @@ const Game2Root = ({ onComplete }) => {
     
     audioActions.playSoundEffect?.('buttonClick');
     
-    // Small delay before navigation to allow sound to play
     const navTimeout = setTimeout(() => {
       if (isMounted.current) {
         gameDispatch({ type: 'SET_VIEW', payload: 'mission-map' });
@@ -277,7 +268,23 @@ const Game2Root = ({ onComplete }) => {
 
   return (
     <div className="astro-game-root">
+      {/* Stars background - dynamically generated */}
+      {[...Array(20)].map((_, i) => (
+        <div
+          key={i}
+          className="star"
+          style={{
+            top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`,
+            width: `${Math.random() * 3 + 1}px`,
+            height: `${Math.random() * 3 + 1}px`,
+            animationDelay: `${Math.random() * 5}s`,
+            opacity: Math.random() * 0.7 + 0.3
+          }}
+        />
+      ))}
 
+      {/* ===== HEADER SECTION - ONLY PART CHANGED ===== */}
       <div className="astro-header">
         <button onClick={handleBackToMap} className="back-button space-button">
           <svg className="back-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -296,18 +303,16 @@ const Game2Root = ({ onComplete }) => {
         <div className="header-center">
           <div className="astro-title">
             <h1>ASTROVOYAGER – TILTQUEST</h1>
-            <p className="subtitle">Discover how Earth's tilt affects daylight!</p>
-          </div>
-        </div>
-
-        <div className="right-container">
-          <div className="astro-score">
+            <div className="astro-score">
             <span className="score-label">Total Progress:</span>
             <span className="score-value">{getCompletedCount()}/3 Locations</span>
             <span className="score-total">Score: {getTotalScore()}/9</span>
           </div>
+          </div>
         </div>
+          <div className="header-spacer"></div>
       </div>
+      {/* ===== END OF HEADER SECTION ===== */}
 
       <div className="astro-content">
         {currentStage === 'location-selector' && (

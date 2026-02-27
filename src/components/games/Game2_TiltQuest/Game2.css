@@ -1,4 +1,4 @@
-/* Game2.css - Fully Responsive Version with Game1-style Header */
+/* Game2.css - Fixed Responsive Version (Game1 Style) */
 
 .astro-game-root {
   min-height: 100vh;
@@ -28,7 +28,21 @@
   z-index: 0;
 }
 
-/* ===== HEADER SECTION - GAME1 STYLE WITH GAME2 COLORS ===== */
+/* Stars animation */
+.star {
+  position: fixed;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 3s infinite;
+  z-index: 0;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* ===== HEADER SECTION - GAME1 STYLE ===== */
 .astro-header {
   display: flex;
   align-items: center;
@@ -41,9 +55,11 @@
   z-index: 10;
   min-height: 70px;
   flex-shrink: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Bottom border accent - using game2 colors */
+/* Bottom border accent */
 .astro-header::after {
   content: '';
   position: absolute;
@@ -54,7 +70,7 @@
   background: linear-gradient(90deg, #4a7dff, #8a4fff, #4a7dff);
 }
 
-/* Back Button Container - fixed width to match spacer */
+/* Back Button - Game1 style */
 .astro-header .back-button {
   background: rgba(74, 125, 255, 0.2);
   border: 2px solid #4a7dff;
@@ -76,7 +92,9 @@
   position: relative;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  width: 120px; /* Fixed width to match spacer + score */
+  width: 140px;
+  text-decoration: none;
+  z-index: 15;
 }
 
 .astro-header .back-button:hover {
@@ -97,6 +115,7 @@
   height: 20px;
   transition: transform 0.3s ease;
   color: currentColor;
+  flex-shrink: 0;
 }
 
 .astro-header .back-button:hover .back-icon {
@@ -108,7 +127,7 @@
   z-index: 2;
 }
 
-/* Shine effect - matching game1 */
+/* Shine effect */
 .back-btn-shine {
   position: absolute;
   top: -50%;
@@ -135,15 +154,12 @@
   }
 }
 
-/* Header Center Content - absolutely centered */
+/* Header Center - contains title and score */
 .astro-header .header-center {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  flex: 1;
   text-align: center;
+  padding: 0 1rem;
   min-width: 0;
-  max-width: 60%; /* Prevent overflow */
-  pointer-events: none; /* Allow clicks to pass through if needed */
 }
 
 .astro-header .header-center .astro-title {
@@ -151,19 +167,18 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.15rem;
-  pointer-events: auto; /* Re-enable clicks for interactive elements */
+  gap: 0.25rem;
 }
 
 .astro-header .header-center .astro-title h1 {
-  font-size: clamp(1.25rem, 4vw, 1.8rem);
+  font-size: clamp(1rem, 3vw, 1.8rem);
   background: linear-gradient(45deg, #4a7dff, #8a4fff);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0;
   text-shadow: 0 0 20px rgba(74, 125, 255, 0.5);
-  letter-spacing: 5px;
+  letter-spacing: 3px;
   line-height: 1.2;
   font-weight: 700;
   white-space: nowrap;
@@ -172,62 +187,45 @@
   max-width: 100%;
 }
 
-.astro-header .header-center .subtitle {
-  color: #a0b9ff;
-  margin: 0;
-  font-weight: 300;
+/* Score Display - centered under title */
+.astro-header .header-center .astro-score {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  font-size: clamp(0.75rem, 2vw, 0.9rem);
+  padding: 0.3rem 1rem;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.score-label {
+  font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+  color: #ffd166;
   white-space: nowrap;
 }
 
-/* Right side container - fixed width to match back button */
-.astro-header .right-container {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  width: 420px; /* Fixed width to match back button */
-  justify-content: flex-end;
-  flex-shrink: 0;
-}
-
-/* Header Spacer (for balance) - exactly like Game1 */
-/* .astro-header .header-spacer {
-  width: 100px;
-  flex-shrink: 0;
-} */
-
-/* Score Display */
-.astro-header .astro-score {
-  padding: 0.5rem 1rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-  align-items: center;
-  justify-content: flex-end;
-  min-width: auto;
-}
-
-
-.score-label {
-  font-size: clamp(0.7rem, 2vw, 0.8rem);
-  color: #ffd166;
-}
-
 .score-value {
-  font-size: clamp(0.7rem, 2vw, 0.8rem);
+  font-size: clamp(0.65rem, 1.5vw, 0.8rem);
   font-weight: bold;
   color: #ffffff;
   text-shadow: 0 0 10px #ffd166;
+  padding: 0.2rem 0.5rem;
+  border-radius: 20px;
+  white-space: nowrap;
 }
 
 .score-total {
-  font-size: clamp(0.7rem, 2vw, 0.8rem);
-  color: #ffffff;
+  font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+  color: #a0b9ff;
+  white-space: nowrap;
+}
+
+/* Header spacer for balance */
+.header-spacer {
+  width: 140px;
+  flex-shrink: 0;
 }
 
 /* ===== MAIN CONTENT AREA ===== */
@@ -244,6 +242,7 @@
   max-width: 1400px;
   margin: 0 auto;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
 /* Ensure all child components are responsive */
@@ -768,19 +767,8 @@
   font-weight: bold;
 }
 
-/* Animation for stars */
-@keyframes twinkle {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
-}
+/* ===== RESPONSIVE BREAKPOINTS ===== */
 
-.step-number:hover {
-  animation: twinkle 1s infinite;
-}
-
-/* ===== RESPONSIVE BREAKPOINTS - MATCHING GAME1 ===== */
-
-/* Tablet */
 /* Tablet */
 @media (max-width: 1024px) {
   .astro-header {
@@ -789,11 +777,17 @@
   }
   
   .astro-header .back-button {
-    width: 100px;
+    width: 120px;
+    padding: 0.35rem 1rem;
   }
   
-  .astro-header .right-container {
-    width: 100px;
+  .header-spacer {
+    width: 120px;
+  }
+  
+  .astro-header .header-center .astro-title h1 {
+    font-size: 1.4rem;
+    letter-spacing: 2px;
   }
 }
 
@@ -803,8 +797,7 @@
     flex-wrap: wrap;
     min-height: auto;
     padding: 0.5rem 1rem;
-    gap: 0.5rem;
-    justify-content: center;
+    gap: 0.35rem;
   }
 
   .astro-header .back-button {
@@ -812,16 +805,17 @@
     width: auto;
     padding: 0.35rem 0.9rem;
     font-size: 0.85rem;
-    position: static;
   }
 
   .astro-header .header-center {
-    position: static;
-    transform: none;
     order: 2;
     width: 100%;
-    max-width: 100%;
-    margin: 0.25rem 0;
+    padding: 0 0.25rem;
+    flex: 0 0 100%;
+  }
+
+  .astro-header .header-center .astro-title {
+    gap: 0.1rem;
   }
 
   .astro-header .header-center .astro-title h1 {
@@ -831,21 +825,8 @@
     margin: 0.1rem 0;
   }
 
-  .astro-header .header-center .subtitle {
-    gap: 0.5rem;
-    margin: 0.1rem 0;
-    white-space: normal;
-  }
-
-  .astro-header .right-container {
-    order: 3;
-    width: 100%;
-    justify-content: center;
-  }
-
-  .astro-header .astro-score {
-    width: 100%;
-    justify-content: center;
+  .header-spacer {
+    display: none;
   }
 
   .step-name {
@@ -855,20 +836,20 @@
   }
 }
 
-/* Mobile Portrait */
+/* Mobile Portrait - Game1 style */
 @media (max-width: 480px) {
   .astro-header {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    grid-template-rows: auto auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
-    padding: 0.75rem 0.75rem 0.5rem 2rem;
-    row-gap: 0.75rem;
+    justify-content: flex-start;
+    padding: 0.5rem 0.75rem;
+    gap: 0.25rem;
+    min-height: auto;
   }
 
-
-
-  /* Back button with map icon - icon only */
+  /* Back button with icon only - Game1 style */
   .astro-header .back-button {
     padding: 0.4rem;
     border-radius: 8px;
@@ -880,20 +861,14 @@
     align-items: center;
     justify-content: center;
     background: rgba(74, 125, 255, 0.15);
+    position: relative;
+    overflow: hidden;
   }
-
-    Back button top-left
-  .astro-header .back-button {
-    grid-column: 1;
-    grid-row: 1;
-    position: static;
-  }
-
 
   .astro-header .back-button .back-icon {
     width: 22px;
     height: 22px;
-    color: #a0b9ff;
+    color: #4a7dff;
     transition: all 0.3s ease;
   }
 
@@ -905,90 +880,71 @@
   .astro-header .back-button .back-text {
     display: none;
   }
-  
 
-  /* Header Center - contains both title and subtitle */
-  .astro-header .header-center {
-    grid-column: 1 / -1;
-    grid-row: 1;
-    justify-self: center;
-    text-align: center;
-    width: 100%;
+  .back-btn-shine {
+    display: block;
   }
 
-
-  /* Header Center - contains both title and subtitle */
+  /* Header Center - contains both title and score */
   .astro-header .header-center {
-    width: 100%;
+    flex: 1;
+    min-width: 0;
     padding: 0;
+    margin: 0;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
   }
 
-.astro-header .header-center .astro-title {
-  pointer-events: auto;
-}
+  /* Title row - vertically aligned with back button */
+  .astro-header .header-center .astro-title {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    min-height: 36px;
+  }
 
   .astro-header .header-center .astro-title h1 {
-    font-size:1rem;
-    letter-spacing: 3px;
+    font-size: 18px;
+    letter-spacing: 0.5px;
     margin: 0;
     padding: 0;
     line-height: 1;
     white-space: nowrap;
-    /* overflow: hidden;
-    text-overflow: ellipsis; */
-    max-width: 400px;
+    overflow: hidden;
+    max-width: 300px;
+    text-align: left;
   }
 
-
-  /* Subtitle - centered below */
-  .astro-header .header-center .subtitle {
+  /* Score - centered below title */
+  .astro-header .header-center .astro-score {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     font-size: 0.7rem;
-    margin: 0.25rem 0 0 0;
-    padding: 0;
+    margin: 0.35rem 0 0 0;
+    padding: 0.3rem 0.75rem;
     flex-wrap: wrap;
     width: 100%;
   }
 
-  /* Move back button to bottom-left */
-.astro-header .back-button {
-  position: absolute;
-  bottom: 0.5rem;
-  left: 0.75rem;
-  margin: 0;
-}
-
-  /* Score below title */
-  .astro-header .right-container {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    width: 100%;
-    justify-content: center;
-  }
-
-
-  .astro-header .astro-score {
-    justify-content: center;
-  }
-
-
   .score-label {
-    font-size: 0.65rem;
+    font-size: 0.7rem;
   }
-  
+
   .score-value {
-    font-size: 0.6rem;
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
   }
-  
+
   .score-total {
     font-size: 0.65rem;
   }
 
   /* Hide spacer on mobile */
-  .astro-header .header-spacer {
+  .header-spacer {
     display: none;
   }
 
@@ -1001,42 +957,51 @@
   }
 
   .progress-steps {
-    gap: 0.3rem;
+    gap: 0.25rem;
   }
-  
+
   .step {
-    min-width: 50px;
+    min-width: 45px;
   }
-  
+
+  .step-number {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+
   .step-name {
-    font-size: 0.65rem;
-    max-width: 60px;
+    font-size: 0.6rem;
+    max-width: 50px;
   }
-  
+
   .location-tags {
     flex-direction: column;
     align-items: center;
+    gap: 0.5rem;
   }
-  
+
   .location-tag {
     width: 100%;
-    max-width: 200px;
+    max-width: 220px;
     justify-content: center;
+    padding: 0.4rem 0.8rem;
   }
-  
+
   .final-score-circle {
-    width: 150px;
-    height: 150px;
+    width: 130px;
+    height: 130px;
   }
-  
+
   .final-score-number {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
   }
-  
+
   .achievements-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
-  
+
   .mission-summary {
     flex-direction: column;
     gap: 0.5rem;
@@ -1070,41 +1035,41 @@
     max-width: 150px;
   }
 
-  .astro-header .header-center .subtitle {
-    gap: 0.35rem;
-    margin-top: 0.15rem;
-    font-size: 0.6rem;
-  }
-
-  .astro-header .astro-score {
+  .astro-header .header-center .astro-score {
     padding: 0.25rem 0.5rem;
+    gap: 0.35rem;
+    margin-top: 0.25rem;
   }
 
-  .score-label {
-    font-size: 0.6rem;
-  }
-  
-  .score-value {
-    font-size: 0.8rem;
-  }
-  
+  .score-label,
+  .score-value,
   .score-total {
-    font-size: 0.6rem;
+    font-size: 0.55rem;
+  }
+
+  .score-value {
+    padding: 0.1rem 0.3rem;
   }
 
   .step {
     min-width: 40px;
   }
-  
+
+  .step-number {
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+  }
+
   .step-name {
-    font-size: 0.6rem;
+    font-size: 0.55rem;
   }
-  
+
   .final-score-circle {
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
   }
-  
+
   .final-score-number {
     font-size: 2rem;
   }
@@ -1116,35 +1081,32 @@
     min-height: 50px;
     padding: 0.3rem 1rem;
   }
-
+  
   .astro-header .back-button {
     padding: 0.25rem 0.8rem;
     min-height: 36px;
   }
-
+  
   .astro-header .header-center .astro-title h1 {
-    font-size: clamp(1rem, 3vh, 1.3rem);
+    font-size: 1.2rem;
   }
-
-  .astro-header .header-center .subtitle {
-    font-size: clamp(0.65rem, 1.5vh, 0.8rem);
+  
+  .astro-header .header-center .astro-score {
+    padding: 0.25rem 0.5rem;
   }
-
-  .astro-header .astro-score {
-    padding: 0.25rem 0.6rem;
-  }
-
+  
   .astro-content {
     padding: 0.5rem;
   }
-
+  
   .astro-progress {
     padding: 0.35rem 0.5rem;
   }
-
+  
   .step-number {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
   }
   
   .final-score-circle {
@@ -1161,14 +1123,25 @@
 @media (min-width: 1440px) {
   .astro-content {
     max-width: 1600px;
+    padding: 2rem;
+  }
+  
+  .astro-header {
+    padding: 1rem 3rem;
   }
   
   .astro-header .header-center .astro-title h1 {
-    font-size: 2.2rem;
+    font-size: 2rem;
+    letter-spacing: 4px;
   }
   
-  .astro-header .header-center .subtitle {
-    font-size: 1.1rem;
+  .astro-header .back-button {
+    width: 160px;
+    font-size: 1rem;
+  }
+  
+  .header-spacer {
+    width: 160px;
   }
 }
 
@@ -1180,6 +1153,7 @@
   .review-button,
   .location-tag {
     cursor: default;
+    -webkit-tap-highlight-color: transparent;
   }
   
   .complete-mission-button:active,
@@ -1190,11 +1164,7 @@
   }
   
   .astro-header .back-button:active {
-    transform: scale(0.98);
-  }
-  
-  .back-btn-shine {
-    display: none;
+    transform: scale(0.95);
   }
   
   .step-number {
@@ -1204,6 +1174,16 @@
   
   .location-tag {
     padding: 0.5rem 1rem;
+  }
+  
+  /* Increase touch targets */
+  .back-button,
+  .complete-mission-button,
+  .try-another-button,
+  .complete-all-button,
+  .review-button,
+  .location-tag {
+    min-height: 48px;
   }
 }
 
@@ -1222,5 +1202,17 @@
   .try-another-button,
   .review-button {
     display: none;
+  }
+  
+  .astro-header {
+    background: white;
+    color: black;
+    border-bottom: 2px solid #333;
+  }
+  
+  .astro-header .header-center .astro-title h1 {
+    -webkit-text-fill-color: #333;
+    background: none;
+    color: #333;
   }
 }
