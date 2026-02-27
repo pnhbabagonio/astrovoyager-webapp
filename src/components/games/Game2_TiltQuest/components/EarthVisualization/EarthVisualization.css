@@ -63,6 +63,9 @@
     drop-shadow(0 0 40px rgba(255, 153, 0, 0.6));
   animation: pulse 2s infinite ease-in-out;
   transition: all 0.3s ease;
+  /* Make sun size responsive */
+  width: clamp(60px, 15vw, 120px);
+  height: clamp(60px, 15vw, 120px);
 }
 
 /* Fixed: Removed rotation from sun */
@@ -90,6 +93,7 @@
   font-weight: bold;
   font-size: 0.9rem;
   text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+  white-space: nowrap;
 }
 
 /* Earth Container */
@@ -100,11 +104,16 @@
   transform: translate(-50%, -50%);
   transition: left 1s ease;
   z-index: 3;
+  /* Make Earth size responsive */
+  width: clamp(150px, 30vw, 300px);
+  height: clamp(150px, 30vw, 300px);
 }
 
 .earth {
-  transition: transform 0.5s ease, width 0.3s ease, height 0.3s ease;
+  transition: transform 0.5s ease;
   position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .earth-image {
@@ -678,29 +687,82 @@
   opacity: 0.8;
 }
 
-/* Responsive Design */
+/* Responsive Design - Enhanced for mobile */
 @media (max-width: 768px) {
   .earth-visualization {
     padding: 1rem;
+  }
+  
+  .visualization-header h2 {
+    font-size: 1.4rem;
+  }
+  
+  .coordinates {
+    font-size: 0.9rem;
   }
   
   .simulation-area {
     height: 350px;
   }
   
+  /* Sun responsive sizing already handled by clamp */
   .sun {
-    left: 30px;
+    left: 20px;
   }
+  
+  .sun-label {
+    font-size: 0.7rem;
+    bottom: -25px;
+  }
+  
+  /* Earth responsive sizing already handled by clamp */
   
   .label {
     font-size: 0.7rem;
     padding: 2px 6px;
   }
   
+  .dot-label {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    top: -25px;
+  }
+  
+  .dot-label::after {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid rgba(255, 68, 68, 0.95);
+  }
+  
+  .location-dot::before {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .dot-pulse {
+    width: 16px;
+    height: 16px;
+  }
+  
+  @keyframes pulse-dot {
+    0% {
+      width: 16px;
+      height: 16px;
+    }
+    100% {
+      width: 30px;
+      height: 30px;
+    }
+  }
+  
   .control-label {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.8rem;
+  }
+  
+  .label-text {
+    font-size: 1rem;
   }
   
   .tilt-toggle-switch {
@@ -728,7 +790,11 @@
   .indicator-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.8rem;
+    gap: 0.5rem;
+  }
+  
+  .indicator-header h3 {
+    font-size: 1.1rem;
   }
   
   .daylight-hours {
@@ -738,15 +804,51 @@
   .hours-value {
     font-size: 1.8rem;
   }
+  
+  .slider-markers {
+    font-size: 0.8rem;
+  }
+  
+  .control-hint {
+    font-size: 0.8rem;
+  }
+  
+  .daylight-note {
+    font-size: 0.9rem;
+  }
 }
 
 @media (max-width: 480px) {
+  .earth-visualization {
+    padding: 0.75rem;
+  }
+  
+  .visualization-header h2 {
+    font-size: 1.2rem;
+  }
+  
+  .coordinates {
+    font-size: 0.8rem;
+  }
+  
   .simulation-area {
     height: 300px;
   }
   
-  .sun {
-    left: 20px;
+  /* Further reduce sun and earth for very small screens */
+  .sun-image {
+    width: clamp(45px, 12vw, 90px);
+    height: clamp(45px, 12vw, 90px);
+  }
+  
+  .sun-label {
+    font-size: 0.6rem;
+    bottom: -20px;
+  }
+  
+  .earth-container {
+    width: clamp(120px, 25vw, 200px);
+    height: clamp(120px, 25vw, 200px);
   }
   
   .label {
@@ -755,14 +857,202 @@
   }
   
   .dot-label {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.6rem;
-    top: -25px;
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
+    top: -22px;
+    white-space: nowrap;
+  }
+  
+  .dot-label::after {
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-top: 3px solid rgba(255, 68, 68, 0.95);
+  }
+  
+  .location-dot::before {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .dot-pulse {
+    width: 12px;
+    height: 12px;
+  }
+  
+  @keyframes pulse-dot {
+    0% {
+      width: 12px;
+      height: 12px;
+    }
+    100% {
+      width: 24px;
+      height: 24px;
+    }
+  }
+  
+  .earth-controls,
+  .daylight-indicator {
+    padding: 1rem;
+  }
+  
+  .control-group {
+    margin-bottom: 1rem;
+  }
+  
+  .tilt-toggle-switch {
+    width: 120px;
+    height: 40px;
+    margin: 8px 0;
+  }
+  
+  .tilt-thumb {
+    width: 50px;
+    height: 30px;
+  }
+  
+  .tilt-toggle-switch.active .tilt-thumb {
+    left: calc(100% - 54px);
+  }
+  
+  .tilt-icon {
+    font-size: 0.9rem;
+  }
+  
+  .tilt-angle {
+    font-size: 0.65rem;
+  }
+  
+  .tilt-label {
+    font-size: 0.65rem;
+  }
+  
+  .position-slider::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .slider-markers {
+    font-size: 0.7rem;
+  }
+  
+  .indicator-header h3 {
+    font-size: 1rem;
+  }
+  
+  .hours-value {
+    font-size: 1.5rem;
+  }
+  
+  .hours-unit {
+    font-size: 0.8rem;
+  }
+  
+  .daylight-bar-container {
+    height: 24px;
+  }
+  
+  .bar-labels {
+    font-size: 0.7rem;
+  }
+  
+  .daylight-note {
+    font-size: 0.85rem;
+    margin-top: 0.75rem;
   }
   
   .proceed-button {
     width: 100%;
     padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    min-width: unset;
+  }
+  
+  .observation-tip {
+    font-size: 0.8rem;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .simulation-area {
+    height: 260px;
+  }
+  
+  .earth-container {
+    width: clamp(100px, 22vw, 150px);
+    height: clamp(100px, 22vw, 150px);
+  }
+  
+  .sun-image {
+    width: clamp(40px, 10vw, 70px);
+    height: clamp(40px, 10vw, 70px);
+  }
+  
+  .sun {
+    left: 10px;
+  }
+  
+  .sun-label {
+    font-size: 0.55rem;
+    bottom: -18px;
+  }
+  
+  .dot-label {
+    font-size: 0.6rem;
+    padding: 0.1rem 0.3rem;
+    top: -20px;
+  }
+  
+  .control-hint {
+    font-size: 0.75rem;
+    padding-left: 0.5rem;
+  }
+  
+  .slider-markers span {
+    font-size: 0.65rem;
+  }
+}
+
+/* Landscape orientation on mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .simulation-area {
+    height: 220px;
+  }
+  
+  .earth-container {
+    width: clamp(100px, 20vh, 180px);
+    height: clamp(100px, 20vh, 180px);
+  }
+  
+  .sun-image {
+    width: clamp(40px, 10vh, 80px);
+    height: clamp(40px, 10vh, 80px);
+  }
+  
+  .dot-label {
+    top: -25px;
+    font-size: 0.7rem;
+  }
+}
+
+/* High-resolution tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .simulation-area {
+    height: 380px;
+  }
+  
+  .earth-container {
+    width: clamp(200px, 25vw, 250px);
+    height: clamp(200px, 25vw, 250px);
+  }
+  
+  .sun-image {
+    width: clamp(80px, 12vw, 100px);
+    height: clamp(80px, 12vw, 100px);
+  }
+  
+  .label {
+    font-size: clamp(0.7rem, 0.5vw + 0.5rem, 0.85rem);
   }
 }
 

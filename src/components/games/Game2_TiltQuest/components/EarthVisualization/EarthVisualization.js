@@ -4,13 +4,8 @@ import './EarthVisualization.css';
 const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProceed }) => {
   const [daylightHours, setDaylightHours] = useState(12);
   const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const earthRef = useRef(null);
-  
-  // Set default image sizes
-  const imageSizes = {
-    earth: 300,  // X-Large Earth size (previously 200)
-    sun: 120     // X-Large Sun size (previously 80)
-  };
   
   // Image paths
   const earthImages = {
@@ -19,6 +14,16 @@ const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProcee
   };
   
   const sunImage = `${process.env.PUBLIC_URL}/assets/images/game2/illustrations/sun.png`;
+  
+  // Track window resize for responsive adjustments
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   // Preload images for better performance
   useEffect(() => {
@@ -110,6 +115,10 @@ const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProcee
     }
   };
   
+  // Determine if mobile for dynamic adjustments
+  const isMobile = windowWidth <= 768;
+  const isSmallMobile = windowWidth <= 480;
+  
   return (
     <div className="earth-visualization">
       <div className="visualization-header">
@@ -118,29 +127,23 @@ const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProcee
       </div>
       
       <div className="simulation-area">
-        {/* Sun */}
+        {/* Sun - sizing handled by CSS */}
         <div className="sun">
           <img 
             src={sunImage} 
             alt="Sun" 
             className="sun-image"
-            style={{ 
-              width: `${imageSizes.sun}px`,
-              height: `${imageSizes.sun}px`,
-              opacity: imagesLoaded ? 1 : 0 
-            }}
+            style={{ opacity: imagesLoaded ? 1 : 0 }}
           />
           <span className="sun-label">Sun</span>
         </div>
         
-        {/* Earth Container */}
+        {/* Earth Container - sizing handled by CSS */}
         <div className="earth-container" style={{ left: `${earthState.position}%` }}>
           <div 
             ref={earthRef}
             className={`earth ${earthState.tilt ? 'tilted' : ''}`}
             style={{ 
-              width: `${imageSizes.earth}px`,
-              height: `${imageSizes.earth}px`,
               transform: earthState.tilt ? 'rotate(23.5deg)' : 'rotate(0deg)' 
             }}
           >
@@ -154,7 +157,6 @@ const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProcee
                   transform: earthState.tilt ? 'rotate(-23.5deg)' : 'rotate(0deg)'
                 }}
               />
-              
               
               {/* Location Dot */}
               <div 
@@ -173,12 +175,12 @@ const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProcee
         
         {/* Sunlight Rays */}
         <div className="sunlight-rays">
-          {[...Array(5)].map((_, i) => (
+          {[...Array(isSmallMobile ? 3 : 5)].map((_, i) => (
             <div 
               key={i}
               className="ray"
               style={{
-                left: `${20 + (i * 15)}%`,
+                left: `${20 + (i * (isSmallMobile ? 20 : 15))}%`,
                 opacity: 0.3 + (i * 0.1)
               }}
             ></div>
@@ -241,9 +243,9 @@ const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProcee
             className="position-slider"
           />
           <div className="slider-markers">
-            <span>Summer (June)</span>
+            <span>Summer</span>
             <span>Equinox</span>
-            <span>Winter (December)</span>
+            <span>Winter</span>
           </div>
         </div>
       </div>
@@ -251,10 +253,10 @@ const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProcee
       {/* Daylight Indicator */}
       <div className="daylight-indicator">
         <div className="indicator-header">
-          <h3>📏 Daylight Hours in {location.name}</h3>
+          <h3>📏 Daylight Hours in {isSmallMobile ? location.name.split(' ')[0] : location.name}</h3>
           <div className="daylight-hours">
             <span className="hours-value">{daylightHours.toFixed(1)}</span>
-            <span className="hours-unit">hours</span>
+            <span className="hours-unit">h</span>
           </div>
         </div>
         <div className="daylight-bar-container">
@@ -264,7 +266,7 @@ const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProcee
           ></div>
           <div className="bar-labels">
             <span>0h</span>
-            <span>12h (Equal)</span>
+            <span>12h</span>
             <span>24h</span>
           </div>
         </div>
@@ -282,10 +284,10 @@ const EarthVisualization = ({ location, earthState, onUpdateEarthState, onProcee
           onClick={onProceed}
           disabled={!imagesLoaded}
         >
-          {imagesLoaded ? "Continue to Observation Check" : "Loading images..."}
+          {imagesLoaded ? "Continue" : "Loading..."}
         </button>
         <p className="observation-tip">
-          👁️ Earth and Sun are displayed at optimal size (Earth: 300px, Sun: 120px) for better visibility!
+          👁️ Observe how sunlight hits {isMobile ? 'your location' : location.name}
         </p>
       </div>
     </div>

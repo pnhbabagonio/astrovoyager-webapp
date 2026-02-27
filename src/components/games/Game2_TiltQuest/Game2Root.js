@@ -370,19 +370,19 @@ const Game2Root = ({ onComplete }) => {
         <div className="progress-steps">
           <div className={`step ${['location-selector', 'earth-visualization', 'observation-check', 'concept-check', 'score-display'].includes(currentStage) ? 'active' : ''} ${currentStage === 'location-selector' ? 'current' : ''}`}>
             <span className="step-number">1</span>
-            <span className="step-name">Select Location</span>
+            {/* <span className="step-name">Select Location</span> */}
           </div>
           <div className={`step ${['earth-visualization', 'observation-check', 'concept-check', 'score-display'].includes(currentStage) ? 'active' : ''} ${currentStage === 'earth-visualization' ? 'current' : ''}`}>
             <span className="step-number">2</span>
-            <span className="step-name">Explore Earth</span>
+            {/* <span className="step-name">Explore Earth</span> */}
           </div>
           <div className={`step ${['observation-check', 'concept-check', 'score-display'].includes(currentStage) ? 'active' : ''} ${currentStage === 'observation-check' ? 'current' : ''}`}>
             <span className="step-number">3</span>
-            <span className="step-name">Observation</span>
+            {/* <span className="step-name">Observation</span> */}
           </div>
           <div className={`step ${['concept-check', 'score-display'].includes(currentStage) ? 'active' : ''} ${currentStage === 'concept-check' ? 'current' : ''}`}>
             <span className="step-number">4</span>
-            <span className="step-name">Concept Check</span>
+            {/* <span className="step-name">Concept Check</span> */}
           </div>
         </div>
         
