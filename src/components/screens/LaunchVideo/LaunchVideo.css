@@ -140,16 +140,40 @@
   50% { opacity: 1; transform: scale(1.05); }
 }
 
-
-/* Responsive */
-@media (max-width: 480px) {
+/* Responsive - Mobile view */
+@media (max-width: 768px) {
   .skip-button {
-    width: 220px;
-    bottom: 1.2rem;
-    right: 1.2rem;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 160px; /* Smaller width for mobile */
+    padding: 8px 12px; /* Reduced padding */
+    gap: 6px; /* Smaller gap between icon and text */
   }
-
+  
+  .skip-icon {
+    font-size: 1rem; /* Smaller icon */
+  }
+  
   .skip-text {
-    font-size: 1rem;
+    font-size: 0.75rem; /* Smaller text */
+    letter-spacing: 0.5px; /* Adjusted letter spacing */
+  }
+  
+  /* Even smaller for very small screens */
+  @media (max-width: 480px) {
+    .skip-button {
+      bottom: 1rem;
+      right: 1rem;
+      width: 130px; /* Even smaller for very small screens */
+      padding: 6px 10px;
+    }
+    
+    .skip-icon {
+      font-size: 0.9rem;
+    }
+    
+    .skip-text {
+      font-size: 0.65rem;
+    }
   }
 }
