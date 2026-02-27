@@ -1,282 +1,177 @@
-.observatory-status {
+.compact-status-bar {
   width: 100%;
-  max-width: 1000px;
-  margin: 0 auto 2rem;
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  position: relative;
-  z-index: 2;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
-.status-panel {
-  background: linear-gradient(135deg, rgba(19, 42, 65, 0.9), rgba(30, 60, 90, 0.8));
-  border-radius: 20px;
-  padding: 1.5rem;
-  border: 2px solid #4361ee;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
+.phase-steps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  border-radius: 60px;
+  padding: 1rem 2rem;
+  width: fit-content;
+  max-width: 100%;
 }
 
-.panel-title {
-  color: #4cc9f0;
-  font-size: 1.3rem;
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-  text-align: center;
-  text-shadow: 0 0 10px rgba(76, 201, 240, 0.3);
-  font-family: 'Orbitron', sans-serif;
-  letter-spacing: 1px;
-}
-
-/* Mission Phases */
-.mission-phases {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-}
-
-.mission-phase {
+.phase-step {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  background: rgba(13, 27, 42, 0.6);
-  border-radius: 15px;
+  gap: 0.8rem;
+  position: relative;
+  color: #38393b;
   transition: all 0.3s ease;
-  border: 2px solid transparent;
-  position: relative;
-  overflow: hidden;
 }
 
-.mission-phase.active {
-  border-color: #4cc9f0;
-  background: rgba(76, 201, 240, 0.15);
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(76, 201, 240, 0.3);
+.phase-step.active {
+  color: #4cc9f0;
+  transform: scale(1.05);
 }
 
-.mission-phase.completed {
-  border-color: #2e7d32;
-  background: rgba(46, 125, 50, 0.15);
+.phase-step.completed {
+  color: #2e7d32;
 }
 
-.mission-phase::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.mission-phase:hover::before {
-  opacity: 1;
-}
-
-.phase-indicator {
-  position: relative;
-  width: 60px;
-  height: 60px;
-  flex-shrink: 0;
-  border-radius: 50%;
+.step-icon {
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: rgba(13, 27, 42, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid rgba(76, 201, 240, 0.3);
-}
-
-.mission-phase.active .phase-indicator {
-  border-color: #4cc9f0;
-  background: rgba(76, 201, 240, 0.2);
-  box-shadow: 0 0 15px rgba(76, 201, 240, 0.4);
-}
-
-.mission-phase.completed .phase-indicator {
-  border-color: #2e7d32;
-  background: rgba(46, 125, 50, 0.2);
-}
-
-.phase-icon {
-  font-size: 1.8rem;
-  display: block;
-}
-
-.phase-number {
-  position: absolute;
-  bottom: -5px;
-  right: -5px;
-  background: #7209b7;
-  color: white;
-  width: 24px;
-  height: 24px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  font-size: 0.8rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid currentColor;
+  transition: all 0.3s ease;
 }
 
-.phase-info {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  flex: 1;
+.phase-step.active .step-icon {
+  box-shadow: 0 0 15px currentColor;
 }
 
-.phase-label {
-  font-size: 0.85rem;
-  color: #b8c2cc;
-  margin-bottom: 0.3rem;
-  font-family: 'Courier New', monospace;
-}
-
-.phase-name {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #e0e1dd;
-  word-break: break-word;
-}
-
-/* Observatory Metrics */
-.metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-}
-
-.metric-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  background: rgba(13, 27, 42, 0.6);
-  border-radius: 15px;
-  border: 2px solid rgba(76, 201, 240, 0.2);
-  transition: transform 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.metric-card:hover {
-  transform: translateY(-2px);
-  border-color: #4cc9f0;
-  box-shadow: 0 5px 15px rgba(76, 201, 240, 0.2);
-}
-
-.metric-icon {
-  width: 60px;
-  height: 60px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, rgba(67, 97, 238, 0.2), rgba(76, 201, 240, 0.2));
-  border-radius: 12px;
-  border: 1px solid rgba(76, 201, 240, 0.3);
-  font-size: 1.8rem;
-}
-
-.metric-content {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  flex: 1;
-}
-
-.metric-label {
-  font-size: 0.9rem;
-  color: #b8c2cc;
-  margin-bottom: 0.3rem;
+.step-label {
+  font-size: 1.2rem;
+  font-weight: 600;
   white-space: nowrap;
 }
 
-.metric-value {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #ffd700;
-  word-break: break-word;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-  font-family: 'Orbitron', sans-serif;
-}
-
-/* Connection Lines */
-.mission-phase::after {
-  content: '→';
+.step-connector {
   position: absolute;
-  right: -20px;
-  color: rgba(76, 201, 240, 0.5);
-  font-size: 1.5rem;
+  right: -1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 2px;
+  background: linear-gradient(90deg, #4cc9f0, #4361ee);
 }
 
-.mission-phase:last-child::after {
+.phase-step:last-child .step-connector {
   display: none;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .observatory-status {
-    padding: 0 1rem;
-  }
-  
-  .status-panel {
-    padding: 1rem;
-  }
-  
-  .mission-phases {
-    grid-template-columns: 1fr;
-  }
-  
-  .metrics-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .mission-phase {
+  .compact-status-bar {
     padding: 0.8rem;
   }
-  
-  .phase-indicator {
-    width: 50px;
-    height: 50px;
+
+  .phase-steps {
+    gap: 1.5rem;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
   }
-  
-  .phase-icon {
+
+  .step-icon {
     font-size: 1.5rem;
+    width: 42px;
+    height: 42px;
   }
-  
-  .mission-phase::after {
-    content: '↓';
-    right: 50%;
-    transform: translateX(50%);
-    bottom: -25px;
-    top: auto;
+
+  .step-label {
+    font-size: 1rem;
+  }
+
+  .step-connector {
+    right: -1rem;
+    width: 0.8rem;
   }
 }
 
+/* Mobile View - Icons Only */
 @media (max-width: 480px) {
-  .panel-title {
-    font-size: 1.1rem;
+  .compact-status-bar {
+    padding: 0.5rem;
   }
-  
-  .mission-phase {
-    flex-direction: column;
-    text-align: center;
-    gap: 0.5rem;
+
+  .phase-steps {
+    gap: 1.5rem; /* Increased gap for better spacing with icons only */
+    padding: 0.8rem 1.5rem;
+    border-radius: 40px;
+    justify-content: center;
   }
-  
-  .metric-card {
-    flex-direction: column;
-    text-align: center;
-    gap: 0.8rem;
+
+  .phase-step {
+    gap: 0; /* Remove gap since label is hidden */
   }
-  
-  .metric-content {
-    align-items: center;
+
+  .step-icon {
+    font-size: 1.8rem; /* Slightly larger icons on mobile */
+    width: 48px;
+    height: 48px;
+    border-width: 2px;
   }
+
+  .step-label {
+    display: none; /* Hide labels on mobile */
+  }
+
+  .step-connector {
+    right: -1rem; /* Adjust connector position for icon-only layout */
+    width: 0.5rem;
+    height: 2px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 360px) {
+  .compact-status-bar {
+    padding: 0.3rem;
+  }
+
+  .phase-steps {
+    gap: 1rem;
+    padding: 0.6rem 1rem;
+    border-radius: 30px;
+  }
+
+  .step-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+  }
+
+  .step-connector {
+    right: -0.6rem;
+    width: 0.3rem;
+  }
+}
+
+/* Ultra-wide screens */
+@media (min-width: 1400px) {
+  .phase-steps {
+    max-width: 1200px;
+  }
+}
+
+/* Hover effects */
+.phase-step:hover {
+  opacity: 0.9;
+}
+
+.phase-step:hover .step-icon {
+  transform: rotate(5deg);
 }

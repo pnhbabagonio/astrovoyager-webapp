@@ -1,4 +1,5 @@
 import React from 'react';
+import './GameProgress.css';
 
 const CompactGameProgress = ({ 
   currentStep, 
