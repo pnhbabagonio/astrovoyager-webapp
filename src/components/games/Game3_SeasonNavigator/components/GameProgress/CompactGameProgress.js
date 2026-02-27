@@ -32,23 +32,6 @@ const CompactGameProgress = ({
         ))}
       </div>
 
-      {/* Stats Row */}
-      <div className="stats-row">
-        <div className="stat-chip">
-          <span className="chip-icon">📍</span>
-          <span className="chip-value">{selectedRegion?.name || 'Select Target'}</span>
-        </div>
-        
-        <div className="stat-chip energy">
-          <span className="chip-icon">⚡</span>
-          <span className="chip-value">{score}</span>
-        </div>
-        
-        <div className="stat-chip">
-          <span className="chip-icon">🗺️</span>
-          <span className="chip-value">{completedRegions.length}/{totalRegions}</span>
-        </div>
-      </div>
     </div>
   );
 };
