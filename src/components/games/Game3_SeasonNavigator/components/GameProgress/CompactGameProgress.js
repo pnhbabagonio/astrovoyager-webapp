@@ -31,7 +31,6 @@ const CompactGameProgress = ({
           </div>
         ))}
       </div>
-
     </div>
   );
 };
