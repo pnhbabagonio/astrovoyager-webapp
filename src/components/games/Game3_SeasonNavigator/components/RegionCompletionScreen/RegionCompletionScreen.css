@@ -5,6 +5,8 @@
   animation: discoveryReveal 0.8s ease;
   position: relative;
   z-index: 2;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 .celestial-discovery-card {
@@ -17,6 +19,7 @@
     0 0 50px rgba(157, 78, 221, 0.3);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(5px);
 }
 
 .celestial-discovery-card::before {
@@ -53,6 +56,8 @@
   margin-bottom: 0.5rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   font-family: 'Orbitron', sans-serif;
+  line-height: 1.2;
+  word-break: break-word;
 }
 
 .celestial-region {
@@ -65,6 +70,8 @@
   display: inline-block;
   border: 2px solid rgba(76, 201, 240, 0.4);
   font-family: 'Courier New', monospace;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Discovery Analysis */
@@ -117,6 +124,7 @@
   color: #1a2980;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   font-family: 'Orbitron', sans-serif;
+  line-height: 1;
 }
 
 .energy-label {
@@ -128,6 +136,7 @@
 
 .discovery-assessment {
   text-align: center;
+  width: 100%;
 }
 
 .discovery-message {
@@ -140,6 +149,9 @@
   display: inline-block;
   border: 2px solid rgba(255, 215, 0, 0.4);
   box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+  max-width: 100%;
+  box-sizing: border-box;
+  word-break: break-word;
 }
 
 /* Observatory Progress */
@@ -158,6 +170,7 @@
   margin-bottom: 1.5rem;
   text-align: center;
   font-size: 1.2rem;
+  word-break: break-word;
 }
 
 .sky-mapping-progress {
@@ -200,6 +213,7 @@
   color: #b8c2cc;
   font-size: 0.9rem;
   font-family: 'Courier New', monospace;
+  word-break: break-word;
 }
 
 .constellation-tags {
@@ -218,6 +232,8 @@
   font-size: 0.85rem;
   border: 1px solid rgba(76, 201, 240, 0.4);
   font-family: 'Courier New', monospace;
+  word-break: break-word;
+  text-align: center;
 }
 
 .constellation-tag.mapped {
@@ -255,6 +271,10 @@
   position: relative;
   overflow: hidden;
   min-height: 60px;
+  width: 100%;
+  box-sizing: border-box;
+  word-break: break-word;
+  text-align: center;
 }
 
 .operation-button.primary {
@@ -266,6 +286,10 @@
 .operation-button.primary:hover {
   transform: translateY(-3px);
   box-shadow: 0 10px 25px rgba(157, 78, 221, 0.6);
+}
+
+.operation-button.primary:active {
+  transform: translateY(-1px);
 }
 
 .operation-button.secondary {
@@ -280,6 +304,10 @@
   box-shadow: 0 5px 15px rgba(76, 201, 240, 0.4);
 }
 
+.operation-button.secondary:active {
+  transform: translateY(-1px);
+}
+
 .operation-button.exit {
   background: rgba(13, 27, 42, 0.8);
   color: #ff6b6b;
@@ -292,8 +320,13 @@
   box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
 }
 
+.operation-button.exit:active {
+  transform: translateY(-1px);
+}
+
 .operation-icon {
   font-size: 1.3rem;
+  flex-shrink: 0;
 }
 
 /* Seasonal Color Variations */
@@ -350,30 +383,345 @@
   100% { transform: translateX(100%); }
 }
 
+/* Tablet Styles */
 @media (max-width: 768px) {
+  .region-completion-screen {
+    padding: 0.75rem;
+  }
+  
   .celestial-discovery-card {
     padding: 1.5rem;
+    border-width: 2px;
+  }
+  
+  .discovery-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .constellation-icon-large {
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
   }
   
   .discovery-header h2 {
     font-size: 1.8rem;
   }
   
+  .celestial-region {
+    font-size: 1.1rem;
+    padding: 0.4rem 1.2rem;
+  }
+  
   .energy-sphere {
     width: 140px;
     height: 140px;
+    border-width: 6px;
   }
   
   .energy-value {
     font-size: 2.5rem;
   }
   
+  .energy-label {
+    font-size: 0.9rem;
+  }
+  
+  .discovery-message {
+    font-size: 1.1rem;
+    padding: 0.6rem 1.2rem;
+  }
+  
+  .observatory-progress {
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .observatory-progress h4 {
+    font-size: 1.1rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .progress-status {
+    font-size: 0.85rem;
+  }
+  
+  .constellation-tag {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
+  
   .operation-button {
     padding: 0.8rem 1.5rem;
     font-size: 1rem;
+    min-height: 50px;
+  }
+  
+  .operation-icon {
+    font-size: 1.1rem;
   }
   
   .mission-operations {
     gap: 0.8rem;
+  }
+}
+
+/* Mobile Styles */
+@media (max-width: 480px) {
+  .region-completion-screen {
+    padding: 0.5rem;
+  }
+  
+  .celestial-discovery-card {
+    padding: 1.2rem;
+    border-radius: 20px;
+  }
+  
+  .discovery-header {
+    margin-bottom: 1.2rem;
+  }
+  
+  .constellation-icon-large {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .discovery-header h2 {
+    font-size: 1.4rem;
+  }
+  
+  .celestial-region {
+    font-size: 0.95rem;
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+  }
+  
+  .stellar-energy-reading {
+    margin-bottom: 1.5rem;
+  }
+  
+  .energy-sphere {
+    width: 120px;
+    height: 120px;
+    border-width: 5px;
+    margin-bottom: 0.75rem;
+  }
+  
+  .energy-sphere::before {
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border-width: 2px;
+  }
+  
+  .energy-value {
+    font-size: 2.2rem;
+  }
+  
+  .energy-label {
+    font-size: 0.8rem;
+  }
+  
+  .discovery-message {
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+  }
+  
+  .observatory-progress {
+    padding: 1rem;
+    margin-bottom: 1.2rem;
+    border-radius: 15px;
+  }
+  
+  .observatory-progress h4 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .progress-orbit {
+    height: 8px;
+  }
+  
+  .progress-status {
+    font-size: 0.8rem;
+  }
+  
+  .constellation-tags {
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+  
+  .constellation-tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+  }
+  
+  .mission-operations {
+    gap: 0.6rem;
+  }
+  
+  .operation-button {
+    padding: 0.7rem 1rem;
+    font-size: 0.85rem;
+    min-height: 44px;
+    border-radius: 15px;
+    gap: 0.5rem;
+  }
+  
+  .operation-icon {
+    font-size: 1rem;
+  }
+  
+  /* Stack buttons vertically with proper spacing */
+  .mission-operations {
+    flex-direction: column;
+  }
+  
+  /* Ensure text doesn't overflow on very small screens */
+  .operation-button span:not(.operation-icon) {
+    white-space: normal;
+    word-break: break-word;
+  }
+}
+
+/* Small Mobile Styles */
+@media (max-width: 360px) {
+  .celestial-discovery-card {
+    padding: 1rem;
+  }
+  
+  .discovery-header h2 {
+    font-size: 1.2rem;
+  }
+  
+  .celestial-region {
+    font-size: 0.85rem;
+    padding: 0.2rem 0.8rem;
+  }
+  
+  .energy-sphere {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .energy-value {
+    font-size: 1.8rem;
+  }
+  
+  .energy-label {
+    font-size: 0.7rem;
+  }
+  
+  .discovery-message {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+  }
+  
+  .operation-button {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.75rem;
+  }
+  
+  .operation-icon {
+    font-size: 0.9rem;
+  }
+}
+
+/* Landscape Mode for Mobile */
+@media (max-height: 600px) and (orientation: landscape) {
+  .region-completion-screen {
+    padding: 0.5rem;
+  }
+  
+  .celestial-discovery-card {
+    padding: 1rem;
+  }
+  
+  .discovery-header {
+    margin-bottom: 1rem;
+  }
+  
+  .constellation-icon-large {
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .stellar-energy-reading {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .energy-sphere {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 0;
+  }
+  
+  .discovery-assessment {
+    display: flex;
+    align-items: center;
+  }
+  
+  .discovery-message {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+  
+  .observatory-progress {
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+  }
+  
+  .mission-operations {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .operation-button {
+    flex: 1;
+    min-width: 150px;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    min-height: 40px;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  .operation-button {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .operation-button:active {
+    transform: scale(0.98);
+  }
+  
+  .constellation-tag {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* High-resolution screens */
+@media (min-width: 1200px) {
+  .region-completion-screen {
+    max-width: 700px;
+  }
+  
+  .celestial-discovery-card {
+    padding: 3rem;
+  }
+  
+  .energy-sphere {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .energy-value {
+    font-size: 4rem;
   }
 }
