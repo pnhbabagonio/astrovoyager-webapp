@@ -15,7 +15,7 @@ const ScenarioHeader = ({ scenarioNumber, totalScenarios, character }) => {
               e.target.src = `${process.env.PUBLIC_URL}/assets/images/characters/default.png`;
             }}
           />
-          {character.name} • Energy Detective
+          {character.name}
         </span>
       </div>
       <div className="scenario-title">
