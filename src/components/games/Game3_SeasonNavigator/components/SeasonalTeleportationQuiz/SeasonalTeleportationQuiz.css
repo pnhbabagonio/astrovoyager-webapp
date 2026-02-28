@@ -1,17 +1,37 @@
+/* SeasonalTeleportationQuiz.css - Complete Responsive Version */
+
+/* Root variables for consistent theming */
+:root {
+  --primary-color: #4361ee;
+  --secondary-color: #4cc9f0;
+  --success-color: #4caf50;
+  --error-color: #f44336;
+  --warning-color: #ffd700;
+  --text-primary: #e0e1dd;
+  --text-secondary: #b8c2cc;
+  --bg-dark: rgba(13, 27, 42, 0.8);
+  --bg-darker: rgba(13, 27, 42, 0.95);
+}
+
 .seasonal-teleportation-quiz {
   max-width: 800px;
   margin: 0 auto;
   animation: fadeIn 0.5s ease;
+  padding: 0 1rem;
 }
 
-/* Navigation Header */
+/* ============================================ */
+/* Navigation Header Styles */
+/* ============================================ */
+
 .navigation-header {
   text-align: center;
   margin-bottom: 2rem;
   padding: 1.5rem;
-  background: rgba(13, 27, 42, 0.8);
+  background: var(--bg-dark);
   border-radius: 15px;
   border: 2px solid var(--secondary-color);
+  backdrop-filter: blur(5px);
 }
 
 .warp-drive-effect {
@@ -20,10 +40,17 @@
   justify-content: center;
   gap: 1rem;
   margin-bottom: 1rem;
+  flex-wrap: wrap;
 }
 
 .warp-icon {
   font-size: 2rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
 }
 
 .navigation-header h2 {
@@ -33,10 +60,12 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
 .navigation-subtitle {
-  color: #b8c2cc;
+  color: var(--text-secondary);
   font-size: 1rem;
   margin: 0.5rem 0 1rem 0;
 }
@@ -48,9 +77,16 @@
   gap: 0.5rem;
 }
 
+.navigation-progress span {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
 .progress-constellation {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .constellation-star {
@@ -59,28 +95,224 @@
   border-radius: 50%;
   background: #666;
   border: 2px solid transparent;
+  transition: all 0.3s ease;
 }
 
 .constellation-star.active {
   background: var(--secondary-color);
   border-color: var(--secondary-color);
+  box-shadow: 0 0 15px var(--secondary-color);
   transform: scale(1.3);
 }
 
 .constellation-star.completed {
-  background: #4caf50;
-  border-color: #4caf50;
+  background: var(--success-color);
+  border-color: var(--success-color);
 }
 
+/* ============================================ */
 /* Navigation Console */
+/* ============================================ */
+
 .navigation-console {
   background: rgba(13, 27, 42, 0.7);
   border-radius: 15px;
   padding: 1.5rem;
   border: 2px solid var(--primary-color);
+  backdrop-filter: blur(5px);
 }
 
+/* ============================================ */
+/* Scenario Card Styles */
+/* ============================================ */
+
+.scenario-card {
+  background: linear-gradient(145deg, rgba(19, 42, 65, 0.95), rgba(13, 27, 42, 0.98));
+  border: 2px solid var(--primary-color);
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(76, 201, 240, 0.1) inset;
+  position: relative;
+  overflow: hidden;
+}
+
+.scenario-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--primary-color));
+  animation: scanline 3s linear infinite;
+}
+
+@keyframes scanline {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.scenario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.scenario-season-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(76, 201, 240, 0.15);
+  padding: 0.4rem 1rem;
+  border-radius: 30px;
+  border: 1px solid rgba(76, 201, 240, 0.3);
+  backdrop-filter: blur(5px);
+}
+
+.season-icon {
+  font-size: 1.3rem;
+}
+
+.season-name {
+  color: var(--secondary-color);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.scenario-points {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(255, 215, 0, 0.15);
+  padding: 0.4rem 1rem;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.points-icon {
+  font-size: 1.1rem;
+}
+
+.points-value {
+  color: var(--warning-color);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.scenario-question-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1.2rem;
+  border-radius: 15px;
+  border-left: 4px solid var(--secondary-color);
+}
+
+.scenario-question-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.scenario-question {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin: 0;
+  font-weight: 500;
+  flex: 1;
+}
+
+.scenario-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(76, 201, 240, 0.08);
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  margin-bottom: 1.2rem;
+  border: 1px dashed rgba(76, 201, 240, 0.3);
+}
+
+.hint-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.hint-text {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-style: italic;
+  flex: 1;
+}
+
+.scenario-image {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(135deg, #1a2f3f, #0b1a26);
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(76, 201, 240, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.scenario-image::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(76,201,240,0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  padding: 1rem 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  z-index: 2;
+}
+
+.overlay-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--secondary-color);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.overlay-icon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+/* ============================================ */
 /* Destination Grid */
+/* ============================================ */
+
 .destination-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -88,51 +320,50 @@
   margin: 1.5rem 0;
 }
 
-@media (max-width: 768px) {
-  .destination-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 .destination-card {
   background: rgba(19, 42, 65, 0.8);
-  border: 2px solid #4361ee;
+  border: 2px solid var(--primary-color);
   border-radius: 12px;
   padding: 1rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   cursor: pointer;
   transition: all 0.3s ease;
   text-align: left;
   position: relative;
-  padding-left: 50px;
+  padding-left: 45px;
+  min-height: 60px;
+  backdrop-filter: blur(5px);
 }
 
 .destination-card:hover:not(:disabled) {
   border-color: var(--secondary-color);
   transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(76, 201, 240, 0.3);
 }
 
 .destination-card.selected {
   border-color: var(--secondary-color);
   background: rgba(76, 201, 240, 0.1);
+  box-shadow: 0 0 20px rgba(76, 201, 240, 0.2);
 }
 
 .destination-card.correct {
-  border-color: #4caf50;
+  border-color: var(--success-color);
   background: rgba(76, 175, 80, 0.1);
 }
 
 .destination-card.incorrect {
-  border-color: #f44336;
+  border-color: var(--error-color);
   background: rgba(244, 67, 54, 0.1);
 }
 
 .destination-marker {
   position: absolute;
-  top: 10px;
+  top: 50%;
   left: 10px;
+  transform: translateY(-50%);
   width: 24px;
   height: 24px;
   background: rgba(255, 255, 255, 0.1);
@@ -150,24 +381,28 @@
 
 .destination-icon {
   font-size: 2rem;
+  flex-shrink: 0;
 }
 
 .destination-content {
   flex: 1;
+  min-width: 0;
 }
 
 .destination-text {
   display: block;
-  color: #e0e1dd;
+  color: var(--text-primary);
   font-size: 1rem;
   font-weight: bold;
   margin-bottom: 0.3rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .course-plot {
   display: inline-block;
   background: rgba(76, 175, 80, 0.2);
-  color: #4caf50;
+  color: var(--success-color);
   padding: 0.2rem 0.5rem;
   border-radius: 10px;
   font-size: 0.8rem;
@@ -176,35 +411,53 @@
 .selection-beam {
   color: var(--secondary-color);
   font-size: 1.2rem;
+  flex-shrink: 0;
+  animation: beamPulse 1s infinite;
 }
 
-/* Feedback */
+@keyframes beamPulse {
+  0%, 100% { opacity: 0.5; transform: translateX(0); }
+  50% { opacity: 1; transform: translateX(5px); }
+}
+
+/* ============================================ */
+/* Feedback Section */
+/* ============================================ */
+
 .warp-feedback {
-  padding: 1rem;
+  padding: 1.5rem;
   border-radius: 12px;
-  margin: 1rem 0;
+  margin: 1.5rem 0;
   border: 2px solid;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .correct-feedback {
   background: rgba(76, 175, 80, 0.1);
-  border-color: #4caf50;
+  border-color: var(--success-color);
 }
 
 .incorrect-feedback {
   background: rgba(244, 67, 54, 0.1);
-  border-color: #f44336;
+  border-color: var(--error-color);
 }
 
 .warp-feedback h4 {
   margin: 0 0 0.5rem 0;
   color: inherit;
+  font-size: 1.2rem;
 }
 
 .warp-feedback p {
   margin: 0 0 0.5rem 0;
-  color: #b8c2cc;
-  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .energy-expended {
@@ -212,7 +465,7 @@
   margin-top: 0.5rem;
   padding: 0.3rem 0.8rem;
   background: rgba(255, 215, 0, 0.2);
-  color: #ffd700;
+  color: var(--warning-color);
   border-radius: 12px;
   font-size: 0.9rem;
   font-weight: bold;
@@ -221,28 +474,33 @@
 .correct-answer-hint {
   background: rgba(76, 175, 80, 0.1);
   border: 1px solid rgba(76, 175, 80, 0.3);
-  border-radius: 6px;
-  padding: 10px;
-  margin-top: 10px;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 12px;
   font-weight: 600;
-  color: #4CAF50;
-  font-size: 0.9em;
+  color: var(--success-color);
+  font-size: 0.95rem;
 }
 
+/* ============================================ */
 /* Proceed Button */
+/* ============================================ */
+
 .proceed-button {
   width: 100%;
-  margin-top: 1rem;
+  margin-top: 1.2rem;
   padding: 0.8rem 1.5rem;
   background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   color: white;
   border: none;
   border-radius: 12px;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(76, 201, 240, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .proceed-button:hover {
@@ -256,12 +514,21 @@
   box-shadow: 0 2px 10px rgba(76, 201, 240, 0.3);
 }
 
-/* Telemetry */
+.proceed-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================ */
+/* Telemetry Display */
+/* ============================================ */
+
 .navigation-telemetry {
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  gap: 1.5rem;
   margin-top: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .telemetry-readout {
@@ -270,23 +537,613 @@
   border-radius: 12px;
   text-align: center;
   border: 1px solid rgba(76, 201, 240, 0.3);
+  flex: 1;
+  min-width: 140px;
+  backdrop-filter: blur(5px);
 }
 
 .telemetry-label {
   display: block;
-  color: #b8c2cc;
+  color: var(--text-secondary);
   font-size: 0.8rem;
   margin-bottom: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .telemetry-value {
   display: block;
-  color: #ffd700;
-  font-size: 1.2rem;
+  color: var(--warning-color);
+  font-size: 1.3rem;
   font-weight: bold;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
 }
+
+/* ============================================ */
+/* Animations */
+/* ============================================ */
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================ */
+/* Responsive Styles - Tablet (768px and below) */
+/* ============================================ */
+
+@media (max-width: 768px) {
+  /* General spacing */
+  .seasonal-teleportation-quiz {
+    padding: 0 0.5rem;
+  }
+
+  /* Header */
+  .navigation-header {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-width: 1px;
+  }
+
+  .warp-drive-effect {
+    gap: 0.5rem;
+  }
+
+  .warp-icon {
+    font-size: 1.5rem;
+  }
+
+  .navigation-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .navigation-subtitle {
+    font-size: 0.85rem;
+    margin: 0.25rem 0 0.75rem 0;
+  }
+
+  .navigation-progress span {
+    font-size: 0.8rem;
+  }
+
+  .progress-constellation {
+    gap: 0.4rem;
+  }
+
+  .constellation-star {
+    width: 8px;
+    height: 8px;
+    border-width: 1px;
+  }
+
+  /* Navigation Console */
+  .navigation-console {
+    padding: 1rem;
+    border-width: 1px;
+  }
+
+  /* Scenario Card */
+  .scenario-card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-width: 1px;
+    border-radius: 16px;
+  }
+
+  .scenario-header {
+    margin-bottom: 1rem;
+  }
+
+  .scenario-season-badge {
+    padding: 0.3rem 0.8rem;
+  }
+
+  .season-icon {
+    font-size: 1.1rem;
+  }
+
+  .season-name {
+    font-size: 0.8rem;
+  }
+
+  .scenario-points {
+    padding: 0.3rem 0.8rem;
+  }
+
+  .points-icon {
+    font-size: 1rem;
+  }
+
+  .points-value {
+    font-size: 0.8rem;
+  }
+
+  .scenario-question-container {
+    padding: 0.8rem 1rem;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .scenario-question-icon {
+    font-size: 1.4rem;
+  }
+
+  .scenario-question {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .scenario-hint {
+    padding: 0.6rem 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .hint-icon {
+    font-size: 1rem;
+  }
+
+  .hint-text {
+    font-size: 0.8rem;
+  }
+
+  .scenario-image {
+    height: 150px;
+    border-radius: 12px;
+  }
+
+  .overlay-text {
+    font-size: 0.8rem;
+  }
+
+  .overlay-icon {
+    font-size: 1.2rem;
+  }
+
+  /* Destination Grid */
+  .destination-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin: 1rem 0;
+  }
+
+  .destination-card {
+    padding: 0.75rem;
+    padding-left: 40px;
+    gap: 0.5rem;
+    min-height: 50px;
+    border-width: 1px;
+  }
+
+  .destination-marker {
+    width: 22px;
+    height: 22px;
+    font-size: 0.8rem;
+    left: 8px;
+  }
+
+  .destination-icon {
+    font-size: 1.5rem;
+  }
+
+  .destination-text {
+    font-size: 0.85rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .course-plot {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.4rem;
+  }
+
+  .selection-beam {
+    font-size: 1rem;
+  }
+
+  /* Feedback */
+  .warp-feedback {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+
+  .warp-feedback h4 {
+    font-size: 1rem;
+  }
+
+  .warp-feedback p {
+    font-size: 0.85rem;
+  }
+
+  .energy-expended {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .correct-answer-hint {
+    font-size: 0.85rem;
+    padding: 10px;
+    margin-top: 10px;
+  }
+
+  /* Proceed Button */
+  .proceed-button {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.95rem;
+    margin-top: 1rem;
+  }
+
+  /* Telemetry */
+  .navigation-telemetry {
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .telemetry-readout {
+    padding: 0.6rem 1rem;
+    min-width: 120px;
+  }
+
+  .telemetry-label {
+    font-size: 0.7rem;
+  }
+
+  .telemetry-value {
+    font-size: 1.1rem;
+  }
+}
+
+/* ============================================ */
+/* Responsive Styles - Mobile (480px and below) */
+/* ============================================ */
+
+@media (max-width: 480px) {
+  /* Header */
+  .navigation-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .warp-icon {
+    font-size: 1.2rem;
+  }
+
+  .navigation-subtitle {
+    font-size: 0.75rem;
+  }
+
+  /* Scenario Card */
+  .scenario-card {
+    padding: 0.8rem;
+    border-radius: 14px;
+  }
+
+  .scenario-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .scenario-season-badge,
+  .scenario-points {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .season-icon {
+    font-size: 1rem;
+  }
+
+  .season-name {
+    font-size: 0.75rem;
+  }
+
+  .points-value {
+    font-size: 0.75rem;
+  }
+
+  .scenario-question-container {
+    padding: 0.6rem 0.8rem;
+    gap: 0.5rem;
+    border-left-width: 3px;
+  }
+
+  .scenario-question-icon {
+    font-size: 1.2rem;
+  }
+
+  .scenario-question {
+    font-size: 0.85rem;
+  }
+
+  .scenario-hint {
+    padding: 0.5rem 0.8rem;
+  }
+
+  .hint-text {
+    font-size: 0.75rem;
+  }
+
+  .scenario-image {
+    height: 120px;
+    border-radius: 10px;
+  }
+
+  .image-overlay {
+    padding: 0.6rem 0.8rem;
+  }
+
+  .overlay-text {
+    font-size: 0.7rem;
+  }
+
+  .overlay-icon {
+    font-size: 1rem;
+  }
+
+  /* Destination Cards */
+  .destination-card {
+    padding: 0.6rem;
+    padding-left: 35px;
+    gap: 0.4rem;
+    min-height: 45px;
+  }
+
+  .destination-marker {
+    width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+    left: 6px;
+  }
+
+  .destination-icon {
+    font-size: 1.2rem;
+  }
+
+  .destination-text {
+    font-size: 0.75rem;
+    line-height: 1.3;
+  }
+
+  /* Feedback */
+  .warp-feedback {
+    padding: 0.8rem;
+  }
+
+  .warp-feedback h4 {
+    font-size: 0.9rem;
+  }
+
+  .warp-feedback p {
+    font-size: 0.8rem;
+  }
+
+  .energy-expended {
+    font-size: 0.75rem;
+  }
+
+  .correct-answer-hint {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+
+  /* Proceed Button */
+  .proceed-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  /* Telemetry */
+  .telemetry-readout {
+    padding: 0.5rem 0.8rem;
+    min-width: 100px;
+  }
+
+  .telemetry-label {
+    font-size: 0.6rem;
+  }
+
+  .telemetry-value {
+    font-size: 0.9rem;
+  }
+
+  .navigation-telemetry {
+    gap: 0.5rem;
+  }
+}
+
+/* ============================================ */
+/* Landscape Mode Optimization */
+/* ============================================ */
+
+@media (max-height: 600px) and (orientation: landscape) {
+  .navigation-header {
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .navigation-console {
+    padding: 0.75rem;
+  }
+
+  .scenario-card {
+    padding: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .scenario-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .scenario-question-container {
+    padding: 0.5rem 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .scenario-hint {
+    padding: 0.4rem 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .scenario-image {
+    height: 100px;
+  }
+
+  .destination-grid {
+    margin: 0.5rem 0;
+    gap: 0.5rem;
+  }
+
+  .warp-feedback {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+  }
+
+  .proceed-button {
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .navigation-telemetry {
+    margin-top: 0.5rem;
+  }
+}
+
+/* ============================================ */
+/* Tablet Specific (769px - 1024px) */
+/* ============================================ */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .scenario-card {
+    padding: 1.2rem;
+  }
+
+  .scenario-question {
+    font-size: 1rem;
+  }
+
+  .scenario-image {
+    height: 180px;
+  }
+
+  .destination-card {
+    padding: 0.9rem;
+    padding-left: 42px;
+  }
+
+  .destination-text {
+    font-size: 0.95rem;
+  }
+}
+
+/* ============================================ */
+/* High Resolution Screens (1440px and above) */
+/* ============================================ */
+
+@media (min-width: 1440px) {
+  .seasonal-teleportation-quiz {
+    max-width: 1000px;
+  }
+
+  .scenario-card {
+    padding: 2rem;
+  }
+
+  .scenario-question {
+    font-size: 1.2rem;
+  }
+
+  .scenario-image {
+    height: 250px;
+  }
+
+  .destination-card {
+    padding: 1.2rem;
+    padding-left: 50px;
+  }
+
+  .destination-text {
+    font-size: 1.1rem;
+  }
+
+  .telemetry-readout {
+    padding: 1rem 2rem;
+  }
+
+  .telemetry-value {
+    font-size: 1.5rem;
+  }
+}
+
+/* ============================================ */
+/* Touch Device Optimizations */
+/* ============================================ */
+
+@media (hover: none) and (pointer: coarse) {
+  .destination-card:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .destination-card:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+
+  .proceed-button:hover {
+    transform: none;
+  }
+
+  .proceed-button:active {
+    transform: scale(0.98);
+  }
+
+  .destination-card,
+  .proceed-button {
+    min-height: 44px;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ============================================ */
+/* Accessibility and Print Styles */
+/* ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  .seasonal-teleportation-quiz {
+    background: white;
+    color: black;
+  }
+
+  .destination-card,
+  .proceed-button,
+  .warp-feedback {
+    break-inside: avoid;
+  }
+}
+
+/* ============================================ */
+/* Utility Classes */
+/* ============================================ */
+
+.text-center {
+  text-align: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.invisible {
+  visibility: hidden !important;
+}
+
+/* Ensure proper box sizing */
+* {
+  box-sizing: border-box;
 }
