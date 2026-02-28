@@ -219,7 +219,6 @@ const Game1Root = ({ onComplete }) => {
             <div className="mission-subtitle">
               <span>⏱️ Mission {Math.min(currentScenarioIndex + 1, game1Data.scenarios.length)}/{game1Data.scenarios.length}</span>
               <span>⭐ Score: {score}/{game1Data.scenarios.length}</span>
-              {selectedCharacter && <span>🚀 {selectedCharacter.name}</span>}
             </div>
           </div>
         </div>
