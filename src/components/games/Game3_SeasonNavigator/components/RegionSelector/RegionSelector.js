@@ -11,17 +11,6 @@ const RegionSelector = ({ regions, completedRegions, onSelect }) => {
 
   return (
     <div className="region-selector">
-      {/* <div className="selector-header">
-        <h2>🔭 Telescope Targeting System</h2>
-        <p className="subtitle">Select a celestial region to observe seasonal patterns</p>
-        {completedRegions.length > 0 && (
-          <div className="completion-banner">
-            <span className="banner-icon">✅</span>
-            <span>Chart Complete: {completedRegions.length} region(s)</span>
-          </div>
-        )}
-      </div> */}
-      
       <div className="star-chart-container">
         <div className="regions-grid">
           {regions.map(region => {
