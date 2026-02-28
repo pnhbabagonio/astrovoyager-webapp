@@ -1,32 +1,34 @@
-.scoreboard {
+/* Game3 Scoreboard.css - with game3- prefix */
+
+.game3-scoreboard {
   max-width: 700px;
   margin: 0 auto 2.5rem auto;
-  animation: reportGenerate 0.8s ease;
+  animation: game3-reportGenerate 0.8s ease;
   position: relative;
   z-index: 2;
-  padding: 0 1rem; /* Added padding for mobile */
+  padding: 0 1rem;
 }
 
-.analysis-report-header {
+.game3-analysis-report-header {
   text-align: center;
   margin-bottom: 2rem;
   padding: 2rem;
-  background: rgba(13, 27, 42, 0.8);
+  background: transparent;
   border-radius: 20px;
   border: 2px solid #4361ee;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-.analysis-report-header h2 {
+.game3-analysis-report-header h2 {
   font-size: 2.5rem;
   background: linear-gradient(45deg, #ffd700, #4cc9f0);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  word-break: break-word; /* Prevent overflow */
+  word-break: break-word;
 }
 
-.scoreboard-icon {
+.game3-scoreboard-icon {
   color: initial;
   background: none;
   -webkit-background-clip: initial;
@@ -37,15 +39,15 @@
   font-family: 'Orbitron', sans-serif;
 }
 
-.report-subtitle {
+.game3-report-subtitle {
   color: #b8c2cc;
   font-size: 1.2rem;
   font-style: italic;
 }
 
 /* Mission Analysis Report */
-.mission-analysis-report {
-  background: linear-gradient(135deg, rgba(19, 42, 65, 0.9), rgba(30, 60, 90, 0.8));
+.game3-mission-analysis-report {
+  background: transparent;
   border-radius: 20px;
   padding: 2.5rem;
   border: 2px solid #7209b7;
@@ -54,22 +56,22 @@
 }
 
 /* Mission Score */
-.mission-score {
+.game3-mission-score {
   margin-bottom: 2rem;
   padding: 2rem;
-  background: rgba(13, 27, 42, 0.6);
+  background: transparent;
   border-radius: 15px;
   border: 2px solid rgba(76, 201, 240, 0.3);
 }
 
-.mission-score h3 {
+.game3-mission-score h3 {
   color: #b8c2cc;
   font-size: 1.5rem;
   margin-bottom: 1rem;
   font-family: 'Courier New', monospace;
 }
 
-.score-number {
+.game3-score-number {
   font-size: 4rem;
   font-weight: bold;
   background: linear-gradient(45deg, #ffd700, #ff6b6b);
@@ -81,35 +83,35 @@
   font-family: 'Orbitron', sans-serif;
 }
 
-.score-number span {
+.game3-score-number span {
   font-size: 2rem;
   color: #b8c2cc;
   font-weight: normal;
 }
 
-.efficiency-rating {
+.game3-efficiency-rating {
   font-size: 1.2rem;
   color: #4cc9f0;
   margin-top: 0.5rem;
   font-family: 'Courier New', monospace;
   display: inline-block;
   padding: 0.5rem 1rem;
-  background: rgba(76, 201, 240, 0.1);
+  background: transparent;
   border-radius: 15px;
   border: 1px solid rgba(76, 201, 240, 0.3);
 }
 
 /* System Analysis */
-.system-analysis {
+.game3-system-analysis {
   margin: 2rem 0;
   padding: 1.5rem;
-  background: rgba(13, 27, 42, 0.6);
+  background: transparent;
   border-radius: 15px;
   text-align: left;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.system-analysis h4 {
+.game3-system-analysis h4 {
   color: #4cc9f0;
   margin-top: 0;
   margin-bottom: 1.5rem;
@@ -117,7 +119,7 @@
   font-size: 1.3rem;
 }
 
-.analysis-item {
+.game3-analysis-item {
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
@@ -126,25 +128,25 @@
   align-items: center;
 }
 
-.analysis-item:last-child {
+.game3-analysis-item:last-child {
   border-bottom: none;
   margin-bottom: 0;
   padding-bottom: 0;
 }
 
-.analysis-item .system {
+.game3-analysis-item .game3-system {
   color: #b8c2cc;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  flex-wrap: wrap; /* Allow wrapping on very small screens */
+  flex-wrap: wrap;
 }
 
-.system-icon {
+.game3-system-icon {
   font-size: 1.2rem;
 }
 
-.analysis-item .performance {
+.game3-analysis-item .game3-performance {
   color: #ffd700;
   font-weight: bold;
   font-family: 'Courier New', monospace;
@@ -152,20 +154,20 @@
   background: rgba(255, 215, 0, 0.1);
   border-radius: 10px;
   border: 1px solid rgba(255, 215, 0, 0.3);
-  white-space: nowrap; /* Keep score on one line */
+  white-space: nowrap;
 }
 
 /* Anomaly Detection */
-.anomaly-detection {
+.game3-anomaly-detection {
   padding: 1rem;
-  background: rgba(211, 47, 47, 0.1);
+  background: transparent;
   border-radius: 15px;
   margin-bottom: 2rem;
   border: 2px solid #d32f2f;
-  animation: pulseWarning 2s infinite;
+  animation: game3-pulseWarning 2s infinite;
 }
 
-.anomaly-detection p {
+.game3-anomaly-detection p {
   color: #ff6b6b;
   margin: 0;
   display: flex;
@@ -173,20 +175,20 @@
   justify-content: center;
   gap: 0.8rem;
   font-weight: bold;
-  flex-wrap: wrap; /* Allow wrapping on mobile */
+  flex-wrap: wrap;
   text-align: center;
 }
 
 /* Mission Control */
-.mission-control {
+.game3-mission-control {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
   flex-wrap: wrap;
 }
 
-.review-anomalies-button, 
-.proceed-mission-button {
+.game3-review-anomalies-button, 
+.game3-proceed-mission-button {
   padding: 1rem 2rem;
   border-radius: 25px;
   font-size: 1.1rem;
@@ -202,24 +204,24 @@
   min-width: 200px;
 }
 
-.review-anomalies-button {
+.game3-review-anomalies-button {
   background: linear-gradient(45deg, #d32f2f, #ff6b6b);
   color: white;
 }
 
-.proceed-mission-button {
+.game3-proceed-mission-button {
   background: linear-gradient(45deg, #2e7d32, #4caf50);
   color: white;
 }
 
-.review-anomalies-button:hover, 
-.proceed-mission-button:hover {
+.game3-review-anomalies-button:hover, 
+.game3-proceed-mission-button:hover {
   transform: scale(1.05);
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
 }
 
-.review-anomalies-button::before,
-.proceed-mission-button::before {
+.game3-review-anomalies-button::before,
+.game3-proceed-mission-button::before {
   content: '';
   position: absolute;
   top: -50%;
@@ -227,20 +229,20 @@
   width: 200%;
   height: 200%;
   background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  animation: button-glow 2s linear infinite;
+  animation: game3-button-glow 2s linear infinite;
 }
 
 /* Success Message */
-.mission-success {
+.game3-mission-success {
   padding: 1rem;
-  background: rgba(46, 125, 50, 0.2);
+  background: transparent;
   border-radius: 15px;
   margin-bottom: 2rem;
   border: 2px solid #2e7d32;
-  animation: pulseSuccess 2s infinite;
+  animation: game3-pulseSuccess 2s infinite;
 }
 
-.mission-success p {
+.game3-mission-success p {
   color: #4caf50;
   margin: 0;
   display: flex;
@@ -248,12 +250,12 @@
   justify-content: center;
   gap: 0.8rem;
   font-weight: bold;
-  flex-wrap: wrap; /* Allow wrapping on mobile */
+  flex-wrap: wrap;
   text-align: center;
 }
 
 /* Animations */
-@keyframes reportGenerate {
+@keyframes game3-reportGenerate {
   from { 
     opacity: 0; 
     transform: translateY(30px) scale(0.95); 
@@ -264,7 +266,7 @@
   }
 }
 
-@keyframes pulseWarning {
+@keyframes game3-pulseWarning {
   0%, 100% { 
     box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.4); 
   }
@@ -273,7 +275,7 @@
   }
 }
 
-@keyframes pulseSuccess {
+@keyframes game3-pulseSuccess {
   0%, 100% { 
     box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.4); 
   }
@@ -282,120 +284,120 @@
   }
 }
 
-@keyframes button-glow {
+@keyframes game3-button-glow {
   0% { transform: rotate(0deg) translate(-50%, -50%); }
   100% { transform: rotate(360deg) translate(-50%, -50%); }
 }
 
 /* Tablet and smaller screens */
 @media (max-width: 768px) {
-  .analysis-report-header h2 {
+  .game3-analysis-report-header h2 {
     font-size: 2rem;
   }
 
-  .mission-analysis-report {
+  .game3-mission-analysis-report {
     padding: 1.5rem;
   }
 
-  .score-number {
+  .game3-score-number {
     font-size: 3rem;
   }
 
-  .mission-control {
+  .game3-mission-control {
     flex-direction: column;
   }
 
-  .review-anomalies-button, 
-  .proceed-mission-button {
+  .game3-review-anomalies-button, 
+  .game3-proceed-mission-button {
     width: 100%;
-    min-width: unset; /* Remove min-width on mobile */
+    min-width: unset;
   }
 }
 
 /* Mobile screens */
 @media (max-width: 480px) {
-  .analysis-report-header {
+  .game3-analysis-report-header {
     padding: 1.5rem 1rem;
   }
 
-  .analysis-report-header h2 {
-    font-size: 1.5rem; /* Smaller header text */
+  .game3-analysis-report-header h2 {
+    font-size: 1.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.25rem;
   }
 
-  .scoreboard-icon {
+  .game3-scoreboard-icon {
     font-size: 2rem;
     margin-bottom: 0;
   }
 
-  .report-subtitle {
+  .game3-report-subtitle {
     font-size: 1rem;
   }
 
-  .mission-analysis-report {
+  .game3-mission-analysis-report {
     padding: 1rem;
   }
 
-  .mission-score {
+  .game3-mission-score {
     padding: 1.5rem 1rem;
   }
 
-  .mission-score h3 {
+  .game3-mission-score h3 {
     font-size: 1.2rem;
   }
 
-  .score-number {
-    font-size: 2.5rem; /* Smaller score number */
+  .game3-score-number {
+    font-size: 2.5rem;
   }
 
-  .score-number span {
+  .game3-score-number span {
     font-size: 1.5rem;
   }
 
-  .efficiency-rating {
+  .game3-efficiency-rating {
     font-size: 1rem;
     padding: 0.4rem 0.8rem;
   }
 
-  .system-analysis {
+  .game3-system-analysis {
     padding: 1rem;
     margin: 1.5rem 0;
   }
 
-  .system-analysis h4 {
+  .game3-system-analysis h4 {
     font-size: 1.1rem;
     margin-bottom: 1rem;
   }
 
-  .analysis-item {
+  .game3-analysis-item {
     gap: 0.5rem;
   }
 
-  .analysis-item .system {
+  .game3-analysis-item .game3-system {
     font-size: 0.9rem;
     gap: 0.25rem;
   }
 
-  .system-icon {
+  .game3-system-icon {
     font-size: 1rem;
   }
 
-  .analysis-item .performance {
+  .game3-analysis-item .game3-performance {
     font-size: 0.9rem;
     padding: 0.2rem 0.6rem;
   }
 
-  .anomaly-detection p,
-  .mission-success p {
+  .game3-anomaly-detection p,
+  .game3-mission-success p {
     font-size: 0.9rem;
     gap: 0.5rem;
   }
 
-  .review-anomalies-button, 
-  .proceed-mission-button {
+  .game3-review-anomalies-button, 
+  .game3-proceed-mission-button {
     padding: 0.875rem 1.5rem;
     font-size: 0.9rem;
   }
@@ -403,66 +405,66 @@
 
 /* Very small screens */
 @media (max-width: 360px) {
-  .analysis-report-header h2 {
+  .game3-analysis-report-header h2 {
     font-size: 1.25rem;
   }
 
-  .score-number {
+  .game3-score-number {
     font-size: 2rem;
   }
 
-  .score-number span {
+  .game3-score-number span {
     font-size: 1.25rem;
   }
 
-  .analysis-item {
+  .game3-analysis-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
 
-  .analysis-item .system {
+  .game3-analysis-item .game3-system {
     width: 100%;
   }
 
-  .analysis-item .performance {
+  .game3-analysis-item .game3-performance {
     align-self: flex-end;
   }
 
-  .mission-control {
+  .game3-mission-control {
     gap: 1rem;
   }
 }
 
 /* Landscape mode on mobile */
 @media (max-width: 896px) and (orientation: landscape) {
-  .scoreboard {
+  .game3-scoreboard {
     padding: 0 0.5rem;
   }
 
-  .analysis-report-header {
+  .game3-analysis-report-header {
     padding: 1rem;
     margin-bottom: 1rem;
   }
 
-  .analysis-report-header h2 {
+  .game3-analysis-report-header h2 {
     font-size: 1.5rem;
   }
 
-  .mission-analysis-report {
+  .game3-mission-analysis-report {
     padding: 1rem;
   }
 
-  .mission-score {
+  .game3-mission-score {
     padding: 1rem;
     margin-bottom: 1rem;
   }
 
-  .score-number {
+  .game3-score-number {
     font-size: 2.5rem;
   }
 
-  .system-analysis {
+  .game3-system-analysis {
     margin: 1rem 0;
     padding: 1rem;
   }
