@@ -4,6 +4,7 @@
   animation: reportGenerate 0.8s ease;
   position: relative;
   z-index: 2;
+  padding: 0 1rem; /* Added padding for mobile */
 }
 
 .analysis-report-header {
@@ -22,6 +23,7 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  word-break: break-word; /* Prevent overflow */
 }
 
 .scoreboard-icon {
@@ -135,6 +137,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap; /* Allow wrapping on very small screens */
 }
 
 .system-icon {
@@ -149,6 +152,7 @@
   background: rgba(255, 215, 0, 0.1);
   border-radius: 10px;
   border: 1px solid rgba(255, 215, 0, 0.3);
+  white-space: nowrap; /* Keep score on one line */
 }
 
 /* Anomaly Detection */
@@ -169,6 +173,8 @@
   justify-content: center;
   gap: 0.8rem;
   font-weight: bold;
+  flex-wrap: wrap; /* Allow wrapping on mobile */
+  text-align: center;
 }
 
 /* Mission Control */
@@ -242,6 +248,8 @@
   justify-content: center;
   gap: 0.8rem;
   font-weight: bold;
+  flex-wrap: wrap; /* Allow wrapping on mobile */
+  text-align: center;
 }
 
 /* Animations */
@@ -279,6 +287,7 @@
   100% { transform: rotate(360deg) translate(-50%, -50%); }
 }
 
+/* Tablet and smaller screens */
 @media (max-width: 768px) {
   .analysis-report-header h2 {
     font-size: 2rem;
@@ -299,5 +308,162 @@
   .review-anomalies-button, 
   .proceed-mission-button {
     width: 100%;
+    min-width: unset; /* Remove min-width on mobile */
+  }
+}
+
+/* Mobile screens */
+@media (max-width: 480px) {
+  .analysis-report-header {
+    padding: 1.5rem 1rem;
+  }
+
+  .analysis-report-header h2 {
+    font-size: 1.5rem; /* Smaller header text */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .scoreboard-icon {
+    font-size: 2rem;
+    margin-bottom: 0;
+  }
+
+  .report-subtitle {
+    font-size: 1rem;
+  }
+
+  .mission-analysis-report {
+    padding: 1rem;
+  }
+
+  .mission-score {
+    padding: 1.5rem 1rem;
+  }
+
+  .mission-score h3 {
+    font-size: 1.2rem;
+  }
+
+  .score-number {
+    font-size: 2.5rem; /* Smaller score number */
+  }
+
+  .score-number span {
+    font-size: 1.5rem;
+  }
+
+  .efficiency-rating {
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .system-analysis {
+    padding: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .system-analysis h4 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .analysis-item {
+    gap: 0.5rem;
+  }
+
+  .analysis-item .system {
+    font-size: 0.9rem;
+    gap: 0.25rem;
+  }
+
+  .system-icon {
+    font-size: 1rem;
+  }
+
+  .analysis-item .performance {
+    font-size: 0.9rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .anomaly-detection p,
+  .mission-success p {
+    font-size: 0.9rem;
+    gap: 0.5rem;
+  }
+
+  .review-anomalies-button, 
+  .proceed-mission-button {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+  .analysis-report-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .score-number {
+    font-size: 2rem;
+  }
+
+  .score-number span {
+    font-size: 1.25rem;
+  }
+
+  .analysis-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .analysis-item .system {
+    width: 100%;
+  }
+
+  .analysis-item .performance {
+    align-self: flex-end;
+  }
+
+  .mission-control {
+    gap: 1rem;
+  }
+}
+
+/* Landscape mode on mobile */
+@media (max-width: 896px) and (orientation: landscape) {
+  .scoreboard {
+    padding: 0 0.5rem;
+  }
+
+  .analysis-report-header {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .analysis-report-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .mission-analysis-report {
+    padding: 1rem;
+  }
+
+  .mission-score {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .score-number {
+    font-size: 2.5rem;
+  }
+
+  .system-analysis {
+    margin: 1rem 0;
+    padding: 1rem;
   }
 }

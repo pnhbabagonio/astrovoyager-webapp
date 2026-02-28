@@ -1,6 +1,7 @@
 .review-incorrect {
   max-width: 800px;
   margin: 0 auto;
+  padding: 1rem;
   animation: anomalyReveal 0.8s ease;
   position: relative;
   z-index: 2;
@@ -9,7 +10,7 @@
 .anomaly-analysis-header {
   text-align: center;
   margin-bottom: 2rem;
-  padding: 2rem;
+  padding: 1.5rem 1rem;
   background: rgba(13, 27, 42, 0.8);
   border-radius: 20px;
   border: 2px solid #d32f2f;
@@ -17,18 +18,20 @@
 }
 
 .anomaly-analysis-header h2 {
-  font-size: 2.2rem;
+  font-size: clamp(1.5rem, 6vw, 2.2rem);
   background: linear-gradient(45deg, #ff6b6b, #d32f2f);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   margin-bottom: 0.5rem;
   font-family: 'Orbitron', sans-serif;
+  line-height: 1.2;
+  word-break: break-word;
 }
 
 .anomaly-subtitle {
   color: #ff6b6b;
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 4vw, 1.1rem);
   font-style: italic;
 }
 
@@ -36,7 +39,7 @@
 .anomaly-console {
   background: linear-gradient(135deg, rgba(19, 42, 65, 0.9), rgba(30, 60, 90, 0.8));
   border-radius: 20px;
-  padding: 2rem;
+  padding: 1.5rem 1rem;
   border: 2px solid #d32f2f;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
   margin-bottom: 2rem;
@@ -46,8 +49,8 @@
 .system-clear {
   text-align: center;
   color: #4caf50;
-  font-size: 1.2rem;
-  padding: 2rem;
+  font-size: clamp(1rem, 4vw, 1.2rem);
+  padding: 1.5rem 1rem;
   background: rgba(46, 125, 50, 0.2);
   border-radius: 15px;
   border: 2px solid #4caf50;
@@ -56,7 +59,7 @@
 
 .system-clear::before {
   content: '✅ ';
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 
 /* Anomaly Investigation */
@@ -74,17 +77,18 @@
 
 .anomaly-investigation h3 {
   color: #ffd700;
-  font-size: 1.4rem;
+  font-size: clamp(1.1rem, 5vw, 1.4rem);
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 /* Celestial Event */
 .celestial-event {
   color: #e0e1dd;
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 4vw, 1.1rem);
   line-height: 1.5;
   margin-bottom: 1.5rem;
   padding: 1rem;
@@ -92,20 +96,15 @@
   border-radius: 10px;
   border-left: 4px solid #ff6b6b;
   font-family: 'Courier New', monospace;
+  word-break: break-word;
 }
 
 /* Signal Analysis */
 .signal-analysis {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
   margin-bottom: 1.5rem;
-}
-
-@media (max-width: 768px) {
-  .signal-analysis {
-    grid-template-columns: 1fr;
-  }
 }
 
 .signal {
@@ -119,14 +118,15 @@
   display: block;
   font-weight: bold;
   margin-bottom: 0.5rem;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 3.5vw, 0.9rem);
   font-family: 'Orbitron', sans-serif;
   letter-spacing: 1px;
 }
 
 .signal .signal-data {
-  font-size: 1rem;
+  font-size: clamp(0.85rem, 3.5vw, 1rem);
   font-family: 'Courier New', monospace;
+  word-break: break-word;
 }
 
 .anomaly-signal {
@@ -162,6 +162,8 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-size: clamp(0.95rem, 4vw, 1.1rem);
+  flex-wrap: wrap;
 }
 
 .transmission-decode p {
@@ -169,23 +171,26 @@
   line-height: 1.6;
   margin: 0;
   font-family: 'Courier New', monospace;
+  font-size: clamp(0.85rem, 3.5vw, 1rem);
+  word-break: break-word;
 }
 
 /* Analysis Protocol */
 .analysis-protocol {
   text-align: center;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
 }
+
 .recalibrate-button {
   background: linear-gradient(45deg, #4361ee, #4cc9f0);
   color: white;
   border: none;
-  padding: 1rem 2.5rem;
+  padding: 0.875rem 2rem;
   border-radius: 25px;
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 4vw, 1.1rem);
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -194,6 +199,11 @@
   letter-spacing: 1px;
   position: relative;
   overflow: hidden;
+  width: auto;
+  min-width: 200px;
+  max-width: 100%;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .recalibrate-button:hover {
@@ -212,7 +222,7 @@
   animation: button-glow 2s linear infinite;
 }
 
-
+/* Animations */
 @keyframes anomalyReveal {
   from { 
     opacity: 0; 
@@ -238,16 +248,69 @@
   100% { transform: rotate(360deg) translate(-50%, -50%); }
 }
 
-@media (max-width: 768px) {
-  .anomaly-analysis-header h2 {
-    font-size: 1.8rem;
+/* Extra small devices (phones, 480px and down) */
+@media (max-width: 480px) {
+  .review-incorrect {
+    padding: 0.5rem;
+  }
+
+  .anomaly-analysis-header {
+    padding: 1rem 0.75rem;
+    margin-bottom: 1.5rem;
   }
 
   .anomaly-console {
-    padding: 1.5rem;
+    padding: 1rem 0.75rem;
+  }
+
+  .anomaly-investigation {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
   }
 
   .celestial-event {
-    font-size: 1rem;
+    padding: 0.875rem;
+    font-size: 0.9rem;
+  }
+
+  .signal-analysis {
+    gap: 0.75rem;
+  }
+
+  .signal {
+    padding: 0.875rem;
+  }
+
+  .transmission-decode {
+    padding: 0.875rem;
+  }
+
+  .recalibrate-button {
+    padding: 0.75rem 1.5rem;
+    min-width: 180px;
+    width: 100%;
+  }
+}
+
+/* Landscape mode optimization */
+@media (max-width: 768px) and (orientation: landscape) {
+  .review-incorrect {
+    max-width: 100%;
+    padding: 1rem 2rem;
+  }
+
+  .signal-analysis {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Tablet optimization */
+@media (min-width: 481px) and (max-width: 768px) {
+  .anomaly-analysis-header h2 {
+    font-size: 2rem;
+  }
+  
+  .review-incorrect {
+    padding: 1.5rem;
   }
 }
