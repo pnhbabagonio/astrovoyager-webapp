@@ -5,15 +5,6 @@ import './SeasonalTeleportationQuiz.css';
 const ScenarioCard = ({ 
   scenario
 }) => {
-  // Function to get season-specific icon
-  const getSeasonIcon = (season) => {
-    const seasonLower = season?.toLowerCase() || '';
-    if (seasonLower.includes('spring')) return '🌸';
-    if (seasonLower.includes('summer')) return '☀️';
-    if (seasonLower.includes('autumn') || seasonLower.includes('fall')) return '🍂';
-    if (seasonLower.includes('winter')) return '❄️';
-    return '🌍';
-  };
 
   return (
     <div className="scenario-card">
