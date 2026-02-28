@@ -1,3 +1,4 @@
+//CompactGameProgress.js
 import React from 'react';
 import './GameProgress.css';
 
@@ -17,19 +18,20 @@ const CompactGameProgress = ({
 
   return (
     <div className="compact-status-bar">
-      {/* Phase Steps */}
+      {/* Phase Steps - Always centered */}
       <div className="phase-steps">
         {steps.map((step, index) => (
-          <div 
-            key={step.number}
-            className={`phase-step 
-              ${step.number === currentStep ? 'active' : ''} 
-              ${step.number < currentStep ? 'completed' : ''}`}
-          >
-            <span className="step-icon">{step.icon}</span>
-            <span className="step-label">{step.label}</span>
+          <React.Fragment key={step.number}>
+            <div 
+              className={`phase-step 
+                ${step.number === currentStep ? 'active' : ''} 
+                ${step.number < currentStep ? 'completed' : ''}`}
+            >
+              <span className="step-icon">{step.icon}</span>
+              <span className="step-label">{step.label}</span>
+            </div>
             {index < steps.length - 1 && <div className="step-connector" />}
-          </div>
+          </React.Fragment>
         ))}
       </div>
     </div>
