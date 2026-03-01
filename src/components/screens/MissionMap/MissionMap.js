@@ -212,11 +212,11 @@ const MissionMap = () => {
       </header>
 
       {/* Click counter indicator (hidden but shows when clicking) */}
-      {clickCount > 0 && clickCount < 5 && (
+      {/* {clickCount > 0 && clickCount < 5 && (
         <div className="click-counter">
           {clickCount} / 5 clicks for admin
         </div>
-      )}
+      )} */}
 
       {/* Character and Text Bubble at Center - Now clickable */}
       <div className="character-container">
